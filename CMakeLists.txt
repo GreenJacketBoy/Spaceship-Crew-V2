@@ -1,31 +1,33 @@
 cmake_minimum_required(VERSION 4.3.1)
 project(SpaceshipCrewV2)
 
-# add_library(SpaceshipCrewV2
-#   src/app.cpp
-# )
+set(CMAKE_AUTOMOC ON) # DOESN'T WORK WITHOUT IT (https://doc.qt.io/qt-6/moc.html)
+# set(CMAKE_AUTORCC ON) # https://doc.qt.io/qt-6/resources.html
 
-# target_compile_features(SpaceshipCrewV2 PUBLIC cxx_std_20)
-# target_include_directories(SpaceshipCrewV2
-#   PUBLIC
-#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#     $<INSTALL_INTERFACE:include>
-# )
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Find Qt6 packages
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
 
-find_package(Qt6 REQUIRED COMPONENTS Qml) # Find Qt6
-find_package(GTest REQUIRED) # Find GTest
+add_subdirectory(src/SpaceshipCrewV2_Dir)
 
-add_executable(SpaceshipCrewV2_cli src/main.cpp)
-target_link_libraries(SpaceshipCrewV2_cli 
-  PRIVATE 
-    # SpaceshipCrewV2
-    Qt6::Qml
-    # GTest::gtest_main
+# Set up the executable
+qt_add_executable(SpaceshipCrewV2_Bin
+    main.cpp
 )
 
-get_target_property(QT_INCLUDES SpaceshipCrewV2_cli INCLUDE_DIRECTORIES)
-message(STATUS "Include dirs for hello_qt: ${QT_INCLUDES}")
+target_link_libraries(SpaceshipCrewV2_Bin
+    PRIVATE 
+        Qt6::Core 
+        Qt6::Gui 
+        Qt6::Qml 
+        Qt6::Quick
+        SpaceshipCrewV2_Module
+)
 
+# Note to myself and others learning :
+# As I found out, the "ctest" command must be ran from the build directory, but
+# more than that, it must be ran from the build directory mirroring the code 
+# directory containing the CMakeLists.txt file where "enable_testing()" is called.
+# If it's in /test/CMakeLists.txt then you have to do "cd build/test" followed
+# by "ctest"
+enable_testing()
 add_subdirectory(tests)
