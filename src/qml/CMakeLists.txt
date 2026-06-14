@@ -8,7 +8,7 @@
 # https://doc.qt.io/qt-6/qt-add-qml-module.html
 
 qt_add_qml_module(SpaceshipCrewV2_Module
-    URI SpaceshipCrewV2_Dir
+    URI qml.main
     QML_FILES 
         main.qml
 )

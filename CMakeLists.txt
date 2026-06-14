@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON) # DOESN'T WORK WITHOUT IT (https://doc.qt.io/qt-6/moc.html
 # Find Qt6 packages
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
 
-add_subdirectory(src/SpaceshipCrewV2_Dir)
+add_subdirectory(src)
 
 # Set up the executable
 qt_add_executable(SpaceshipCrewV2_Bin
@@ -20,7 +20,7 @@ target_link_libraries(SpaceshipCrewV2_Bin
         Qt6::Gui 
         Qt6::Qml 
         Qt6::Quick
-        SpaceshipCrewV2_Module
+        SpaceshipCrewV2_Lib
 )
 
 # Note to myself and others learning :
@@ -30,4 +30,5 @@ target_link_libraries(SpaceshipCrewV2_Bin
 # If it's in /test/CMakeLists.txt then you have to do "cd build/test" followed
 # by "ctest"
 enable_testing()
+include(CTest)
 add_subdirectory(tests)
