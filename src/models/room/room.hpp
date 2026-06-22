@@ -1,3 +1,6 @@
+#ifndef ROOM_HPP
+#define ROOM_HPP
+
 #include <memory>
 #include <set>
 #include <cstddef>
@@ -47,3 +50,5 @@ private:
     std::unique_ptr<RoomType> type;
     std::set<size_t> adjacentRoomsIds;
 };
+
+#endif // !ROOM_HPP

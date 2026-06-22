@@ -1,11 +1,12 @@
 add_library(SpaceshipCrewV2_Lib
     STATIC
-        models/room.cpp
+        models/room/room.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib
     PUBLIC
-        models
+        models/room
+        models/room/types
 )
 
 add_subdirectory(qml)

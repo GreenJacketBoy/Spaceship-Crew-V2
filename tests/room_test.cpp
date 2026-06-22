@@ -1,7 +1,10 @@
 #include <cstddef>
 #include <gtest/gtest.h>
-#include <memory>
 #include "room.hpp"
+#include "medbay.hpp"
+#include "corridor.hpp"
+#include "quarter.hpp"
+#include "bridge.hpp"
 
 TEST(RoomType, Name) {
   EXPECT_STREQ((Medbay()).getName().c_str(), "Medbay");
