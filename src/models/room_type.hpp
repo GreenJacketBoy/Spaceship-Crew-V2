@@ -8,9 +8,10 @@ enum class RoomTypeEnum {
 };
 
 class RoomType {
-public: 
-    virtual inline std::string getName() = 0;
-    virtual inline RoomTypeEnum getType() = 0;
+public:
+    virtual ~RoomType() {};
+    virtual std::string getName() = 0; 
+    virtual RoomTypeEnum getType() = 0; 
 };
 
 /* 
@@ -19,24 +20,28 @@ public:
 
 class Medbay: public RoomType {
 public: 
-    std::string  getName() override { return "Medbay"; }
-    RoomTypeEnum getType() override { return RoomTypeEnum::MEDBAY; }
+    ~Medbay() override {}
+    inline std::string  getName() override { return "Medbay"; }
+    inline RoomTypeEnum getType() override { return RoomTypeEnum::MEDBAY; }
 };
 
 class Corridor: public RoomType {
 public: 
-    std::string  getName() override { return "Corridor"; }
-    RoomTypeEnum getType() override { return RoomTypeEnum::CORRIDOR; }
+    ~Corridor() override {}
+    inline std::string  getName() override { return "Corridor"; }
+    inline RoomTypeEnum getType() override { return RoomTypeEnum::CORRIDOR; }
 };
 
 class Quarter: public RoomType {
 public: 
-    std::string  getName() override { return "Quarter"; }
-    RoomTypeEnum getType() override { return RoomTypeEnum::QUARTER; }
+    ~Quarter() override {}
+    inline std::string  getName() override { return "Quarter"; }
+    inline RoomTypeEnum getType() override { return RoomTypeEnum::QUARTER; }
 };
 
 class Bridge: public RoomType {
 public: 
-    std::string  getName() override { return "Bridge"; }
-    RoomTypeEnum getType() override { return RoomTypeEnum::BRIDGE; }
+    ~Bridge() override {}
+    inline std::string  getName() override { return "Bridge"; }
+    inline RoomTypeEnum getType() override { return RoomTypeEnum::BRIDGE; }
 };

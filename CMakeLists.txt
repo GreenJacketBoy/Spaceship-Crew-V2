@@ -3,6 +3,8 @@ project(SpaceshipCrewV2)
 
 set(CMAKE_AUTOMOC ON) # DOESN'T WORK WITHOUT IT (https://doc.qt.io/qt-6/moc.html)
 # set(CMAKE_AUTORCC ON) # https://doc.qt.io/qt-6/resources.html
+add_compile_options(-std=c++23)
+# add_compile_options(-g) # For debuggin uing gdb
 
 # Find Qt6 packages
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
