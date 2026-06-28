@@ -5,9 +5,11 @@
 
 class Quarter: public RoomType {
 public: 
+    Quarter() {
+        this->type = RoomTypeEnum::QUARTER;
+        this->name = "Quarter";
+    }
     ~Quarter() override {}
-    inline std::string  getName() override { return "Quarter"; }
-    inline RoomTypeEnum getType() override { return RoomTypeEnum::QUARTER; }
 };
 
 #endif // !QUARTER_HPP

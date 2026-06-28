@@ -7,10 +7,10 @@
 #include "bridge.hpp"
 
 TEST(RoomType, Name) {
-  EXPECT_STREQ((Medbay()).getName().c_str(), "Medbay");
-  EXPECT_STREQ((Corridor()).getName().c_str(), "Corridor");
-  EXPECT_STREQ((Quarter()).getName().c_str(), "Quarter");
-  EXPECT_STREQ((Bridge()).getName().c_str(), "Bridge");
+  EXPECT_STREQ((Medbay()).getName(), "Medbay");
+  EXPECT_STREQ((Corridor()).getName(), "Corridor");
+  EXPECT_STREQ((Quarter()).getName(), "Quarter");
+  EXPECT_STREQ((Bridge()).getName(), "Bridge");
 }
 
 TEST(RoomType, Type) {
@@ -30,7 +30,7 @@ TEST(Room, Create) {
   EXPECT_DOUBLE_EQ(room.getCrewCapacity(), crewCapacity);
   EXPECT_DOUBLE_EQ(room.getStorageCapacity(), storageCapacity);
   EXPECT_DOUBLE_EQ(room.getSize(), size);
-  EXPECT_STREQ(room.getTypeName().c_str(), Medbay().getName().c_str());
+  EXPECT_STREQ(room.getTypeName().c_str(), Medbay().getName());
 }
 
 TEST(Room, InitAdjacentRooms) {

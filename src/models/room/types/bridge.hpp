@@ -5,9 +5,11 @@
 
 class Bridge: public RoomType {
 public: 
+    Bridge() {
+        this->type = RoomTypeEnum::BRIDGE;
+        this->name = "Bridge";
+    }
     ~Bridge() override {}
-    inline std::string  getName() override { return "Bridge"; }
-    inline RoomTypeEnum getType() override { return RoomTypeEnum::BRIDGE; }
 };
 
 #endif // !BRIDGE_HPP

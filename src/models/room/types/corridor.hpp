@@ -5,9 +5,11 @@
 
 class Corridor: public RoomType {
 public: 
+    Corridor() {
+        this->type = RoomTypeEnum::CORRIDOR;
+        this->name = "Corridor";
+    }
     ~Corridor() override {}
-    inline std::string  getName() override { return "Corridor"; }
-    inline RoomTypeEnum getType() override { return RoomTypeEnum::CORRIDOR; }
 };
 
 #endif // !CORRIDOR_HPP

@@ -5,9 +5,11 @@
 
 class Medbay: public RoomType {
 public: 
+    Medbay() {
+        this->type = RoomTypeEnum::MEDBAY;
+        this->name = "Medbay";
+    }
     ~Medbay() override {}
-    inline std::string  getName() override { return "Medbay"; }
-    inline RoomTypeEnum getType() override { return RoomTypeEnum::MEDBAY; }
 };
 
 #endif // !MEDBAY_HPP
