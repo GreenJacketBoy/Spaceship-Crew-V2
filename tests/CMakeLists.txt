@@ -1,6 +1,8 @@
 add_executable(spaceship_test
     hello_test.cpp
     room_test.cpp
+    crew_member_test.cpp
+    skill_test.cpp
 )
 
 find_package(GTest REQUIRED) # Find GTest
