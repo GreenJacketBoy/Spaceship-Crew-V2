@@ -10,6 +10,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/room/types
         models/crew_member
         models/skill
+        models/event
 )
 
 add_subdirectory(qml)
