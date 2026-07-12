@@ -20,9 +20,9 @@ class Room {
     );
 
     inline size_t       getId()              { return this->id;               }
-    inline std::string  getName()            { return this->name;             }
-    inline RoomTypeEnum getType()            { return this->type->getType();   }
-    inline std::string  getTypeName()        { return this->type->getName();   }
+    inline const std::string &getName()      { return this->name;             }
+    inline RoomTypeEnum getType()            { return this->type->getType();  }
+    inline const char*  getTypeName()        { return this->type->getName();  }
     inline size_t       getSize()            { return this->size;             }
     inline size_t       getStorageCapacity() { return this->storageCapacity;  }
     inline size_t       getCrewCapacity()    { return this->crewCapacity;     }

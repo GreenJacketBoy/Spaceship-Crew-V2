@@ -30,7 +30,7 @@ TEST(Room, Create) {
   EXPECT_DOUBLE_EQ(room.getCrewCapacity(), crewCapacity);
   EXPECT_DOUBLE_EQ(room.getStorageCapacity(), storageCapacity);
   EXPECT_DOUBLE_EQ(room.getSize(), size);
-  EXPECT_STREQ(room.getTypeName().c_str(), Medbay().getName());
+  EXPECT_STREQ(room.getTypeName(), Medbay().getName());
 }
 
 TEST(Room, InitAdjacentRooms) {
