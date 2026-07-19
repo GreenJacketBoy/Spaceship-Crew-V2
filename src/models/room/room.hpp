@@ -11,11 +11,11 @@
 class Room {
     public: 
     Room(
-        const std::string &name,
+        std::string &&name,
         size_t crewCapacity,
         size_t storageCapacity,
         size_t size,
-        std::unique_ptr<RoomType> type,
+        std::unique_ptr<RoomType> &&type,
         const std::vector<size_t> &adjacentRoomsIds
     );
 

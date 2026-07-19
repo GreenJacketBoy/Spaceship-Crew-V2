@@ -2,6 +2,7 @@ add_library(SpaceshipCrewV2_Lib
     STATIC
         models/room/room.cpp
         models/crew_member/crew_member.cpp
+        models/space_ship/space_ship.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib
@@ -11,6 +12,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/crew_member
         models/skill
         models/event
+        models/space_ship
 )
 
 add_subdirectory(qml)
