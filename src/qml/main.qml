@@ -12,7 +12,5 @@ Window {
         text: "SPACESHIP !"
         anchors.centerIn: parent
     }
-    CrewOrRoomTabs {
-        height: parent.height
-    }
+    CrewOrRoomTabs { }
 }

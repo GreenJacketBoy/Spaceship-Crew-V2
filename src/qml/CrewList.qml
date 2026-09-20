@@ -11,10 +11,11 @@ ScrollView {
         delegate: 
             Rectangle {
                 border.color: "black"
-                implicitHeight: column.implicitHeight
-                implicitWidth: column.implicitWidth
+                height: column.implicitHeight
+                width: parent.width
                 Column {
                     id: column
+                    width: parent.width
                     Text {
                         id: textId
                         width: parent.width

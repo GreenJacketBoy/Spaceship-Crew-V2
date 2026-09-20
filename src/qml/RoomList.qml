@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 ScrollView {
     width: parent.width
@@ -12,8 +11,8 @@ ScrollView {
         delegate: 
             Rectangle {
                 border.color: "black"
-                implicitHeight: column.implicitHeight
-                implicitWidth: column.implicitWidth
+                height: column.implicitHeight
+                width: parent.width
                 Column {
                     id: column
                     width: parent.width

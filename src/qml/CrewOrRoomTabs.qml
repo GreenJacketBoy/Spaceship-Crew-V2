@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 ColumnLayout {
     width: 200
+    height: parent.height
     TabBar {
         id: bar
         width: parent.width
@@ -18,14 +19,12 @@ ColumnLayout {
     }
 
     StackLayout {
-        Layout.fillWidth: true
+        z: bar.z - 1
+        height: parent.height - bar.height
+        anchors.bottom: parent.bottom
         width: parent.width
         currentIndex: bar.currentIndex
-        RoomList {
-            Layout.fillWidth: true
-        }
-        CrewList {
-            Layout.fillWidth: true
-        }
+        RoomList {}
+        CrewList {}
     }
 }
