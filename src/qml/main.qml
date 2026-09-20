@@ -12,4 +12,5 @@ Window {
         anchors.centerIn: parent
     }
     RoomList {}
+    CrewList {}
 }

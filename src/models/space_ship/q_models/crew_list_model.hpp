@@ -1,15 +1,15 @@
-#ifndef ROOM_LIST_MODEL_HPP
-#define ROOM_LIST_MODEL_HPP
+#ifndef CREW_LIST_MODEL_HPP
+#define CREW_LIST_MODEL_HPP
 
 #include <cstddef>
 #include <optional>
-#include "room.hpp"
+#include "crew_member.hpp"
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel {
+class CrewListModel : public QAbstractTableModel {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -19,19 +19,16 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void setRoomList(std::map<size_t, std::unique_ptr<Room>> &roomList);
+    void setCrewList(std::map<size_t, std::unique_ptr<CrewMember>> &roomList);
 
 private:
     enum RoomModelRoles {
         IdRole = Qt::UserRole + 1,
         NameRole,
-        CrewCapacityRole,
-        StorageCapacityRole,
-        SizeRole,
-        TypeRole,
+        TitleRole,
     };
 
-    std::optional<std::map<size_t, std::unique_ptr<Room>>*> roomList;
+    std::optional<std::map<size_t, std::unique_ptr<CrewMember>>*> crewList;
 };
 
-#endif // !ROOM_LIST_MODEL_HPP
+#endif // !CREW_LIST_MODEL_HPP

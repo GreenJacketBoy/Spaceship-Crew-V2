@@ -12,4 +12,5 @@ qt_add_qml_module(SpaceshipCrewV2_Module
     QML_FILES 
         main.qml
         RoomList.qml
+        CrewList.qml
 )

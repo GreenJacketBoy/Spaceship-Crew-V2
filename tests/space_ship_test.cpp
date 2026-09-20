@@ -16,6 +16,7 @@ TEST(SpaceShip, Init) {
   EXPECT_STREQ(spaceShip.getFlag().c_str(), "HCS");
   EXPECT_NO_THROW(spaceShip.getId());
   EXPECT_DOUBLE_EQ(spaceShip.getRoomListModel().rowCount(), 0);
+  EXPECT_DOUBLE_EQ(spaceShip.getCrewListModel().rowCount(), 0);
 }
 
 TEST(SpaceShip, InitWithRooms) {
@@ -45,4 +46,5 @@ TEST(SpaceShip, InitWithCrew) {
   EXPECT_STREQ(spaceShip.getCrewMap().at(2)->getName().c_str(), "Amanda");
   EXPECT_STREQ(spaceShip.getCrewMap().at(3)->getName().c_str(), "Karl");
   EXPECT_THROW(spaceShip.getCrewMap().at(4), std::out_of_range);
+  EXPECT_DOUBLE_EQ(spaceShip.getCrewListModel().rowCount(), 3);
 }

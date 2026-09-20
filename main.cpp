@@ -1,11 +1,10 @@
+#include "crew_member.hpp"
 #include "quarter.hpp"
 #include "room.hpp"
-#include "room_list_model.hpp"
 #include "space_ship.hpp"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QAbstractListModel>
-#include <algorithm>
 #include <memory>
 #include <qqmlcontext.h>
 
@@ -27,9 +26,14 @@ int main(int argc, char *argv[])
     idToRoom_map.insert({room4->getId(), std::move(room4)});
     idToRoom_map.insert({room5->getId(), std::move(room5)});
 
-    SpaceShip spaceShip = SpaceShip("yolo", "yolo", {}, std::move(idToRoom_map));
+    auto crew1 = std::unique_ptr<CrewMember>(new CrewMember( "James", "Pilot", {}));
+    std::map<size_t, std::unique_ptr<CrewMember>> idToCrewMember_map;
+    idToCrewMember_map.insert({crew1->getId(), std::move(crew1)});
+
+    SpaceShip spaceShip = SpaceShip("yolo", "yolo", std::move(idToCrewMember_map), std::move(idToRoom_map));
     
     engine.rootContext()->setContextProperty("roomListModel", &spaceShip.getRoomListModel());
+    engine.rootContext()->setContextProperty("crewListModel", &spaceShip.getCrewListModel());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 
     if (engine.rootObjects().isEmpty()) {
