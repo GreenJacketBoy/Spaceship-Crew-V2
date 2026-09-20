@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 Window {
     visible: true
@@ -11,6 +12,7 @@ Window {
         text: "SPACESHIP !"
         anchors.centerIn: parent
     }
-    RoomList {}
-    CrewList {}
+    CrewOrRoomTabs {
+        height: parent.height
+    }
 }
