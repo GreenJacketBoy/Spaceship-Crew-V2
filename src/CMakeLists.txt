@@ -3,6 +3,7 @@ add_library(SpaceshipCrewV2_Lib
         models/room/room.cpp
         models/crew_member/crew_member.cpp
         models/space_ship/space_ship.cpp
+        models/space_ship/q_models/room_list_model.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib
@@ -13,11 +14,18 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/skill
         models/event
         models/space_ship
+        models/space_ship/q_models
 )
 
 add_subdirectory(qml)
 
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
+
 target_link_libraries(SpaceshipCrewV2_Lib
     PRIVATE
         SpaceshipCrewV2_Module
+        Qt6::Core 
+        Qt6::Gui 
+        Qt6::Qml 
+        Qt6::Quick
 )

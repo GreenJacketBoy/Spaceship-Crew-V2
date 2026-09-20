@@ -22,5 +22,5 @@ type(std::move(type))
     for (auto roomId : adjacentRoomsIds) {
         this->adjacentRoomsIds.insert(roomId);
     }
-    std::cout << "Room of name " << name << " and type " << this->getTypeName() << " has been created" << '\n';
+    std::cout << "Room of name " << this->name << " and type " << this->getTypeName() << " has been created" << '\n';
 };

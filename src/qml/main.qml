@@ -11,4 +11,5 @@ Window {
         text: "SPACESHIP !"
         anchors.centerIn: parent
     }
+    RoomList {}
 }

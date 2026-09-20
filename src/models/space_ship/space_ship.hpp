@@ -3,6 +3,7 @@
 
 #include "crew_member.hpp"
 #include "room.hpp"
+#include "room_list_model.hpp"
 #include <cstddef>
 #include <map>
 #include <memory>
@@ -17,11 +18,12 @@ public:
         std::map<size_t, std::unique_ptr<Room>>       &&idToRoom_map 
     );
 
-    inline size_t             getId()      { return this->id;   }
-    inline const std::string &getName()    { return this->name; }
-    inline const std::string &getFlag()    { return this->flag; }
-    inline auto              &getCrewMap() { return this->idToCrewMember_map; }
-    inline auto              &getRoomMap() { return this->idToRoom_map;       }
+    inline size_t             getId()            { return this->id;   }
+    inline const std::string &getName()          { return this->name; }
+    inline const std::string &getFlag()          { return this->flag; }
+    inline auto              &getCrewMap()       { return this->idToCrewMember_map; }
+    inline auto              &getRoomMap()       { return this->idToRoom_map;       }
+    inline auto              &getRoomListModel() { return this->roomListModel;       }
 
     inline void setName(std::string &&name) { this->name  = name; }
     inline void setFlag(std::string &&flag) { this->flag = flag;  }
@@ -33,6 +35,7 @@ private:
     std::map<size_t, std::unique_ptr<CrewMember>> idToCrewMember_map;
     std::map<size_t, std::unique_ptr<Room>>       idToRoom_map;
     inline static size_t next_id = 0;
+    RoomListModel roomListModel;
 };
 
 #endif // !SPACE_SHIP_HPP

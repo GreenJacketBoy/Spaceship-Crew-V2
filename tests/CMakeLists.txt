@@ -11,6 +11,10 @@ add_executable(spaceship_test
 find_package(GTest REQUIRED) # Find GTest
 
 target_link_libraries(spaceship_test
+    Qt6::Core 
+    Qt6::Gui 
+    Qt6::Qml 
+    Qt6::Quick
     GTest::gtest_main
     SpaceshipCrewV2_Lib
 )
