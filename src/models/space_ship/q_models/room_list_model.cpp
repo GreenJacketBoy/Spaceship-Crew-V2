@@ -1,5 +1,6 @@
 #include "room_list_model.hpp"
 #include "q_variant_size_t.hpp"
+#include <optional>
 
 int RoomListModel::columnCount(const QModelIndex &parent) const {
     if (!this->roomList) return 0;

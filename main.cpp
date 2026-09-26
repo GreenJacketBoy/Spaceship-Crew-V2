@@ -1,7 +1,7 @@
+#include "game_state.hpp"
 #include "crew_member.hpp"
 #include "quarter.hpp"
 #include "room.hpp"
-#include "space_ship.hpp"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QAbstractListModel>
@@ -30,10 +30,16 @@ int main(int argc, char *argv[])
     std::map<size_t, std::unique_ptr<CrewMember>> idToCrewMember_map;
     idToCrewMember_map.insert({crew1->getId(), std::move(crew1)});
 
-    SpaceShip spaceShip = SpaceShip("yolo", "yolo", std::move(idToCrewMember_map), std::move(idToRoom_map));
-    
-    engine.rootContext()->setContextProperty("roomListModel", &spaceShip.getRoomListModel());
-    engine.rootContext()->setContextProperty("crewListModel", &spaceShip.getCrewListModel());
+    GameState *gameState = &GameState::getInstance();
+
+    gameState->getSpaceShip().get()->value().getRoomMap().swap(idToRoom_map);
+    gameState->getSpaceShip().get()->value().getCrewMap().swap(idToCrewMember_map);
+
+    gameState->getRoomListModel().get()->setRoomList(gameState->getSpaceShip().get()->value().getRoomMap());
+    gameState->getCrewListModel().get()->setCrewList(gameState->getSpaceShip().get()->value().getCrewMap());
+
+    engine.rootContext()->setContextProperty("roomListModel", gameState->getRoomListModel().get());
+    engine.rootContext()->setContextProperty("crewListModel", gameState->getCrewListModel().get());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 
     if (engine.rootObjects().isEmpty()) {

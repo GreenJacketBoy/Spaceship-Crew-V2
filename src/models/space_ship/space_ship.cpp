@@ -13,6 +13,4 @@ idToCrewMember_map(std::move(idToCrewMember_map))
 {
     this->id = this->next_id;
     this->next_id++;
-    this->roomListModel.setRoomList(this->idToRoom_map);
-    this->crewListModel.setCrewList(this->idToCrewMember_map);
 }

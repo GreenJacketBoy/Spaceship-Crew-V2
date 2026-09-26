@@ -36,6 +36,6 @@ QHash<int, QByteArray> CrewListModel::roleNames() const {
     };
 }
 
-void CrewListModel::setCrewList(std::map<size_t, std::unique_ptr<CrewMember>> &roomList) {
-    this->crewList = &roomList;
+void CrewListModel::setCrewList(std::map<size_t, std::unique_ptr<CrewMember>> &crewList) {
+    this->crewList = &crewList;
 }
