@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <stdexcept>
-#include "corridor.hpp"
 #include "crew_member.hpp"
 #include "room.hpp"
+#include "room_type.hpp"
 #include "space_ship.hpp"
 
 TEST(SpaceShip, Init) {
@@ -19,9 +19,9 @@ TEST(SpaceShip, Init) {
 
 TEST(SpaceShip, InitWithRooms) {
   std::map<size_t, std::unique_ptr<Room>> roomMap;
-  roomMap.insert({1, std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, std::make_unique<Corridor>(), {}))});
-  roomMap.insert({2, std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, std::make_unique<Corridor>(), {}))});
-  roomMap.insert({3, std::unique_ptr<Room>(new Room("Room 3", 1, 1, 1, std::make_unique<Corridor>(), {}))});
+  roomMap.insert({1, std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}))});
+  roomMap.insert({2, std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}))});
+  roomMap.insert({3, std::unique_ptr<Room>(new Room("Room 3", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}))});
 
   SpaceShip spaceShip = SpaceShip("Antarctica", "HCS", {}, std::move(roomMap));
 

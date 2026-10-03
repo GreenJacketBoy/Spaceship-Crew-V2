@@ -5,6 +5,7 @@
 #include "corridor.hpp"
 #include "quarter.hpp"
 #include "bridge.hpp"
+#include "room_type.hpp"
 
 TEST(RoomType, Name) {
   EXPECT_STREQ((Medbay()).getName(), "Medbay");
@@ -23,7 +24,7 @@ TEST(RoomType, Type) {
 TEST(Room, Create) {
   size_t crewCapacity = 15, storageCapacity = 5, size = 30;
   std::vector<size_t> adjacentRooms;
-  Room room = Room("test room", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  Room room = Room("test room", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
 
   EXPECT_STREQ(room.getName().c_str(), "test room");
   EXPECT_EQ(room.getType(), Medbay().getType());
@@ -37,17 +38,17 @@ TEST(Room, InitAdjacentRooms) {
   size_t crewCapacity = 15, storageCapacity = 5, size = 30;
 
   std::array<Room, 3> rooms = {
-    Room("test room 1", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
-    Room("test room 2", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
-    Room("test room 3", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
+    Room("test room 1", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
+    Room("test room 2", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
+    Room("test room 3", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
   };
 
   std::vector<size_t> adjacentRooms;
-  Room room = Room("test room 4", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  Room room = Room("test room 4", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 0);
 
   adjacentRooms = { rooms.at(0).getId() };
-  room = Room("test room 5", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  room = Room("test room 5", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 1);
   EXPECT_TRUE(room.isRoomAdjacent(rooms.at(0).getId()));
 
@@ -55,7 +56,7 @@ TEST(Room, InitAdjacentRooms) {
     rooms.at(0).getId(),
     rooms.at(1).getId()
   };
-  room = Room("test room 6", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  room = Room("test room 6", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 2);
   EXPECT_TRUE(room.isRoomAdjacent(rooms.at(0).getId()));
   EXPECT_TRUE(room.isRoomAdjacent(rooms.at(1).getId()));
@@ -65,7 +66,7 @@ TEST(Room, InitAdjacentRooms) {
     rooms.at(1).getId(),
     rooms.at(2).getId()
   };
-  room = Room("test room 7", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  room = Room("test room 7", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 3);
   EXPECT_TRUE(room.isRoomAdjacent(rooms.at(0).getId()));
   EXPECT_TRUE(room.isRoomAdjacent(rooms.at(1).getId()));
@@ -76,13 +77,13 @@ TEST(Room, AddAdjacentRoom) {
   size_t crewCapacity = 15, storageCapacity = 5, size = 30;
 
   std::array<Room, 3> rooms = {
-    Room("test room 1", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
-    Room("test room 2", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
-    Room("test room 3", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
+    Room("test room 1", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
+    Room("test room 2", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
+    Room("test room 3", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
   };
   
   std::vector<size_t> adjacentRooms = { };
-  Room room = Room("test room 4", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  Room room = Room("test room 4", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 0);
 
   room.addAdjacentRoom(rooms.at(0).getId());
@@ -99,7 +100,7 @@ TEST(Room, AddAdjacentRoom) {
 
   // same with already initialized adjacent rooms :
   adjacentRooms = { rooms.at(0).getId() };
-  room = Room("test room 5", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  room = Room("test room 5", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 1);
   EXPECT_TRUE(room.isRoomAdjacent(rooms.at(0).getId()));
 
@@ -116,9 +117,9 @@ TEST(Room, RemoveAdjacentRoom) {
   size_t crewCapacity = 15, storageCapacity = 5, size = 30;
 
   std::array<Room, 3> rooms = {
-    Room("test room 1", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
-    Room("test room 2", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
-    Room("test room 3", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), std::vector<size_t>()),
+    Room("test room 1", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
+    Room("test room 2", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
+    Room("test room 3", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, std::vector<size_t>()),
   };
   
   std::vector<size_t> adjacentRooms = { 
@@ -126,7 +127,7 @@ TEST(Room, RemoveAdjacentRoom) {
     rooms.at(1).getId(),
     rooms.at(2).getId(),
    };
-  Room room = Room("test room 4", crewCapacity, storageCapacity, size, std::make_unique<Medbay>(), adjacentRooms);
+  Room room = Room("test room 4", crewCapacity, storageCapacity, size, RoomTypeEnum::MEDBAY, adjacentRooms);
   EXPECT_DOUBLE_EQ(room.getAdjacentRooms().size(), 3);
 
   room.removeAdjacentRoom(rooms.at(0).getId());

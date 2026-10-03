@@ -2,6 +2,7 @@
 #include "crew_member.hpp"
 #include "quarter.hpp"
 #include "room.hpp"
+#include "room_type.hpp"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QAbstractListModel>
@@ -14,11 +15,11 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    auto room1 = std::unique_ptr<Room>(new Room( "Mega Room 1 yolo yolo yolo yolo yolo", 1, 1, 1, std::make_unique<Quarter>(), {}));
-    auto room2 = std::unique_ptr<Room>(new Room( "Mega Room 2 yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo", 1, 1, 1, std::make_unique<Quarter>(), {}));
-    auto room3 = std::unique_ptr<Room>(new Room( "Mega Room 3", 1, 1, 1, std::make_unique<Quarter>(), {}));
-    auto room4 = std::unique_ptr<Room>(new Room( "Mega Room 4", 1, 1, 1, std::make_unique<Quarter>(), {}));
-    auto room5 = std::unique_ptr<Room>(new Room( "Mega Room 5", 1, 1, 1, std::make_unique<Quarter>(), {}));
+    auto room1 = std::unique_ptr<Room>(new Room( "Mega Room 1 yolo yolo yolo yolo yolo", 1, 1, 1, RoomTypeEnum::QUARTER, {}));
+    auto room2 = std::unique_ptr<Room>(new Room( "Mega Room 2 yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo yolo", 1, 1, 1, RoomTypeEnum::QUARTER, {}));
+    auto room3 = std::unique_ptr<Room>(new Room( "Mega Room 3", 1, 1, 1, RoomTypeEnum::QUARTER, {}));
+    auto room4 = std::unique_ptr<Room>(new Room( "Mega Room 4", 1, 1, 1, RoomTypeEnum::QUARTER, {}));
+    auto room5 = std::unique_ptr<Room>(new Room( "Mega Room 5", 1, 1, 1, RoomTypeEnum::QUARTER, {}));
     std::map<size_t, std::unique_ptr<Room>> idToRoom_map;
     idToRoom_map.insert({room1->getId(), std::move(room1)});
     idToRoom_map.insert({room2->getId(), std::move(room2)});

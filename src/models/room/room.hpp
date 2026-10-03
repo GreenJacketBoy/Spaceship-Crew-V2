@@ -1,7 +1,6 @@
 #ifndef ROOM_HPP
 #define ROOM_HPP
 
-#include <memory>
 #include <set>
 #include <cstddef>
 #include <string>
@@ -15,14 +14,14 @@ class Room {
         size_t crewCapacity,
         size_t storageCapacity,
         size_t size,
-        std::unique_ptr<RoomType> &&type,
+        RoomTypeEnum type,
         const std::vector<size_t> &adjacentRoomsIds
     );
 
     inline size_t       getId()              { return this->id;               }
     inline const std::string &getName()      { return this->name;             }
-    inline RoomTypeEnum getType()            { return this->type->getType();  }
-    inline const char*  getTypeName()        { return this->type->getName();  }
+    inline RoomTypeEnum getType()            { return this->type.getType();  }
+    inline const char*  getTypeName()        { return this->type.getName();  }
     inline size_t       getSize()            { return this->size;             }
     inline size_t       getStorageCapacity() { return this->storageCapacity;  }
     inline size_t       getCrewCapacity()    { return this->crewCapacity;     }
@@ -47,7 +46,7 @@ private:
     size_t        storageCapacity;
     size_t        size;
     inline static size_t next_id = 0;
-    std::unique_ptr<RoomType> type;
+    RoomType type;
     std::set<size_t> adjacentRoomsIds;
 };
 

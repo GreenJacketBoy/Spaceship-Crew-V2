@@ -21,4 +21,8 @@ protected:
     const char* name;
 };
 
+namespace util {
+    RoomType createRoomTypeFromEnum(RoomTypeEnum type);
+}
+
 #endif // !ROOM_TYPE_H

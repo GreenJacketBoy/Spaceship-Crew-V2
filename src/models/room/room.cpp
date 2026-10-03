@@ -6,11 +6,11 @@ Room::Room(
     size_t crewCapacity,
     size_t storageCapacity,
     size_t size,
-    std::unique_ptr<RoomType> &&type,
+    RoomTypeEnum type,
     const std::vector<size_t> &adjacentRoomsIds
 ):
 name(std::move(name)),
-type(std::move(type))
+type(util::createRoomTypeFromEnum(type))
 {
     this->id = this->next_id;
     this->next_id++;

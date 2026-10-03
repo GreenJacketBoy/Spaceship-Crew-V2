@@ -18,6 +18,7 @@ public:
     inline auto &getSpaceShip() { return this->spaceShip; } // TEMPORARY
     inline auto &getRoomListModel() { return this->roomListModel; }
     inline auto &getCrewListModel() { return this->crewListModel; }
+    inline auto &getEventManager() { return this->eventManager; }
 
 private:
     GameState() {};

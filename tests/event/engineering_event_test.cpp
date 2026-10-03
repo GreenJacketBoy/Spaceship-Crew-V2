@@ -1,8 +1,7 @@
 #include <cstddef>
 #include <gtest/gtest.h>
-#include <memory>
-#include "corridor.hpp"
 #include "engineering_event.hpp"
+#include "room_type.hpp"
 
 TEST(EngineeringEvent, Init) {
     size_t crewMemberId = 0;
@@ -16,7 +15,7 @@ TEST(EngineeringEvent, Repair) {
     size_t roomId = 0;
     EngineeringEvent engineeringEvent = EngineeringEvent(0);
     CrewMember engineer = CrewMember("Karl", "Engineer", {});
-    Room room = Room("Corridor", 1, 1, 1, std::make_unique<Corridor>(), {});
+    Room room = Room("Corridor", 1, 1, 1, RoomTypeEnum::CORRIDOR, {});
     
     bool didSucceed = engineeringEvent.repair(engineer, room);
     EXPECT_FALSE(didSucceed);
