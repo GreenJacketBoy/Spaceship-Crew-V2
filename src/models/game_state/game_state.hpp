@@ -4,6 +4,7 @@
 #include "event_manager.hpp"
 #include "crew_list_model.hpp"
 #include "room_list_model.hpp"
+#include "room_type_model.hpp"
 #include "space_ship.hpp"
 #include <memory>
 #include <optional>
@@ -18,6 +19,7 @@ public:
     inline auto &getSpaceShip() { return this->spaceShip; } // TEMPORARY
     inline auto &getRoomListModel() { return this->roomListModel; }
     inline auto &getCrewListModel() { return this->crewListModel; }
+    inline auto &getRoomTypeModel() { return this->roomTypeModel; }
     inline auto &getEventManager() { return this->eventManager; }
 
 private:
@@ -25,9 +27,10 @@ private:
     // TEMPORARY
     std::unique_ptr<std::optional<SpaceShip>> spaceShip = std::unique_ptr<std::optional<SpaceShip>>(new std::optional<SpaceShip>(SpaceShip("Antarctica", "Fr", {}, {})));
 
+    std::unique_ptr<EventManager>  eventManager = std::make_unique<EventManager>();
+    std::unique_ptr<RoomTypeModel> roomTypeModel = std::make_unique<RoomTypeModel>();
     std::unique_ptr<RoomListModel> roomListModel = std::make_unique<RoomListModel>();
     std::unique_ptr<CrewListModel> crewListModel = std::make_unique<CrewListModel>();
-    std::unique_ptr<EventManager>  eventManager = std::make_unique<EventManager>();
 };
 
 #endif // !GAME_STATE_HPP

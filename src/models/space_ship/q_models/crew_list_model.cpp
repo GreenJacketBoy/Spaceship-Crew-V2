@@ -1,5 +1,5 @@
 #include "crew_list_model.hpp"
-#include "q_variant_size_t.hpp"
+#include "q_variant_special_type.hpp"
 
 int CrewListModel::columnCount(const QModelIndex &parent) const {
     if (!this->crewList) return 0;

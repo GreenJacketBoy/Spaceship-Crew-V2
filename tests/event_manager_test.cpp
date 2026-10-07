@@ -30,9 +30,9 @@ TEST(EventManager, CreateRoomEvent) {
 
     gameState.getEventManager().get()->getCreateRoomEvent().createRoom(
         QString("Medbay Test"),
-        1,
-        1,
-        1,
+        "1",
+        "18000",
+        "50000000",
         RoomTypeEnum::MEDBAY,
         QList<size_t>({9, 10, 11})
     );
@@ -46,4 +46,15 @@ TEST(EventManager, CreateRoomEvent) {
         gameState.getSpaceShip().get()->value().getRoomMap().at(testSubscriber.getReceivedRoomId().value())->getId(),
         testSubscriber.getReceivedRoomId().value()
     );
+
+    Room *room = gameState.getSpaceShip().get()->value().getRoomMap().at(testSubscriber.getReceivedRoomId().value()).get();
+    EXPECT_STREQ(room->getName().c_str(), "Medbay Test");
+    EXPECT_DOUBLE_EQ(room->getCrewCapacity(), 1);
+    EXPECT_DOUBLE_EQ(room->getStorageCapacity(), 18000);
+    EXPECT_DOUBLE_EQ(room->getSize(), 50000000);
+    EXPECT_EQ(room->getType(), RoomTypeEnum::MEDBAY);
+    EXPECT_DOUBLE_EQ(room->getAdjacentRooms().size(), 3);
+    EXPECT_TRUE(room->getAdjacentRooms().contains(9));
+    EXPECT_TRUE(room->getAdjacentRooms().contains(10));
+    EXPECT_TRUE(room->getAdjacentRooms().contains(11));
 }

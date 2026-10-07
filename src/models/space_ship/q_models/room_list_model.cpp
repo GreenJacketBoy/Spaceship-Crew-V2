@@ -1,6 +1,9 @@
 #include "room_list_model.hpp"
-#include "q_variant_size_t.hpp"
+#include "game_state.hpp"
+#include "q_variant_special_type.hpp"
+#include <iostream>
 #include <optional>
+#include <qabstractitemmodel.h>
 
 int RoomListModel::columnCount(const QModelIndex &parent) const {
     if (!this->roomList) return 0;
@@ -45,4 +48,15 @@ QHash<int, QByteArray> RoomListModel::roleNames() const {
 
 void RoomListModel::setRoomList(std::map<size_t, std::unique_ptr<Room>> &roomList) {
     this->roomList = &roomList;
+}
+
+void RoomListModel::handleRoomCreated(size_t &payload) {
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+
+    this->layoutChanged();
+}
+
+void RoomListModel::TEMPORARY_subscribeToUpdates() {
+    GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
 }

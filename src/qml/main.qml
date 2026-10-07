@@ -8,9 +8,31 @@ Window {
     height: 400
     title: "Spaceship Crew V2"
 
-    Button {
-        text: "SPACESHIP !"
-        anchors.centerIn: parent
+
+    ColumnLayout {
+        width: parent.width
+        height: parent.height
+        TabBar {
+            id: bar
+            width: parent.width
+            TabButton {
+                width: bar.parent.width / bar.children.length
+                text: qsTr("Lists")
+            }
+            TabButton {
+                width: bar.parent.width / bar.children.length
+                text: qsTr("Create Room")
+            }
+        }
+
+        StackLayout {
+            z: bar.z - 1
+            height: parent.height - bar.height
+            anchors.bottom: parent.bottom
+            width: parent.width
+            currentIndex: bar.currentIndex
+            CrewOrRoomTabs { }
+            CreateRoomForm { }
+        }
     }
-    CrewOrRoomTabs { }
 }

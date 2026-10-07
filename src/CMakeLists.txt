@@ -2,6 +2,7 @@ add_library(SpaceshipCrewV2_Lib
     STATIC
         models/room/room.cpp
         models/room/types/room_type.cpp
+        models/room/types/q_models/room_type_model.cpp
         models/crew_member/crew_member.cpp
         models/space_ship/space_ship.cpp
         models/space_ship/q_models/room_list_model.cpp
@@ -15,6 +16,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         util
         models/room
         models/room/types
+        models/room/types/q_models/
         models/crew_member
         models/skill
         models/event

@@ -1,12 +1,16 @@
 #ifndef ROOM_TYPE_H
 #define ROOM_TYPE_H
 
+#include <cstddef>
 enum class RoomTypeEnum {
     MEDBAY,
     CORRIDOR,
     QUARTER,
     BRIDGE,
 };
+
+// Not the end of the world if this is not updated, but it should be
+const size_t AMOUNT_OF_ROOM_TYPES = static_cast<size_t>(RoomTypeEnum::BRIDGE) + 1;
 
 class RoomType {
 public:

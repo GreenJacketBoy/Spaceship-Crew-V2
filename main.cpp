@@ -7,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QAbstractListModel>
 #include <memory>
+#include <qobject.h>
 #include <qqmlcontext.h>
 
 int main(int argc, char *argv[])
@@ -33,6 +34,8 @@ int main(int argc, char *argv[])
 
     GameState *gameState = &GameState::getInstance();
 
+    gameState->getRoomListModel()->TEMPORARY_subscribeToUpdates(); // DUDE just let me commit already I've been at it for 3 days, I know it's a ugly hack and I'll do something about it
+
     gameState->getSpaceShip().get()->value().getRoomMap().swap(idToRoom_map);
     gameState->getSpaceShip().get()->value().getCrewMap().swap(idToCrewMember_map);
 
@@ -41,6 +44,8 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("roomListModel", gameState->getRoomListModel().get());
     engine.rootContext()->setContextProperty("crewListModel", gameState->getCrewListModel().get());
+    engine.rootContext()->setContextProperty("roomTypeModel", gameState->getRoomTypeModel().get());
+    engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 
     if (engine.rootObjects().isEmpty()) {

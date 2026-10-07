@@ -3,13 +3,14 @@
 
 #include <cstddef>
 #include <optional>
+#include "create_room_event.hpp"
 #include "room.hpp"
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel {
+class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -20,6 +21,10 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     void setRoomList(std::map<size_t, std::unique_ptr<Room>> &roomList);
+
+    void handleRoomCreated(size_t &payload) override;
+
+    void TEMPORARY_subscribeToUpdates();
 
 private:
     enum RoomModelRoles {
