@@ -1,6 +1,5 @@
 #include "game_state.hpp"
 #include "crew_member.hpp"
-#include "quarter.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
 #include <QGuiApplication>
@@ -34,7 +33,7 @@ int main(int argc, char *argv[])
 
     GameState *gameState = &GameState::getInstance();
 
-    gameState->getRoomListModel()->TEMPORARY_subscribeToUpdates(); // DUDE just let me commit already I've been at it for 3 days, I know it's a ugly hack and I'll do something about it
+    gameState->triggerSubscriptions();
 
     gameState->getSpaceShip().get()->value().getRoomMap().swap(idToRoom_map);
     gameState->getSpaceShip().get()->value().getCrewMap().swap(idToCrewMember_map);

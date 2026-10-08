@@ -24,7 +24,7 @@ public:
 
     void handleRoomCreated(size_t &payload) override;
 
-    void TEMPORARY_subscribeToUpdates();
+    void triggerSubscriptions();
 
 private:
     enum RoomModelRoles {

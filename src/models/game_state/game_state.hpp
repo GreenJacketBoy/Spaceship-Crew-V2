@@ -22,6 +22,8 @@ public:
     inline auto &getRoomTypeModel() { return this->roomTypeModel; }
     inline auto &getEventManager() { return this->eventManager; }
 
+    void triggerSubscriptions();
+
 private:
     GameState() {};
     // TEMPORARY

@@ -57,6 +57,6 @@ void RoomListModel::handleRoomCreated(size_t &payload) {
     this->layoutChanged();
 }
 
-void RoomListModel::TEMPORARY_subscribeToUpdates() {
+void RoomListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
 }
