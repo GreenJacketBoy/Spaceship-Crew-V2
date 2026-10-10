@@ -64,7 +64,7 @@ void AdjacentRoomsListCreateRoomModel::adjacentRoomAddedCreateForm(size_t roomId
 
 void AdjacentRoomsListCreateRoomModel::adjacentRoomRemovedCreateForm(size_t roomId) {
     this->layoutAboutToBeChanged();
-    this->adjacentRooms.remove(roomId);
+    this->adjacentRooms.removeOne(roomId);
     this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
     this->layoutChanged();
 }
