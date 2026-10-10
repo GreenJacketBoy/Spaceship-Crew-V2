@@ -11,12 +11,6 @@
 #include <qtmetamacros.h>
 #include <qvariant.h>
 
-enum RoomModelRoles {
-    IdRole = Qt::UserRole + 1,
-    NameRole,
-    TypeRole,
-};
-
 class AdjacentRoomsListCreateRoomModel : public QAbstractTableModel {
 Q_OBJECT
 public:
@@ -37,6 +31,12 @@ public slots:
     void adjacentRoomRemovedCreateForm(size_t roomId);
 
 private:
+    enum ModelRoles {
+        IdRole = Qt::UserRole + 1,
+        NameRole,
+        TypeRole,
+    };
+
     QList<size_t> adjacentRooms;
 };
 

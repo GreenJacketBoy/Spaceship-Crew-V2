@@ -27,7 +27,7 @@ public:
     void triggerSubscriptions();
 
 private:
-    enum RoomModelRoles {
+    enum ModelRoles {
         IdRole = Qt::UserRole + 1,
         NameRole,
         CrewCapacityRole,

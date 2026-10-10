@@ -22,7 +22,7 @@ public:
     void setCrewList(std::map<size_t, std::unique_ptr<CrewMember>> &roomList);
 
 private:
-    enum RoomModelRoles {
+    enum ModelRoles {
         IdRole = Qt::UserRole + 1,
         NameRole,
         TitleRole,

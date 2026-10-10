@@ -7,11 +7,6 @@
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 
-enum AddAdjacentRoomModelRoles {
-    Text = Qt::UserRole + 1,
-    Value,
-};
-
 class AddAdjacentRoomModel : public QAbstractListModel, public CreateRoomSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -25,6 +20,12 @@ public:
     void handleRoomCreated(size_t &payload) override;
 
     void triggerSubscriptions();
+
+private:
+    enum ModelRoles {
+        Text = Qt::UserRole + 1,
+        Value,
+    };
 };
 
 #endif // !ADD_ADJACENT_ROOM_MODEL_HPP
