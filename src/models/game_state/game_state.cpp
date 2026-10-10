@@ -5,4 +5,5 @@ void GameState::triggerSubscriptions() {
     if (!events) return;
 
     if (this->roomListModel) this->roomListModel->triggerSubscriptions();
+    if (this->addAdjacentRoomModel) this->addAdjacentRoomModel->triggerSubscriptions();
 }

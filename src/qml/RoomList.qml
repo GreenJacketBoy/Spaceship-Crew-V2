@@ -12,7 +12,7 @@ ScrollView {
             Rectangle {
                 border.color: "black"
                 height: column.implicitHeight
-                width: parent.width
+                width: roomList.width
                 Column {
                     id: column
                     width: parent.width

@@ -28,7 +28,6 @@ Window {
         StackLayout {
             z: bar.z - 1
             height: parent.height - bar.height
-            anchors.bottom: parent.bottom
             width: parent.width
             currentIndex: bar.currentIndex
             CrewOrRoomTabs { }

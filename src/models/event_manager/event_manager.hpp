@@ -4,7 +4,7 @@
 #include "create_room_event.hpp"
 class EventManager {
 public: 
-    CreateRoomEvent &getCreateRoomEvent() { return createRoomEvent; }
+    CreateRoomEvent &getCreateRoomEvent() { return this->createRoomEvent; }
 
 private:
     CreateRoomEvent createRoomEvent;

@@ -1,9 +1,6 @@
 #include "room_list_model.hpp"
 #include "game_state.hpp"
 #include "q_variant_special_type.hpp"
-#include <iostream>
-#include <optional>
-#include <qabstractitemmodel.h>
 
 int RoomListModel::columnCount(const QModelIndex &parent) const {
     if (!this->roomList) return 0;

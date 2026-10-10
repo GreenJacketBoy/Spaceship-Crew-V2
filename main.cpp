@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("roomListModel", gameState->getRoomListModel().get());
     engine.rootContext()->setContextProperty("crewListModel", gameState->getCrewListModel().get());
     engine.rootContext()->setContextProperty("roomTypeModel", gameState->getRoomTypeModel().get());
+    engine.rootContext()->setContextProperty("addAdjacentRoomModel", gameState->getAddAdjacentRoomModel().get());
+    engine.rootContext()->setContextProperty("adjacentRoomsListCreateRoomModel", gameState->getAdjacentRoomsListCreateRoomModel().get());
     engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 

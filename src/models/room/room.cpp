@@ -1,4 +1,5 @@
 #include "room.hpp"
+#include "get_room.hpp"
 #include <iostream>
 
 Room::Room(
@@ -23,4 +24,10 @@ type(util::createRoomTypeFromEnum(type))
         this->adjacentRoomsIds.insert(roomId);
     }
     std::cout << "Room of name " << this->name << " and type " << this->getTypeName() << " has been created" << '\n';
+    if (adjacentRoomsIds.size() != 0) std::cout << "Adjacent Rooms:\n";
+    for (auto adjacentRoomId : adjacentRoomsIds) {
+        auto room = util::getRoom(adjacentRoomId);
+        if (!room) continue;
+        std::cout << "- #" << room.value()->getId() << " " << room.value()->getName() << '\n';
+    }
 };

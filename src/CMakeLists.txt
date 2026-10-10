@@ -9,6 +9,9 @@ add_library(SpaceshipCrewV2_Lib
         models/space_ship/q_models/crew_list_model.cpp
         models/game_state/game_state.cpp
         models/event_manager/events/create_room_event.cpp
+        qml/q_models/add_adjacent_room_model.cpp
+        qml/q_models/adjacent_rooms_list_create_room.cpp
+        util/get_room.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib
@@ -25,6 +28,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/event_manager
         models/event_manager/events
         models/game_state
+        qml/q_models
 )
 
 add_subdirectory(qml)
