@@ -1,9 +1,6 @@
 #ifndef CREW_LIST_MODEL_HPP
 #define CREW_LIST_MODEL_HPP
 
-#include <cstddef>
-#include <optional>
-#include "crew_member.hpp"
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
@@ -19,16 +16,12 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void setCrewList(std::map<size_t, std::unique_ptr<CrewMember>> &roomList);
-
 private:
     enum ModelRoles {
         IdRole = Qt::UserRole + 1,
         NameRole,
         TitleRole,
     };
-
-    std::optional<std::map<size_t, std::unique_ptr<CrewMember>>*> crewList;
 };
 
 #endif // !CREW_LIST_MODEL_HPP

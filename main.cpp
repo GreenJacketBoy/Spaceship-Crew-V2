@@ -38,9 +38,6 @@ int main(int argc, char *argv[])
     gameState->getSpaceShip().get()->value().getRoomMap().swap(idToRoom_map);
     gameState->getSpaceShip().get()->value().getCrewMap().swap(idToCrewMember_map);
 
-    gameState->getRoomListModel().get()->setRoomList(gameState->getSpaceShip().get()->value().getRoomMap());
-    gameState->getCrewListModel().get()->setCrewList(gameState->getSpaceShip().get()->value().getCrewMap());
-
     engine.rootContext()->setContextProperty("roomListModel", gameState->getRoomListModel().get());
     engine.rootContext()->setContextProperty("crewListModel", gameState->getCrewListModel().get());
     engine.rootContext()->setContextProperty("roomTypeModel", gameState->getRoomTypeModel().get());

@@ -2,9 +2,7 @@
 #define ROOM_LIST_MODEL_HPP
 
 #include <cstddef>
-#include <optional>
 #include "create_room_event.hpp"
-#include "room.hpp"
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
@@ -20,8 +18,6 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void setRoomList(std::map<size_t, std::unique_ptr<Room>> &roomList);
-
     void handleRoomCreated(size_t &payload) override;
 
     void triggerSubscriptions();
@@ -35,8 +31,6 @@ private:
         SizeRole,
         TypeRole,
     };
-
-    std::optional<std::map<size_t, std::unique_ptr<Room>>*> roomList;
 };
 
 #endif // !ROOM_LIST_MODEL_HPP

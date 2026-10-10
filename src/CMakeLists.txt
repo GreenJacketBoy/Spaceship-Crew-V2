@@ -12,6 +12,8 @@ add_library(SpaceshipCrewV2_Lib
         qml/q_models/add_adjacent_room_model.cpp
         qml/q_models/adjacent_rooms_list_create_room.cpp
         util/get_room.cpp
+        util/get_room_list.cpp
+        util/get_crew_list.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib

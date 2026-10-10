@@ -1,20 +1,24 @@
 #include "crew_list_model.hpp"
+#include "get_crew_list.hpp"
 #include "q_variant_special_type.hpp"
 
 int CrewListModel::columnCount(const QModelIndex &parent) const {
-    if (!this->crewList) return 0;
+    auto crewList = util::getCrewList();
+    if (!crewList) return 0;
     return 1;
 }
 
 int CrewListModel::rowCount(const QModelIndex &parent) const {
-    if (!this->crewList) return 0;
-    return this->crewList.value()->size();
+    auto crewList = util::getCrewList();
+    if (!crewList) return 0;
+    return crewList.value()->size();
 }
 
 QVariant CrewListModel::data(const QModelIndex &index, int role) const {
-    if (!this->crewList.has_value()) return QVariant();
+    auto crewList = util::getCrewList();
+    if (!crewList) return QVariant();
     size_t i = 0;
-    for (auto &[_, room] : *this->crewList.value()) {
+    for (auto &[_, room] : *crewList.value()) {
         if (index.row() == i) {
             switch (role) {
                 case IdRole: return util::qVariantSizeT(room->getId());
@@ -34,8 +38,4 @@ QHash<int, QByteArray> CrewListModel::roleNames() const {
         { NameRole, "name"},
         { TitleRole, "title"},
     };
-}
-
-void CrewListModel::setCrewList(std::map<size_t, std::unique_ptr<CrewMember>> &crewList) {
-    this->crewList = &crewList;
 }
