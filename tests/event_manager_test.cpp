@@ -4,15 +4,17 @@
 #include <optional>
 #include <qhashfunctions.h>
 #include <qlist.h>
+#include "create_crew_member_event.hpp"
 #include "create_room_event.hpp"
+#include "crew_member.hpp"
 #include "game_state.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
 #include "space_ship.hpp"
 
-class TestSubscriber : public CreateRoomSubscriber {
+class TestRoomSubscriber : public CreateRoomSubscriber {
 public:
-    void handleRoomCreated(size_t &payload) { this->receivedRoomId = payload; }
+    void handleRoomCreated(size_t &payload) override { this->receivedRoomId = payload; }
     auto &getReceivedRoomId() { return this->receivedRoomId; }
 private:
     std::optional<size_t> receivedRoomId;
@@ -21,7 +23,7 @@ private:
 TEST(EventManager, CreateRoomEvent) {
 
     GameState &gameState = GameState::getInstance();
-    TestSubscriber testSubscriber;
+    TestRoomSubscriber testSubscriber;
     gameState.getEventManager().get()->getCreateRoomEvent().subscribe(testSubscriber);
 
     EXPECT_FALSE(testSubscriber.getReceivedRoomId().has_value());
@@ -57,4 +59,44 @@ TEST(EventManager, CreateRoomEvent) {
     EXPECT_TRUE(room->getAdjacentRooms().contains(9));
     EXPECT_TRUE(room->getAdjacentRooms().contains(10));
     EXPECT_TRUE(room->getAdjacentRooms().contains(11));
+}
+
+class TestCrewMemberSubscriber : public CreateCrewMemberSubscriber {
+public:
+    void handleCrewMemberCreated(size_t &payload) override { this->receivedCrewMemberId = payload; }
+    auto &getReceivedCrewMemberId() { return this->receivedCrewMemberId; }
+private:
+    std::optional<size_t> receivedCrewMemberId;
+};
+
+TEST(EventManager, CreateCrewmemberEvent) {
+
+    GameState &gameState = GameState::getInstance();
+    TestCrewMemberSubscriber testSubscriber;
+    gameState.getEventManager().get()->getCreateCrewMemberEvent().subscribe(testSubscriber);
+
+    EXPECT_FALSE(testSubscriber.getReceivedCrewMemberId().has_value());
+    EXPECT_TRUE(gameState.getSpaceShip().get()->has_value());
+    size_t amountOfCrewMembers = gameState.getSpaceShip().get()->value().getCrewMap().size();
+
+    gameState.getEventManager().get()->getCreateCrewMemberEvent().createCrewMember(
+        QString("Johny Test"), // Lol
+        "Lab rat",
+        QList<size_t>()
+    );
+
+    EXPECT_TRUE(testSubscriber.getReceivedCrewMemberId().has_value());
+    EXPECT_DOUBLE_EQ(
+        gameState.getSpaceShip().get()->value().getCrewMap().size(),
+        amountOfCrewMembers + 1
+    );
+    EXPECT_DOUBLE_EQ(
+        gameState.getSpaceShip().get()->value().getCrewMap().at(testSubscriber.getReceivedCrewMemberId().value())->getId(),
+        testSubscriber.getReceivedCrewMemberId().value()
+    );
+
+    CrewMember *crewMember = gameState.getSpaceShip().get()->value().getCrewMap().at(testSubscriber.getReceivedCrewMemberId().value()).get();
+    EXPECT_STREQ(crewMember->getName().c_str(), "Johny Test");
+    EXPECT_STREQ(crewMember->getTitle().c_str(), "Lab rat");
+    EXPECT_DOUBLE_EQ(crewMember->getSkills().size(), 0); // TODO: handle Skills
 }

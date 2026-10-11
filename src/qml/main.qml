@@ -16,12 +16,16 @@ Window {
             id: bar
             width: parent.width
             TabButton {
-                width: bar.parent.width / bar.children.length
+                width: bar.parent.width / bar.count
                 text: qsTr("Lists")
             }
             TabButton {
-                width: bar.parent.width / bar.children.length
+                width: bar.parent.width / bar.count
                 text: qsTr("Create Room")
+            }
+            TabButton {
+                width: bar.parent.width / bar.count
+                text: qsTr("Create Crew Member")
             }
         }
 
@@ -32,6 +36,7 @@ Window {
             currentIndex: bar.currentIndex
             CrewOrRoomTabs { }
             CreateRoomForm { }
+            CreateCrewMemberForm { }
         }
     }
 }

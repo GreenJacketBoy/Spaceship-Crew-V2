@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("addAdjacentRoomModel", gameState->getAddAdjacentRoomModel().get());
     engine.rootContext()->setContextProperty("adjacentRoomsListCreateRoomModel", gameState->getAdjacentRoomsListCreateRoomModel().get());
     engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
+    engine.rootContext()->setContextProperty("createCrewMemberEvent", &gameState->getEventManager().get()->getCreateCrewMemberEvent());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 
     if (engine.rootObjects().isEmpty()) {

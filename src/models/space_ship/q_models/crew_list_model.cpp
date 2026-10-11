@@ -1,5 +1,6 @@
 #include "crew_member.hpp"
 #include "crew_list_model.hpp"
+#include "game_state.hpp"
 #include "get_crew_list.hpp"
 #include "q_variant_special_type.hpp"
 
@@ -39,4 +40,14 @@ QHash<int, QByteArray> CrewListModel::roleNames() const {
         { NameRole, "name"},
         { TitleRole, "title"},
     };
+}
+
+void CrewListModel::handleCrewMemberCreated(size_t &payload) {
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->layoutChanged();
+}
+
+void CrewListModel::triggerSubscriptions() {
+    GameState::getInstance().getEventManager()->getCreateCrewMemberEvent().subscribe(*this);
 }
