@@ -1,5 +1,6 @@
 #include "add_adjacent_room_model.hpp"
 #include "game_state.hpp"
+#include "get_room_list.hpp"
 #include "q_variant_special_type.hpp"
 #include <cstddef>
 #include <format>
@@ -10,21 +11,19 @@ int AddAdjacentRoomModel::columnCount(const QModelIndex &parent) const {
 }
 
 int AddAdjacentRoomModel::rowCount(const QModelIndex &parent) const {
-    auto &spaceship = GameState::getInstance().getSpaceShip();
-    if (spaceship.get() == nullptr || !spaceship.get()->has_value()) return 0;
+    auto roomMap = util::getRoomList();
+    if (!roomMap) return 0;
 
     // yeah this won't work when I have multi-threading, but as I like to say, problem for later
-    return spaceship.get()->value().getRoomMap().size();
+    return roomMap.value()->size();
 }
 
 QVariant AddAdjacentRoomModel::data(const QModelIndex &index, int role) const {
-    auto &spaceship = GameState::getInstance().getSpaceShip();
-    if (spaceship.get() == nullptr || !spaceship.get()->has_value()) return QVariant();
-
-    auto &roomMap = spaceship.get()->value().getRoomMap();
+    auto roomMap = util::getRoomList();
+    if (!roomMap) return QVariant();
 
     size_t i = 0;
-    for (const auto &[_, room] : roomMap) {
+    for (const auto &[_, room] : *roomMap.value()) {
         if (index.row() != i) {
             i++;
             continue;
