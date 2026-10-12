@@ -8,6 +8,7 @@
 #include <qtmetamacros.h>
 
 class CrewMember;
+struct Skill;
 
 class CreateCrewMemberSubscriber {
 public: 
@@ -23,7 +24,7 @@ public slots:
     void createCrewMember(
         QString name,
         QString title,
-        QList<size_t> skills
+        QList<Skill> *skills
     );
 };
 

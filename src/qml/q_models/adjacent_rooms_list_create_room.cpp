@@ -1,3 +1,4 @@
+#include "room.hpp"
 #include "adjacent_rooms_list_create_room.hpp"
 #include "get_room.hpp"
 #include "q_variant_special_type.hpp"

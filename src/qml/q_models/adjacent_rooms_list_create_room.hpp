@@ -2,8 +2,6 @@
 #define ADJACENT_ROOMS_LIST_CREATE_ROOM_HPP
 
 #include <cstddef>
-#include "create_room_event.hpp"
-#include "room.hpp"
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
 #include <qlist.h>
@@ -21,8 +19,6 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     QHash<int, QByteArray> roleNames() const override;
-
-    void setRoomList(std::map<size_t, std::unique_ptr<Room>> &roomList);
 
     Q_INVOKABLE QList<size_t> getAdjacentRooms() { return this->adjacentRooms; };
 

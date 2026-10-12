@@ -10,6 +10,7 @@
 #include "game_state.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
+#include "skill.hpp"
 #include "space_ship.hpp"
 
 class TestRoomSubscriber : public CreateRoomSubscriber {
@@ -79,10 +80,11 @@ TEST(EventManager, CreateCrewmemberEvent) {
     EXPECT_TRUE(gameState.getSpaceShip().get()->has_value());
     size_t amountOfCrewMembers = gameState.getSpaceShip().get()->value().getCrewMap().size();
 
+    QList<Skill> list;
     gameState.getEventManager().get()->getCreateCrewMemberEvent().createCrewMember(
         QString("Johny Test"), // Lol
         "Lab rat",
-        QList<size_t>()
+        &list // TODO: test skills
     );
 
     EXPECT_TRUE(testSubscriber.getReceivedCrewMemberId().has_value());

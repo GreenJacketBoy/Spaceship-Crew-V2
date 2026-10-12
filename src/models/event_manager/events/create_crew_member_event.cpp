@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <qhashfunctions.h>
+#include <utility>
 #include <vector>
 #include "game_state.hpp"
 #include "get_crew_list.hpp"
@@ -17,15 +18,22 @@ void CreateCrewMemberEvent::emitEvent(size_t &crewMemberId) {
 void CreateCrewMemberEvent::createCrewMember(
     QString name,
     QString title,
-    QList<size_t> skills // TODO: imlement choice of skills
+    QList<Skill> *skills // simple pointer because Qt doesn't know references nor const
 ) {
     auto &spaceShip = GameState::getInstance().getSpaceShip();
     if (!spaceShip) return;
+
+    std::vector<Skill> skillsVector;
+    skillsVector.reserve(skills->size());
+
+    for (const auto &skill : *skills) {
+        skillsVector.push_back(skill);
+    }
     
     auto crewMember = std::unique_ptr<CrewMember>(new CrewMember(
         name.toStdString(),
         title.toStdString(),
-        {}
+        skillsVector
     ));
 
     size_t crewMemberId = crewMember->getId();
