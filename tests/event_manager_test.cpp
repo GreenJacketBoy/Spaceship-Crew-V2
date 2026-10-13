@@ -80,7 +80,10 @@ TEST(EventManager, CreateCrewmemberEvent) {
     EXPECT_TRUE(gameState.getSpaceShip().get()->has_value());
     size_t amountOfCrewMembers = gameState.getSpaceShip().get()->value().getCrewMap().size();
 
-    QList<Skill> list;
+    auto list = QList<Skill>({
+        {SkillType::ENGINEERING, 1},
+        {SkillType::PILOTING, 10},
+    });
     gameState.getEventManager().get()->getCreateCrewMemberEvent().createCrewMember(
         QString("Johny Test"), // Lol
         "Lab rat",
@@ -100,5 +103,7 @@ TEST(EventManager, CreateCrewmemberEvent) {
     CrewMember *crewMember = gameState.getSpaceShip().get()->value().getCrewMap().at(testSubscriber.getReceivedCrewMemberId().value()).get();
     EXPECT_STREQ(crewMember->getName().c_str(), "Johny Test");
     EXPECT_STREQ(crewMember->getTitle().c_str(), "Lab rat");
-    EXPECT_DOUBLE_EQ(crewMember->getSkills().size(), 0); // TODO: handle Skills
+    EXPECT_DOUBLE_EQ(crewMember->getSkills().size(), 2);
+    EXPECT_DOUBLE_EQ(crewMember->getSkills().at(SkillType::ENGINEERING), 1);
+    EXPECT_DOUBLE_EQ(crewMember->getSkills().at(SkillType::PILOTING), 10);
 }
