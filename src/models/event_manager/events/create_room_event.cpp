@@ -1,4 +1,5 @@
 #include "create_room_event.hpp"
+#include "get_room_list.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
 #include <cstddef>
@@ -22,8 +23,9 @@ void CreateRoomEvent::createRoom(
     RoomTypeEnum type,
     QList<size_t> *adjacentRoomsIds
 ) {
-    auto &spaceShip = GameState::getInstance().getSpaceShip();
-    if (!spaceShip) return;
+    auto optionalRoomMap = util::getRoomList();
+    if (!optionalRoomMap) return;
+    auto roomMap = optionalRoomMap.value();
     
     size_t crewCapacityNumber = -1;
     size_t storageCapacityNumber = -1;
@@ -51,7 +53,7 @@ void CreateRoomEvent::createRoom(
     ));
 
     size_t roomId = room->getId();
-    spaceShip->value().getRoomMap().insert({roomId, std::move(room)});
+    roomMap->insert({roomId, std::move(room)});
 
     this->emitEvent(roomId);
 }
