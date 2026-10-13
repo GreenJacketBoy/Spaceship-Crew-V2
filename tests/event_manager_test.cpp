@@ -31,13 +31,15 @@ TEST(EventManager, CreateRoomEvent) {
     EXPECT_TRUE(gameState.getSpaceShip().get()->has_value());
     size_t amountOfRooms = gameState.getSpaceShip().get()->value().getRoomMap().size();
 
+
+    auto list = QList<size_t>({9, 10, 11});
     gameState.getEventManager().get()->getCreateRoomEvent().createRoom(
         QString("Medbay Test"),
         "1",
         "18000",
         "50000000",
         RoomTypeEnum::MEDBAY,
-        QList<size_t>({9, 10, 11})
+        &list
     );
 
     EXPECT_TRUE(testSubscriber.getReceivedRoomId().has_value());

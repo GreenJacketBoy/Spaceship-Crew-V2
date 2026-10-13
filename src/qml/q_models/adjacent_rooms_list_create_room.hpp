@@ -20,7 +20,7 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE QList<size_t> getAdjacentRooms() { return this->adjacentRooms; };
+    Q_INVOKABLE QList<size_t> *getAdjacentRooms() { return &this->adjacentRooms; };
 
 public slots: 
     void adjacentRoomAddedCreateForm(size_t roomId);

@@ -20,7 +20,7 @@ void CreateRoomEvent::createRoom(
     QString storageCapacity,
     QString size,
     RoomTypeEnum type,
-    QList<size_t> adjacentRoomsIds
+    QList<size_t> *adjacentRoomsIds
 ) {
     auto &spaceShip = GameState::getInstance().getSpaceShip();
     if (!spaceShip) return;
@@ -36,8 +36,8 @@ void CreateRoomEvent::createRoom(
     stream >> sizeNumber;
 
     std::vector<size_t> roomsAsVector;
-    roomsAsVector.reserve(adjacentRoomsIds.size());
-    for (size_t roomId : adjacentRoomsIds) {
+    roomsAsVector.reserve(adjacentRoomsIds->size());
+    for (size_t roomId : *adjacentRoomsIds) {
         roomsAsVector.push_back(roomId);
     }
 

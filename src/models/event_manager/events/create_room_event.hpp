@@ -29,7 +29,7 @@ public slots:
         QString storageCapacity,
         QString size,
         RoomTypeEnum type,
-        QList<size_t> adjacentRoomsIds
+        QList<size_t> *adjacentRoomsIds
     );
 };
 
