@@ -1,7 +1,7 @@
 #ifndef EVENT_INTERFACE_HPP
 #define EVENT_INTERFACE_HPP
 
-#include <vector>
+#include <set>
 
 template <typename Payload, typename Subscriber>
 class Event {
@@ -9,19 +9,14 @@ public:
     virtual void emitEvent(Payload &payload) = 0; // virtual because Subscribers each have a different handle command
 
     inline void subscribe(Subscriber &subscriber) {
-        this->subscribers.push_back(&subscriber);
+        this->subscribers.insert(&subscriber);
     };
 
-    void unsubscribe(Subscriber &subscriberToRemove) {
-        std::vector<Subscriber*> newSubscribers;
-        newSubscribers.reserve(this->subscribers.size() - 1);
-        for (auto subscriber : this->subscribers) {
-            if (subscriber != &subscriberToRemove) newSubscribers.push_back(subscriber);
-        }
-        this->subscribers = std::move(newSubscribers);
+    inline void unsubscribe(Subscriber &subscriberToRemove) {
+        this->subscribers.erase(subscriberToRemove);
     };
 protected:
-    std::vector<Subscriber*> subscribers;
+    std::set<Subscriber*> subscribers;
 };
 
 #endif // !EVENT_INTERFACE_HPP

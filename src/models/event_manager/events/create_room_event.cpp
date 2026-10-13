@@ -7,7 +7,6 @@
 #include <qhashfunctions.h>
 #include <sstream>
 #include <vector>
-#include "game_state.hpp"
 
 void CreateRoomEvent::emitEvent(size_t &roomId) {
     for (auto subscriber : this->subscribers) {
