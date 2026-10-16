@@ -10,10 +10,12 @@ add_library(SpaceshipCrewV2_Lib
         models/game_state/game_state.cpp
         models/event_manager/events/create_crew_member_event.cpp
         models/event_manager/events/create_room_event.cpp
+        models/event_manager/events/room_selected_event.cpp
         qml/q_models/add_adjacent_room_model.cpp
         qml/q_models/adjacent_rooms_list_create_room.cpp
         qml/q_models/add_skill_model.cpp
         qml/q_models/skills_list_create_crew_member_model.cpp
+        qml/q_models/adjacent_room_list_room_details.cpp
         util/get_room.cpp
         util/get_room_list.cpp
         util/get_crew_list.cpp

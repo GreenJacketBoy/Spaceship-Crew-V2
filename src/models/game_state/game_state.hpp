@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include "adjacent_room_list_room_details.hpp"
 #include "add_adjacent_room_model.hpp"
 #include "add_skill_model.hpp"
 #include "adjacent_rooms_list_create_room.hpp"
@@ -29,6 +30,7 @@ public:
     inline auto &getAddSkillModel() { return this->addSkillModel; }
     inline auto &getSkillsListCreateCrewMemberModel() { return this->skillsListCreateCrewMemberModel; }
     inline auto &getEventManager() { return this->eventManager; }
+    inline auto &getAdjacentRoomListRoomDetailsModel() { return this->adjacentRoomListRoomDetailsModel; }
 
     void triggerSubscriptions();
 
@@ -45,6 +47,7 @@ private:
     std::unique_ptr<AdjacentRoomsListCreateRoomModel> adjacentRoomsListCreateRoomModel = std::make_unique<AdjacentRoomsListCreateRoomModel>();
     std::unique_ptr<AddSkillModel> addSkillModel = std::make_unique<AddSkillModel>();
     std::unique_ptr<SkillsListCreateCrewMemberModel> skillsListCreateCrewMemberModel = std::make_unique<SkillsListCreateCrewMemberModel>();
+    std::unique_ptr<AdjacentRoomListRoomDetailsModel> adjacentRoomListRoomDetailsModel = std::make_unique<AdjacentRoomListRoomDetailsModel>();
 };
 
 #endif // !GAME_STATE_HPP

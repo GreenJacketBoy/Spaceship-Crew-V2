@@ -25,7 +25,7 @@ class Room {
     inline size_t       getSize()            { return this->size;             }
     inline size_t       getStorageCapacity() { return this->storageCapacity;  }
     inline size_t       getCrewCapacity()    { return this->crewCapacity;     }
-    inline auto         getAdjacentRooms()   { return this->adjacentRoomsIds; }
+    inline auto        &getAdjacentRooms()   { return this->adjacentRoomsIds; }
 
     inline bool addAdjacentRoom(const size_t &roomId) {
         return this->adjacentRoomsIds.insert(roomId).second;

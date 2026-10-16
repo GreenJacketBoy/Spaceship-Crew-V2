@@ -9,34 +9,43 @@ Window {
     title: "Spaceship Crew V2"
 
 
-    ColumnLayout {
+    Row {
         width: parent.width
         height: parent.height
-        TabBar {
-            id: bar
-            width: parent.width
-            TabButton {
-                width: bar.parent.width / bar.count
-                text: qsTr("Lists")
+        ColumnLayout {
+            width: 300
+            height: parent.height
+            TabBar {
+                id: bar
+                width: parent.width
+                TabButton {
+                    width: bar.parent.width / bar.count
+                    text: qsTr("Lists")
+                }
+                TabButton {
+                    width: bar.parent.width / bar.count
+                    text: qsTr("Create Room")
+                }
+                TabButton {
+                    width: bar.parent.width / bar.count
+                    text: qsTr("Create Crew Member")
+                }
             }
-            TabButton {
-                width: bar.parent.width / bar.count
-                text: qsTr("Create Room")
-            }
-            TabButton {
-                width: bar.parent.width / bar.count
-                text: qsTr("Create Crew Member")
+
+            StackLayout {
+                z: bar.z - 1
+                height: parent.height - bar.height
+                width: parent.width
+                currentIndex: bar.currentIndex
+                CrewOrRoomTabs { }
+                CreateRoomForm { }
+                CreateCrewMemberForm { }
             }
         }
 
-        StackLayout {
-            z: bar.z - 1
-            height: parent.height - bar.height
-            width: parent.width
-            currentIndex: bar.currentIndex
-            CrewOrRoomTabs { }
-            CreateRoomForm { }
-            CreateCrewMemberForm { }
+        RoomDetails {
+            width: parent.width - 300
+            height: parent.height
         }
     }
 }

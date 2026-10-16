@@ -36,6 +36,12 @@ ScrollView {
                         wrapMode: Text.Wrap
                         text: "type: " + model.type
                     }
+                    Button {
+                        text: qsTr("Select")
+                        onClicked: {
+                            roomSelectedEvent.selectRoom(model.id);
+                        }
+                    }
                 }
             }
     }
