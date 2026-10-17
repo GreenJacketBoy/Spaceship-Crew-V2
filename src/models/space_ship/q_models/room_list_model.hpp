@@ -3,12 +3,14 @@
 
 #include <cstddef>
 #include "create_room_event.hpp"
+#include "room_selected_event.hpp"
 #include <QAbstractTableModel>
+#include <optional>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber {
+class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -20,6 +22,8 @@ public:
 
     void handleRoomCreated(size_t &payload) override;
 
+    void handleRoomSelected(size_t &roomId) override;
+
     void triggerSubscriptions();
 
 private:
@@ -30,7 +34,10 @@ private:
         StorageCapacityRole,
         SizeRole,
         TypeRole,
+        IsSelectedRole,
     };
+
+    std::optional<size_t> selectedRoomId;
 };
 
 #endif // !ROOM_LIST_MODEL_HPP

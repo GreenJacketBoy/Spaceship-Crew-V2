@@ -11,6 +11,7 @@ ScrollView {
         delegate: 
             Rectangle {
                 border.color: "black"
+                border.width: model.isSelected ? 3 : 1
                 height: column.implicitHeight
                 width: roomList.width
                 Column {

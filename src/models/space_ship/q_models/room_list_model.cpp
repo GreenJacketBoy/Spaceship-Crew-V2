@@ -1,11 +1,12 @@
 #include "room_list_model.hpp"
 #include "game_state.hpp"
+#include "get_room.hpp"
 #include "get_room_list.hpp"
 #include "q_variant_special_type.hpp"
+#include <cstddef>
+#include <optional>
 
 int RoomListModel::columnCount(const QModelIndex &parent) const {
-    auto roomList = util::getRoomList();
-    if (!roomList) return 0;
     return 1;
 }
 
@@ -28,7 +29,8 @@ QVariant RoomListModel::data(const QModelIndex &index, int role) const {
                 case StorageCapacityRole: return util::qVariantSizeT(room->getStorageCapacity());
                 case SizeRole: return util::qVariantSizeT(room->getSize());
                 case TypeRole: return QVariant(room->getTypeName());
-                default: return QVariant();
+                case IsSelectedRole: return QVariant(this->selectedRoomId && this->selectedRoomId.value() == room->getId());
+                default: return QVariant(); // TODO: log a warning
             }
         }
         i++;
@@ -44,6 +46,7 @@ QHash<int, QByteArray> RoomListModel::roleNames() const {
         { StorageCapacityRole, "storageCapacity"},
         { SizeRole, "size"},
         { TypeRole, "type"},
+        { IsSelectedRole, "isSelected"},
     };
 }
 
@@ -53,6 +56,30 @@ void RoomListModel::handleRoomCreated(size_t &payload) {
     this->layoutChanged();
 }
 
+void RoomListModel::handleRoomSelected(size_t &roomId) {
+    auto optionalRoomList = util::getRoomList();
+    if (!optionalRoomList) return;
+    auto roomList = optionalRoomList.value();
+
+    std::optional<size_t> currentSelectedIndex;
+    std::optional<size_t> toBeSelectedIndex;
+
+    size_t index = 0;
+    for (const auto &[_, room] : *roomList) {
+        if (room->getId() == roomId) toBeSelectedIndex = index;
+        if (this->selectedRoomId && room->getId() == this->selectedRoomId.value()) currentSelectedIndex = index;
+        if ((currentSelectedIndex || !this->selectedRoomId) && toBeSelectedIndex) break;
+        index++;
+    }
+
+    this->selectedRoomId = roomId;
+    if (currentSelectedIndex)
+        this->dataChanged(this->index(currentSelectedIndex.value(), 0), this->index(currentSelectedIndex.value(), 0));
+    if (toBeSelectedIndex)
+        this->dataChanged(this->index(toBeSelectedIndex.value(), 0), this->index(toBeSelectedIndex.value(), 0));
+}
+
 void RoomListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
 }
