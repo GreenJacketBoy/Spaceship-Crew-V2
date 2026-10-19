@@ -5,9 +5,10 @@
 #include <cstddef>
 #include <string>
 #include <vector>
+#include "crew_member_moved_event.hpp"
 #include "room_type.hpp"
 
-class Room {
+class Room : public CrewMemberMovedSubscriber {
     public: 
     Room(
         std::string &&name,
@@ -26,6 +27,7 @@ class Room {
     inline size_t       getStorageCapacity() { return this->storageCapacity;  }
     inline size_t       getCrewCapacity()    { return this->crewCapacity;     }
     inline auto        &getAdjacentRooms()   { return this->adjacentRoomsIds; }
+    inline const auto  &getCrewMembersInRoom() { return this->crewMembersInRoom; }
 
     inline bool addAdjacentRoom(const size_t &roomId) {
         return this->adjacentRoomsIds.insert(roomId).second;
@@ -39,6 +41,8 @@ class Room {
         return this->adjacentRoomsIds.contains(roomId);
     }
 
+    void handleCrewMemberMoved(CrewMemberMovedPayload &payload) override;
+
 private:
     size_t        id;
     std::string   name;
@@ -48,6 +52,7 @@ private:
     inline static size_t next_id = 0;
     RoomType type;
     std::set<size_t> adjacentRoomsIds;
+    std::set<size_t> crewMembersInRoom;
 };
 
 #endif // !ROOM_HPP

@@ -3,10 +3,12 @@
 
 #include <map>
 #include <cstddef>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <vector>
 #include "skill.hpp"
+#include "associated_rooms.hpp"
 
 class CrewMember {
 public: 
@@ -34,12 +36,16 @@ public:
         else this->skills.insert_or_assign(skill, level);
     };
 
+    inline const std::optional<size_t> &getCurrentRoomId() { return this->associatedRooms.getCurrentRoom(); }
+    inline AssociatedRooms &getAssociatedRooms() { return this->associatedRooms; }
+
 private:
     size_t        id;
     std::string   name;
     std::string   title;
     inline static size_t next_id = 0;
     std::map<SkillType, size_t> skills;
+    AssociatedRooms associatedRooms;
 };
 
 #endif // !CREW_MEMBER_HPP

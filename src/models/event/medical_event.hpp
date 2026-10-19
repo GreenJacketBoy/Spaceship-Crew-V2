@@ -6,7 +6,7 @@
 #include "skill.hpp"
 #include <cstddef>
 
-class MedicalEvent : public Event {
+class MedicalEvent : public GameEvent {
 public:
     MedicalEvent(size_t crewMemberId) {
         this->type = EventType::MEDICAL;

@@ -4,6 +4,7 @@ add_library(SpaceshipCrewV2_Lib
         models/room/types/room_type.cpp
         models/room/types/q_models/room_type_model.cpp
         models/crew_member/crew_member.cpp
+        models/crew_member/associated_rooms/associated_rooms.cpp
         models/space_ship/space_ship.cpp
         models/space_ship/q_models/room_list_model.cpp
         models/space_ship/q_models/crew_list_model.cpp
@@ -11,14 +12,17 @@ add_library(SpaceshipCrewV2_Lib
         models/event_manager/events/create_crew_member_event.cpp
         models/event_manager/events/create_room_event.cpp
         models/event_manager/events/room_selected_event.cpp
+        models/event_manager/events/crew_member_moved_event.cpp
         qml/q_models/add_adjacent_room_model.cpp
         qml/q_models/adjacent_rooms_list_create_room.cpp
         qml/q_models/add_skill_model.cpp
         qml/q_models/skills_list_create_crew_member_model.cpp
         qml/q_models/adjacent_room_list_room_details.cpp
+        qml/q_models/current_room_model.cpp
         util/get_room.cpp
         util/get_room_list.cpp
         util/get_crew_list.cpp
+        util/get_crew_member.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib
@@ -28,6 +32,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/room/types
         models/room/types/q_models/
         models/crew_member
+        models/crew_member/associated_rooms
         models/skill
         models/event
         models/space_ship

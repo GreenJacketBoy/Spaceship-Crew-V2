@@ -4,10 +4,13 @@
 #include <optional>
 #include <qhashfunctions.h>
 #include <qlist.h>
+#include <utility>
 #include "create_crew_member_event.hpp"
 #include "create_room_event.hpp"
 #include "crew_member.hpp"
 #include "game_state.hpp"
+#include "get_crew_member.hpp"
+#include "get_room.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
 #include "skill.hpp"
@@ -89,6 +92,7 @@ TEST(EventManager, CreateCrewmemberEvent) {
     gameState.getEventManager().get()->getCreateCrewMemberEvent().createCrewMember(
         QString("Johny Test"), // Lol
         "Lab rat",
+        std::nullopt, // TODO: test current Room
         &list // TODO: test skills
     );
 
@@ -108,4 +112,105 @@ TEST(EventManager, CreateCrewmemberEvent) {
     EXPECT_DOUBLE_EQ(crewMember->getSkills().size(), 2);
     EXPECT_DOUBLE_EQ(crewMember->getSkills().at(SkillType::ENGINEERING), 1);
     EXPECT_DOUBLE_EQ(crewMember->getSkills().at(SkillType::PILOTING), 10);
+}
+
+TEST(EventManager, CrewMemberMovedEvent) {
+
+    GameState &gameState = GameState::getInstance();
+    auto &spaceShip = gameState.getSpaceShip().get()->value();
+    
+    auto movedCrewMember = std::unique_ptr<CrewMember>(new CrewMember("James", "Pilot", {}));
+    size_t crewMemberId = movedCrewMember->getId();
+    auto movedRoom1 = std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room1Id = movedRoom1->getId();
+    auto movedRoom2 = std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room2Id = movedRoom2->getId();
+
+    spaceShip.getRoomMap().insert({movedRoom1->getId(), std::move(movedRoom1)});
+    spaceShip.getRoomMap().insert({movedRoom2->getId(), std::move(movedRoom2)});
+    spaceShip.getCrewMap().insert({movedCrewMember->getId(), std::move(movedCrewMember)});
+
+    auto crewMember = util::getCrewMember(crewMemberId).value();
+    auto room1 = util::getRoom(room1Id).value();
+    auto room2 = util::getRoom(room2Id).value();
+
+    EXPECT_FALSE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 0);
+
+    CrewMemberMovedPayload payload = {
+        crewMember->getId(),
+        std::nullopt,
+        std::nullopt,
+    };
+    // Nothing happens
+    gameState.getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_FALSE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 0);
+
+    payload = {
+        crewMember->getId(),
+        room1->getId(),
+        std::nullopt,
+    };
+    // Nothing happens
+    gameState.getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_FALSE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 0);
+
+    payload = {
+        crewMember->getId(),
+        std::nullopt,
+        room1->getId(),
+    };
+    // CrewMember is in Room1
+    gameState.getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_TRUE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(crewMember->getAssociatedRooms().getCurrentRoom().value(),  room1->getId());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 1);
+    EXPECT_TRUE(room1->getCrewMembersInRoom().contains(crewMember->getId()));
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 0);
+
+    payload = {
+        crewMember->getId(),
+        room1->getId(),
+        room2->getId(),
+    };
+    // CrewMember is in Room2 and was in Room1
+    gameState.getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_TRUE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(crewMember->getAssociatedRooms().getCurrentRoom().value(),  room2->getId());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 1);
+    EXPECT_TRUE(room2->getCrewMembersInRoom().contains(crewMember->getId()));
+
+    payload = {
+        crewMember->getId(),
+        std::nullopt,
+        room1->getId(),
+    };
+    // CrewMember is in Room1 but it's not specified it was in Room2 before (should not happen, but good to know it can)
+    gameState.getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_TRUE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(crewMember->getAssociatedRooms().getCurrentRoom().value(),  room1->getId());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 1);
+    EXPECT_TRUE(room1->getCrewMembersInRoom().contains(crewMember->getId()));
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 1);
+    EXPECT_TRUE(room2->getCrewMembersInRoom().contains(crewMember->getId()));
+
+
+    payload = {
+        crewMember->getId(),
+        room1->getId(),
+        std::nullopt,
+    };
+    // CrewMember back to no Room from being in Room1
+    gameState.getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_FALSE(crewMember->getAssociatedRooms().getCurrentRoom().has_value());
+    EXPECT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    // still in from the test before, this is normal
+    EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 1);
+    EXPECT_TRUE(room2->getCrewMembersInRoom().contains(crewMember->getId()));
 }

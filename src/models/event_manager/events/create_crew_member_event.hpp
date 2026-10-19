@@ -24,6 +24,7 @@ public slots:
     void createCrewMember(
         QString name,
         QString title,
+        std::optional<size_t> optionalCurrentRoomId,
         QList<Skill> *skills
     );
 };

@@ -33,6 +33,16 @@ ScrollView {
         }
 
         Row {
+            Text { text: qsTr("Current Room: ") }
+            ComboBox {
+                id: currentRoom
+                model: currentRoomModel
+                textRole: "text"
+                valueRole: "value"
+            }
+        }
+
+        Row {
             Text { text: qsTr("Add skill: ") }
             ComboBox {
                 id: addSkillComboBox
@@ -111,6 +121,7 @@ ScrollView {
                 createCrewMemberEvent.createCrewMember(
                     nameInput.text,
                     titleInput.text,
+                    currentRoom.currentValue,
                     skillsList.model.getSkills()
                 )
             }

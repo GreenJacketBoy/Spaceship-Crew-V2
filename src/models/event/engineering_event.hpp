@@ -7,7 +7,7 @@
 #include "skill.hpp"
 #include <cstddef>
 
-class EngineeringEvent : public Event {
+class EngineeringEvent : public GameEvent {
 public:
     EngineeringEvent(size_t roomId) {
         this->type = EventType::ENGINEERING;

@@ -1,7 +1,7 @@
 #ifndef AT_INDEX_HPP
 #define AT_INDEX_HPP
 
-#include <cstddef>
+#include <map>
 #include <optional>
 #include <set>
 #include <type_traits>
@@ -17,7 +17,17 @@ namespace util {
             if (index == i) return std::optional<const T*>(&item);
             i++;
         }
-        return std::optional<const T*>();
+        return std::nullopt; // OOOOH MAGAWD
+    }
+
+    template<typename Key, typename Value, Numeric Size> 
+    inline const std::optional<const Value*> atIndex(const std::map<Key, Value> &map, Size index) {
+        Size i = 0;
+        for (const auto &[_, item]: map) {
+            if (index == i) return std::optional<const Value*>(&item);
+            i++;
+        }
+        return std::nullopt;
     }
 }
 

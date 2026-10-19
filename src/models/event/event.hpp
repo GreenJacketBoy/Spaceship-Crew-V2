@@ -6,9 +6,9 @@ enum class EventType {
     ENGINEERING,
 };
 
-class Event {
+class GameEvent {
 public:
-    virtual ~Event() {};
+    virtual ~GameEvent() {};
     virtual const char* getTypeName() final { return this->typeName; }
     virtual EventType getType() final { return this->type; }
 

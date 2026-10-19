@@ -3,9 +3,12 @@
 #include <cstddef>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <qhashfunctions.h>
+#include <qvariant.h>
 #include <utility>
 #include <vector>
+#include "crew_member_moved_event.hpp"
 #include "game_state.hpp"
 #include "get_crew_list.hpp"
 
@@ -18,6 +21,7 @@ void CreateCrewMemberEvent::emitEvent(size_t &crewMemberId) {
 void CreateCrewMemberEvent::createCrewMember(
     QString name,
     QString title,
+    std::optional<size_t> optionalCurrentRoomId,
     QList<Skill> *skills // simple pointer because Qt doesn't know references nor const
 ) {
     auto &spaceShip = GameState::getInstance().getSpaceShip();
@@ -45,4 +49,10 @@ void CreateCrewMemberEvent::createCrewMember(
     crewMap.value()->insert({crewMemberId, std::move(crewMember)});
 
     this->emitEvent(crewMemberId);
+    CrewMemberMovedPayload payload = {
+        crewMemberId,
+        std::nullopt,
+        optionalCurrentRoomId,
+    };
+    if (optionalCurrentRoomId) GameState::getInstance().getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
 }

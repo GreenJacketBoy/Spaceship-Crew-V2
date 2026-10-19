@@ -31,3 +31,12 @@ type(util::createRoomTypeFromEnum(type))
         std::cout << "- #" << room.value()->getId() << " " << room.value()->getName() << '\n';
     }
 };
+
+void Room::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
+    if (payload.toRoomId && payload.toRoomId.value() == this->id) {
+        this->crewMembersInRoom.insert(payload.crewMemberId);
+    }
+    else if (payload.fromRoomId && payload.fromRoomId.value() == this->id) {
+        this->crewMembersInRoom.erase(payload.crewMemberId);
+    }
+}
