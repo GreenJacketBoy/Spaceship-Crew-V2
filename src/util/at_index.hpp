@@ -14,7 +14,7 @@ namespace util {
     inline const std::optional<const T*> atIndex(const std::set<T> &set, Size index) {
         Size i = 0;
         for (const auto &item: set) {
-            if (index == i) return std::optional<const T*>(&item);
+            if (index == i) return &item;
             i++;
         }
         return std::nullopt; // OOOOH MAGAWD
@@ -24,7 +24,7 @@ namespace util {
     inline const std::optional<const Value*> atIndex(const std::map<Key, Value> &map, Size index) {
         Size i = 0;
         for (const auto &[_, item]: map) {
-            if (index == i) return std::optional<const Value*>(&item);
+            if (index == i) return &item;
             i++;
         }
         return std::nullopt;

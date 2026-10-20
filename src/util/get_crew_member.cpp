@@ -11,7 +11,7 @@ std::optional<CrewMember *> util::getCrewMember(size_t crewMemberId) noexcept {
     try {
         auto &crewMember = spaceship.get()->value().getCrewMap().at(crewMemberId);
         if (!crewMember) return std::nullopt;
-        return std::optional<CrewMember *>(crewMember.get());
+        return crewMember.get();
     } catch (std::out_of_range) {
         return std::nullopt;
     }
