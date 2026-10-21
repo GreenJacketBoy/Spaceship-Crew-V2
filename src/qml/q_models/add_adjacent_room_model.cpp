@@ -1,4 +1,5 @@
 #include "add_adjacent_room_model.hpp"
+#include "at_index.hpp"
 #include "game_state.hpp"
 #include "get_room_list.hpp"
 #include "q_variant_special_type.hpp"
@@ -19,21 +20,16 @@ int AddAdjacentRoomModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant AddAdjacentRoomModel::data(const QModelIndex &index, int role) const {
-    auto roomMap = util::getRoomList();
-    if (!roomMap) return QVariant();
+    auto optionalRoomMap = util::getRoomList();
+    if (!optionalRoomMap) return QVariant();
+    auto optionalRoom = util::atIndex(*optionalRoomMap.value(), index.row());
+    if (!optionalRoom ) return QVariant();
+    if (!optionalRoom || !optionalRoom.value()) return QVariant();
+    auto room = optionalRoom.value()->get();
 
-    size_t i = 0;
-    for (const auto &[_, room] : *roomMap.value()) {
-        if (index.row() != i) {
-            i++;
-            continue;
-        }
-        if (!room) return QVariant();
-
-        switch (role) {
-            case Text: return QVariant(std::format("#{} {} ({})", room->getId(), room->getName(), room->getTypeName()).c_str());
-            case Value: return util::qVariantSizeT(room->getId());
-        }
+    switch (role) {
+        case Text: return QVariant(std::format("#{} {} ({})", room->getId(), room->getName(), room->getTypeName()).c_str());
+        case Value: return util::qVariantSizeT(room->getId());
     }
 
     return QVariant();

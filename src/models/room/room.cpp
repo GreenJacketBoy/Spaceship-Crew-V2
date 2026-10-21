@@ -26,9 +26,9 @@ type(util::createRoomTypeFromEnum(type))
     std::cout << "Room of name " << this->name << " and type " << this->getTypeName() << " has been created" << '\n';
     if (adjacentRoomsIds.size() != 0) std::cout << "Adjacent Rooms:\n";
     for (auto adjacentRoomId : adjacentRoomsIds) {
-        auto room = util::getRoom(adjacentRoomId);
-        if (!room) continue;
-        std::cout << "- #" << room.value()->getId() << " " << room.value()->getName() << '\n';
+        auto optionalRoom = util::getRoom(adjacentRoomId);
+        if (!optionalRoom) continue;
+        std::cout << "- #" << optionalRoom.value()->getId() << " " << optionalRoom.value()->getName() << '\n';
     }
 };
 

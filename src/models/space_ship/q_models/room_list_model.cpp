@@ -1,4 +1,5 @@
 #include "room_list_model.hpp"
+#include "at_index.hpp"
 #include "game_state.hpp"
 #include "get_room.hpp"
 #include "get_room_list.hpp"
@@ -17,23 +18,21 @@ int RoomListModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant RoomListModel::data(const QModelIndex &index, int role) const {
-    auto roomList = util::getRoomList();
-    if (!roomList) return QVariant();
-    size_t i = 0;
-    for (auto &[_, room] : *roomList.value()) {
-        if (index.row() == i) {
-            switch (role) {
-                case IdRole: return util::qVariantSizeT(room->getId());
-                case NameRole: return QVariant(room->getName().c_str());
-                case CrewCapacityRole: return util::qVariantSizeT(room->getCrewCapacity());
-                case StorageCapacityRole: return util::qVariantSizeT(room->getStorageCapacity());
-                case SizeRole: return util::qVariantSizeT(room->getSize());
-                case TypeRole: return QVariant(room->getTypeName());
-                case IsSelectedRole: return QVariant(this->selectedRoomId && this->selectedRoomId.value() == room->getId());
-                default: return QVariant(); // TODO: log a warning
-            }
-        }
-        i++;
+    auto optionalRoomList = util::getRoomList();
+    if (!optionalRoomList) return QVariant();
+    auto optionalRoom = util::atIndex(*optionalRoomList.value(), index.row());
+    if (!optionalRoom || !optionalRoom.value()) return QVariant();
+    auto room = optionalRoom.value()->get();
+
+    switch (role) {
+        case IdRole: return util::qVariantSizeT(room->getId());
+        case NameRole: return QVariant(room->getName().c_str());
+        case CrewCapacityRole: return util::qVariantSizeT(room->getCrewCapacity());
+        case StorageCapacityRole: return util::qVariantSizeT(room->getStorageCapacity());
+        case SizeRole: return util::qVariantSizeT(room->getSize());
+        case TypeRole: return QVariant(room->getTypeName());
+        case IsSelectedRole: return QVariant(this->selectedRoomId && this->selectedRoomId.value() == room->getId());
+        default: return QVariant(); // TODO: log a warning
     }
     return QVariant();
 }

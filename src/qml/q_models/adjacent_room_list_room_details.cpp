@@ -21,7 +21,7 @@ QVariant AdjacentRoomListRoomDetailsModel::data(const QModelIndex &index, int ro
     if (!this->roomId) return QVariant();
     auto optionalRoom = util::getRoom(this->roomId.value());
     if (!optionalRoom) return QVariant();
-    auto adjacentRooms = optionalRoom.value()->getAdjacentRooms();
+    auto &adjacentRooms = optionalRoom.value()->getAdjacentRooms();
 
     auto optionalRoomIdAtIndex = util::atIndex(adjacentRooms, index.row());
     if (!optionalRoomIdAtIndex) return QVariant();
