@@ -8,7 +8,7 @@ Column {
         height: parent.height / 2
         
         Column {
-            width: parent.width
+            width: parent.width / 2
             height: parent.height
             Text {
                 id: adjacentRoomsText
@@ -27,27 +27,24 @@ Column {
                     delegate: 
                         Rectangle {
                             border.color: "black"
-                            height: column.implicitHeight
+                            height: roomListColumn.implicitHeight
                             width: adjacentRoomList.width
                             Column {
-                                id: column
+                                id: roomListColumn
                                 width: parent.width
                                 Text {
-                                    id: textId
                                     width: parent.width
                                     wrapMode: Text.Wrap
                                     text: "id: " + model.id
                                 }
 
                                 Text {
-                                    id: textName
                                     width: parent.width
                                     wrapMode: Text.Wrap
                                     text: "name: " + model.name
                                 }
 
                                 Text {
-                                    id: textType
                                     width: parent.width
                                     wrapMode: Text.Wrap
                                     text: "type: " + model.type
@@ -64,7 +61,53 @@ Column {
                 }
             }
         }
-        Column { }
+        Column {
+            width: parent.width / 2
+            height: parent.height
+            Text {
+                id: crewMembersInRoomText
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: qsTr("Crew Members in the Room")
+            }
+            ScrollView {
+                id: crewMembersInRoom
+                width: parent.width
+                height: parent.height - crewMembersInRoomText.implicitHeight
+                ListView {
+                    id: crewMembersInRoomList
+                    width: parent.width
+                    model: crewMemberInRoomDetailsModel
+                    delegate: 
+                        Rectangle {
+                            border.color: "black"
+                            height: crewListColumn.implicitHeight
+                            width: crewMembersInRoomList.width
+                            Column {
+                                id: crewListColumn
+                                width: parent.width
+                                Text {
+                                    width: parent.width
+                                    wrapMode: Text.Wrap
+                                    text: "id: " + model.id
+                                }
+
+                                Text {
+                                    width: parent.width
+                                    wrapMode: Text.Wrap
+                                    text: "name: " + model.name
+                                }
+
+                                Text {
+                                    width: parent.width
+                                    wrapMode: Text.Wrap
+                                    text: "title: " + model.title
+                                }
+                            }
+                        }
+                }
+            }
+        }
     }
     Row {
         id: roomInfos

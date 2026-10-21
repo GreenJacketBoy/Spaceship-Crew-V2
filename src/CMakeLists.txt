@@ -19,6 +19,7 @@ add_library(SpaceshipCrewV2_Lib
         qml/q_models/skills_list_create_crew_member_model.cpp
         qml/q_models/adjacent_room_list_room_details.cpp
         qml/q_models/current_room_model.cpp
+        qml/q_models/crew_member_in_room_details.cpp
         util/get_room.cpp
         util/get_room_list.cpp
         util/get_crew_list.cpp

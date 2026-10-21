@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("skillsListCreateCrewMemberModel", gameState->getSkillsListCreateCrewMemberModel().get());
     engine.rootContext()->setContextProperty("adjacentRoomListRoomDetailsModel", gameState->getAdjacentRoomListRoomDetailsModel().get());
     engine.rootContext()->setContextProperty("currentRoomModel", gameState->getCurrentRoomModel().get());
+    engine.rootContext()->setContextProperty("crewMemberInRoomDetailsModel", gameState->getCrewMemberInRoomDetailsModel().get());
     engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
     engine.rootContext()->setContextProperty("createCrewMemberEvent", &gameState->getEventManager().get()->getCreateCrewMemberEvent());
     engine.rootContext()->setContextProperty("roomSelectedEvent", &gameState->getEventManager().get()->getRoomSelectedEvent());

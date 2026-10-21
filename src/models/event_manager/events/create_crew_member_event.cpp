@@ -47,12 +47,13 @@ void CreateCrewMemberEvent::createCrewMember(
         return;
     }
     crewMap.value()->insert({crewMemberId, std::move(crewMember)});
-
-    this->emitEvent(crewMemberId);
     CrewMemberMovedPayload payload = {
         crewMemberId,
         std::nullopt,
         optionalCurrentRoomId,
     };
     if (optionalCurrentRoomId) GameState::getInstance().getEventManager().get()->getCrewMemberMovedEvent().emitEvent(payload);
+    // moved event must be sent before this one, otherwise the models getting updated will not have up to date information
+
+    this->emitEvent(crewMemberId);
 }

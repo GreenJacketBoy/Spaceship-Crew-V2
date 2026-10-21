@@ -12,6 +12,7 @@
 #include "room_type_model.hpp"
 #include "skills_list_create_crew_member_model.hpp"
 #include "space_ship.hpp"
+#include "crew_member_in_room_details.hpp"
 #include <memory>
 #include <optional>
 
@@ -33,6 +34,7 @@ public:
     inline auto &getEventManager() { return this->eventManager; }
     inline auto &getAdjacentRoomListRoomDetailsModel() { return this->adjacentRoomListRoomDetailsModel; }
     inline auto &getCurrentRoomModel() { return this->currentRoomModel; }
+    inline auto &getCrewMemberInRoomDetailsModel() { return this->crewMemberInRoomDetailsModel; }
 
     void triggerSubscriptions();
 
@@ -51,6 +53,7 @@ private:
     std::unique_ptr<SkillsListCreateCrewMemberModel> skillsListCreateCrewMemberModel = std::make_unique<SkillsListCreateCrewMemberModel>();
     std::unique_ptr<AdjacentRoomListRoomDetailsModel> adjacentRoomListRoomDetailsModel = std::make_unique<AdjacentRoomListRoomDetailsModel>();
     std::unique_ptr<CurrentRoomModel> currentRoomModel = std::make_unique<CurrentRoomModel>();
+    std::unique_ptr<CrewMemberInRoomDetailsModel> crewMemberInRoomDetailsModel = std::make_unique<CrewMemberInRoomDetailsModel>();
 };
 
 #endif // !GAME_STATE_HPP
