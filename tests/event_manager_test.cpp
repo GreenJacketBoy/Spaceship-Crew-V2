@@ -32,10 +32,25 @@ TEST(EventManager, CreateRoomEvent) {
 
     EXPECT_FALSE(testSubscriber.getReceivedRoomId().has_value());
     EXPECT_TRUE(gameState.getSpaceShip().get()->has_value());
+
+    auto movedRoom1 = std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    auto room1Id = movedRoom1->getId();
+    auto movedRoom2 = std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    auto room2Id = movedRoom2->getId();
+    auto movedRoom3 = std::unique_ptr<Room>(new Room("Room 3", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    auto room3Id = movedRoom3->getId();
+
+    gameState.getSpaceShip().get()->value().getRoomMap().insert({room1Id, std::move(movedRoom1)});
+    gameState.getSpaceShip().get()->value().getRoomMap().insert({room2Id, std::move(movedRoom2)});
+    gameState.getSpaceShip().get()->value().getRoomMap().insert({room3Id, std::move(movedRoom3)});
+
+    EXPECT_DOUBLE_EQ(gameState.getSpaceShip().get()->value().getRoomMap().at(room1Id)->getId(), room1Id);
+    EXPECT_DOUBLE_EQ(gameState.getSpaceShip().get()->value().getRoomMap().at(room2Id)->getId(), room2Id);
+    EXPECT_DOUBLE_EQ(gameState.getSpaceShip().get()->value().getRoomMap().at(room3Id)->getId(), room3Id);
+    
     size_t amountOfRooms = gameState.getSpaceShip().get()->value().getRoomMap().size();
 
-
-    auto list = QList<size_t>({9, 10, 11});
+    auto list = QList<size_t>({ room1Id, room2Id });
     gameState.getEventManager().get()->getCreateRoomEvent().createRoom(
         QString("Medbay Test"),
         "1",
@@ -61,10 +76,13 @@ TEST(EventManager, CreateRoomEvent) {
     EXPECT_DOUBLE_EQ(room->getStorageCapacity(), 18000);
     EXPECT_DOUBLE_EQ(room->getSize(), 50000000);
     EXPECT_EQ(room->getType(), RoomTypeEnum::MEDBAY);
-    EXPECT_DOUBLE_EQ(room->getAdjacentRooms().size(), 3);
-    EXPECT_TRUE(room->getAdjacentRooms().contains(9));
-    EXPECT_TRUE(room->getAdjacentRooms().contains(10));
-    EXPECT_TRUE(room->getAdjacentRooms().contains(11));
+    EXPECT_DOUBLE_EQ(room->getAdjacentRooms().size(), 2);
+    EXPECT_TRUE(room->getAdjacentRooms().contains(room1Id));
+    EXPECT_TRUE(gameState.getSpaceShip().get()->value().getRoomMap().at(room1Id).get()->getAdjacentRooms().contains(room->getId()));
+    EXPECT_TRUE(room->getAdjacentRooms().contains(room2Id));
+    EXPECT_TRUE(gameState.getSpaceShip().get()->value().getRoomMap().at(room2Id).get()->getAdjacentRooms().contains(room->getId()));
+    EXPECT_FALSE(room->getAdjacentRooms().contains(room3Id));
+    EXPECT_FALSE(gameState.getSpaceShip().get()->value().getRoomMap().at(room3Id).get()->getAdjacentRooms().contains(room->getId()));
 }
 
 class TestCrewMemberSubscriber : public CreateCrewMemberSubscriber {

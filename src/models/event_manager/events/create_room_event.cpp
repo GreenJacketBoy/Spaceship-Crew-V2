@@ -1,4 +1,5 @@
 #include "create_room_event.hpp"
+#include "get_room.hpp"
 #include "get_room_list.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
@@ -36,10 +37,16 @@ void CreateRoomEvent::createRoom(
     stream.clear(); stream.str(size.toStdString());
     stream >> sizeNumber;
 
-    std::vector<size_t> roomsAsVector;
-    roomsAsVector.reserve(adjacentRoomsIds->size());
+    std::vector<size_t> roomIdsAsVector;
+    roomIdsAsVector.reserve(adjacentRoomsIds->size());
+    std::vector<Room *> roomPointers;
+    roomPointers.reserve(adjacentRoomsIds->size());
+
     for (size_t roomId : *adjacentRoomsIds) {
-        roomsAsVector.push_back(roomId);
+        auto optionalRoom = util::getRoom(roomId);
+        if (!optionalRoom) continue;
+        roomPointers.push_back(optionalRoom.value());
+        roomIdsAsVector.push_back(roomId);
     }
 
     auto room = std::unique_ptr<Room>(new Room(
@@ -48,11 +55,15 @@ void CreateRoomEvent::createRoom(
         storageCapacityNumber,
         sizeNumber,
         type,
-        roomsAsVector
+        roomIdsAsVector
     ));
 
     size_t roomId = room->getId();
     roomMap->insert({roomId, std::move(room)});
+
+    for (auto adjacentRoom : roomPointers) {
+        adjacentRoom->getAdjacentRooms().insert(roomId);
+    }
 
     this->emitEvent(roomId);
 }
