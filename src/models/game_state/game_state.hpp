@@ -8,6 +8,7 @@
 #include "current_room_model.hpp"
 #include "event_manager.hpp"
 #include "crew_list_model.hpp"
+#include "info_room_details_map.hpp"
 #include "room_list_model.hpp"
 #include "room_type_model.hpp"
 #include "skills_list_create_crew_member_model.hpp"
@@ -35,6 +36,7 @@ public:
     inline auto &getAdjacentRoomListRoomDetailsModel() { return this->adjacentRoomListRoomDetailsModel; }
     inline auto &getCurrentRoomModel() { return this->currentRoomModel; }
     inline auto &getCrewMemberInRoomDetailsModel() { return this->crewMemberInRoomDetailsModel; }
+    inline auto &getInfoRoomDetailsMap() { return this->infoRoomDetailsMap; }
 
     void triggerSubscriptions();
 
@@ -54,6 +56,7 @@ private:
     std::unique_ptr<AdjacentRoomListRoomDetailsModel> adjacentRoomListRoomDetailsModel = std::make_unique<AdjacentRoomListRoomDetailsModel>();
     std::unique_ptr<CurrentRoomModel> currentRoomModel = std::make_unique<CurrentRoomModel>();
     std::unique_ptr<CrewMemberInRoomDetailsModel> crewMemberInRoomDetailsModel = std::make_unique<CrewMemberInRoomDetailsModel>();
+    std::unique_ptr<InfoRoomDetailsMap> infoRoomDetailsMap = std::make_unique<InfoRoomDetailsMap>();
 };
 
 #endif // !GAME_STATE_HPP

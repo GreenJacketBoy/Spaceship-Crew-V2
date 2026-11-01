@@ -15,8 +15,11 @@ void CrewMemberMovedEvent::emitEvent(CrewMemberMovedPayload &payload) {
         if (optionalToRoom) optionalToRoom.value()->handleCrewMemberMoved(payload);
     }
     if (payload.fromRoomId) {
-
         auto optionalFromRoom = util::getRoom(payload.fromRoomId.value());
         if (optionalFromRoom) optionalFromRoom.value()->handleCrewMemberMoved(payload);
+    }
+
+    for (auto subscriber : this->subscribers) {
+        subscriber->handleCrewMemberMoved(payload);
     }
 }

@@ -4,6 +4,7 @@
 #include <optional>
 #include <qhashfunctions.h>
 #include <qlist.h>
+#include <qvariant.h>
 #include <utility>
 #include "create_crew_member_event.hpp"
 #include "create_room_event.hpp"
@@ -11,6 +12,7 @@
 #include "game_state.hpp"
 #include "get_crew_member.hpp"
 #include "get_room.hpp"
+#include "q_variant_special_type.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
 #include "skill.hpp"
@@ -231,4 +233,85 @@ TEST(EventManager, CrewMemberMovedEvent) {
     // still in from the test before, this is normal
     EXPECT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 1);
     EXPECT_TRUE(room2->getCrewMembersInRoom().contains(crewMember->getId()));
+}
+
+TEST(EventManager, InfoRoomDetailsMap) {
+
+    GameState &gameState = GameState::getInstance();
+    gameState.triggerSubscriptions();
+    auto &spaceShip = gameState.getSpaceShip().get()->value();
+
+    auto infoRoomMap = gameState.getInfoRoomDetailsMap().get();
+ 
+    auto movedCrewMember = std::unique_ptr<CrewMember>(new CrewMember("James", "Pilot", {}));
+    size_t crewMemberId = movedCrewMember->getId();
+    auto movedRoom1 = std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room1Id = movedRoom1->getId();
+    auto movedRoom2 = std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room2Id = movedRoom2->getId();
+
+    spaceShip.getRoomMap().insert({movedRoom1->getId(), std::move(movedRoom1)});
+    spaceShip.getRoomMap().insert({movedRoom2->getId(), std::move(movedRoom2)});
+    spaceShip.getCrewMap().insert({movedCrewMember->getId(), std::move(movedCrewMember)});
+
+    auto crewMember = util::getCrewMember(crewMemberId).value();
+    auto room1 = util::getRoom(room1Id).value();
+    auto room2 = util::getRoom(room2Id).value();
+
+    EXPECT_DOUBLE_EQ(infoRoomMap->size(), 7);
+    EXPECT_TRUE(infoRoomMap->contains("id"));
+    EXPECT_TRUE(infoRoomMap->contains("name"));
+    EXPECT_TRUE(infoRoomMap->contains("crewCapacity"));
+    EXPECT_TRUE(infoRoomMap->contains("currentCrewAmount"));
+    EXPECT_TRUE(infoRoomMap->contains("storageCapacity"));
+    EXPECT_TRUE(infoRoomMap->contains("size"));
+    EXPECT_TRUE(infoRoomMap->contains("type"));
+
+    EXPECT_EQ(infoRoomMap->value("id"), QVariant());
+    EXPECT_EQ(infoRoomMap->value("name"), QVariant());
+    EXPECT_EQ(infoRoomMap->value("crewCapacity"), QVariant());
+    EXPECT_EQ(infoRoomMap->value("currentCrewAmount"), QVariant());
+    EXPECT_EQ(infoRoomMap->value("storageCapacity"), QVariant());
+    EXPECT_EQ(infoRoomMap->value("size"), QVariant());
+    EXPECT_EQ(infoRoomMap->value("type"), QVariant());
+
+    // select room 1
+    gameState.getEventManager()->getRoomSelectedEvent().emitEvent(room1Id);
+
+    EXPECT_DOUBLE_EQ(infoRoomMap->size(), 7);
+    EXPECT_TRUE(infoRoomMap->contains("id"));
+    EXPECT_TRUE(infoRoomMap->contains("name"));
+    EXPECT_TRUE(infoRoomMap->contains("crewCapacity"));
+    EXPECT_TRUE(infoRoomMap->contains("currentCrewAmount"));
+    EXPECT_TRUE(infoRoomMap->contains("storageCapacity"));
+    EXPECT_TRUE(infoRoomMap->contains("size"));
+    EXPECT_TRUE(infoRoomMap->contains("type"));
+
+    EXPECT_DOUBLE_EQ(*static_cast<const size_t *>(infoRoomMap->value("id").constData()), room1Id);
+    EXPECT_STREQ(infoRoomMap->value("name").toString().toStdString().c_str(), room1->getName().c_str());
+    EXPECT_EQ(infoRoomMap->value("crewCapacity"), util::qVariantSizeT(room1->getCrewCapacity()));
+    EXPECT_EQ(infoRoomMap->value("currentCrewAmount"), util::qVariantSizeT(room1->getCrewMembersInRoom().size()));
+    EXPECT_EQ(infoRoomMap->value("storageCapacity"), util::qVariantSizeT(room1->getStorageCapacity()));
+    EXPECT_EQ(infoRoomMap->value("size"), util::qVariantSizeT(room1->getSize()));
+    EXPECT_STREQ(infoRoomMap->value("type").toString().toStdString().c_str(), room1->getTypeName());
+
+    // select room 2
+    gameState.getEventManager()->getRoomSelectedEvent().emitEvent(room2Id);
+
+    EXPECT_DOUBLE_EQ(infoRoomMap->size(), 7);
+    EXPECT_TRUE(infoRoomMap->contains("id"));
+    EXPECT_TRUE(infoRoomMap->contains("name"));
+    EXPECT_TRUE(infoRoomMap->contains("crewCapacity"));
+    EXPECT_TRUE(infoRoomMap->contains("currentCrewAmount"));
+    EXPECT_TRUE(infoRoomMap->contains("storageCapacity"));
+    EXPECT_TRUE(infoRoomMap->contains("size"));
+    EXPECT_TRUE(infoRoomMap->contains("type"));
+
+    EXPECT_DOUBLE_EQ(*static_cast<const size_t *>(infoRoomMap->value("id").constData()), room2Id);
+    EXPECT_STREQ(infoRoomMap->value("name").toString().toStdString().c_str(), room2->getName().c_str());
+    EXPECT_EQ(infoRoomMap->value("crewCapacity"), util::qVariantSizeT(room2->getCrewCapacity()));
+    EXPECT_EQ(infoRoomMap->value("currentCrewAmount"), util::qVariantSizeT(room2->getCrewMembersInRoom().size()));
+    EXPECT_EQ(infoRoomMap->value("storageCapacity"), util::qVariantSizeT(room2->getStorageCapacity()));
+    EXPECT_EQ(infoRoomMap->value("size"), util::qVariantSizeT(room2->getSize()));
+    EXPECT_STREQ(infoRoomMap->value("type").toString().toStdString().c_str(), room2->getTypeName());
 }

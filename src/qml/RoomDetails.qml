@@ -109,9 +109,41 @@ Column {
             }
         }
     }
-    Row {
+    Column {
         id: roomInfos
         width: parent.width
         height: parent.height / 2
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "id: " + infoRoomDetailsMap.id
+        }
+
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "name: " + infoRoomDetailsMap.name
+        }
+
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "type: " + infoRoomDetailsMap.type
+        }
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "crewCapacity: " + infoRoomDetailsMap.currentCrewAmount + "/" + infoRoomDetailsMap.crewCapacity
+        }
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "storageCapacity: " + infoRoomDetailsMap.storageCapacity
+        }
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "size: " + infoRoomDetailsMap.storageCapacity
+        }
     }
 }
