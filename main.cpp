@@ -49,9 +49,11 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("currentRoomModel", gameState->getCurrentRoomModel().get());
     engine.rootContext()->setContextProperty("crewMemberInRoomDetailsModel", gameState->getCrewMemberInRoomDetailsModel().get());
     engine.rootContext()->setContextProperty("infoRoomDetailsMap", gameState->getInfoRoomDetailsMap().get());
+    engine.rootContext()->setContextProperty("selectedEntitiesMap", gameState->getSelectedEntitiesMap().get());
     engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
     engine.rootContext()->setContextProperty("createCrewMemberEvent", &gameState->getEventManager().get()->getCreateCrewMemberEvent());
     engine.rootContext()->setContextProperty("roomSelectedEvent", &gameState->getEventManager().get()->getRoomSelectedEvent());
+    engine.rootContext()->setContextProperty("crewMemberSelectedEvent", &gameState->getEventManager().get()->getCrewMemberSelectedEvent());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 
     if (engine.rootObjects().isEmpty()) {

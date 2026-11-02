@@ -43,9 +43,20 @@ Window {
             }
         }
 
-        RoomDetails {
-            width: parent.width - 300
+
+        StackLayout {
+            z: bar.z - 1
             height: parent.height
+            width: parent.width
+            currentIndex: selectedEntitiesMap.lastSelected
+            RoomDetails {
+                width: parent.width - 300
+                height: parent.height
+            }
+            CrewMemberDetails {
+                width: parent.width - 300
+                height: parent.height
+            }
         }
     }
 }

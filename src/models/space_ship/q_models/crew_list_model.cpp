@@ -26,6 +26,7 @@ QVariant CrewListModel::data(const QModelIndex &index, int role) const {
         case IdRole: return util::qVariantSizeT(crewMember->getId());
         case NameRole: return QVariant(crewMember->getName().c_str());
         case TitleRole: return QVariant(crewMember->getTitle().c_str());
+        case IsSelectedRole: return QVariant(this->selectedCrewMemberId && this->selectedCrewMemberId.value() == crewMember->getId());
         default: return QVariant();
     }
     return QVariant();
@@ -36,6 +37,7 @@ QHash<int, QByteArray> CrewListModel::roleNames() const {
         { IdRole, "id"},
         { NameRole, "name"},
         { TitleRole, "title"},
+        { IsSelectedRole, "isSelected"},
     };
 }
 
@@ -45,6 +47,30 @@ void CrewListModel::handleCrewMemberCreated(size_t &payload) {
     this->layoutChanged();
 }
 
+void CrewListModel::handleCrewMemberSelected(size_t &crewMemberId) {
+    auto optionalCrewList = util::getCrewList();
+    if (!optionalCrewList) return;
+    auto roomList = optionalCrewList.value();
+
+    std::optional<size_t> currentSelectedIndex;
+    std::optional<size_t> toBeSelectedIndex;
+
+    size_t index = 0;
+    for (const auto &[_, crewMember] : *roomList) {
+        if (crewMember->getId() == crewMemberId) toBeSelectedIndex = index;
+        if (this->selectedCrewMemberId && crewMember->getId() == this->selectedCrewMemberId.value()) currentSelectedIndex = index;
+        if ((currentSelectedIndex || !this->selectedCrewMemberId) && toBeSelectedIndex) break;
+        index++;
+    }
+
+    this->selectedCrewMemberId = crewMemberId;
+    if (currentSelectedIndex)
+        this->dataChanged(this->index(currentSelectedIndex.value(), 0), this->index(currentSelectedIndex.value(), 0));
+    if (toBeSelectedIndex)
+        this->dataChanged(this->index(toBeSelectedIndex.value(), 0), this->index(toBeSelectedIndex.value(), 0));
+}
+
 void CrewListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateCrewMemberEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
 }

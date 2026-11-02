@@ -11,6 +11,7 @@ ScrollView {
         delegate: 
             Rectangle {
                 border.color: "black"
+                border.width: model.isSelected ? 3 : 1
                 height: column.implicitHeight
                 width: crewList.width
                 Column {
@@ -35,6 +36,13 @@ ScrollView {
                         width: parent.width
                         wrapMode: Text.Wrap
                         text: "title: " + model.title
+                    }
+
+                    Button {
+                        text: qsTr("Select")
+                        onClicked: {
+                            crewMemberSelectedEvent.selectCrewMember(model.id);
+                        }
                     }
                 }
             }

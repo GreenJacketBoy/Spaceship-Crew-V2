@@ -15,6 +15,7 @@
 #include "q_variant_special_type.hpp"
 #include "room.hpp"
 #include "room_type.hpp"
+#include "selected_entities_map.hpp"
 #include "skill.hpp"
 #include "space_ship.hpp"
 
@@ -314,4 +315,22 @@ TEST(EventManager, InfoRoomDetailsMap) {
     EXPECT_EQ(infoRoomMap->value("storageCapacity"), util::qVariantSizeT(room2->getStorageCapacity()));
     EXPECT_EQ(infoRoomMap->value("size"), util::qVariantSizeT(room2->getSize()));
     EXPECT_STREQ(infoRoomMap->value("type").toString().toStdString().c_str(), room2->getTypeName());
+}
+
+TEST(EventManager, SelectedEntities) {
+
+    GameState &gameState = GameState::getInstance();
+    gameState.triggerSubscriptions();
+
+    auto selectedEntitiesMap = gameState.getSelectedEntitiesMap().get();
+    auto &roomSelected = gameState.getEventManager()->getRoomSelectedEvent();
+    auto &crewMemberSelected = gameState.getEventManager()->getCrewMemberSelectedEvent();
+ 
+    EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::NONE));
+    roomSelected.selectRoom(-1); // Doesn't check wether the room exists
+    EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::ROOM));
+    crewMemberSelected.selectCrewMember(-1);
+    EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::CREW_MEMBER));
+    roomSelected.selectRoom(-1);
+    EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::ROOM));
 }

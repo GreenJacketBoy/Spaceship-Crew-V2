@@ -6,7 +6,6 @@
 #include <qvariant.h>
 
 InfoRoomDetailsMap::InfoRoomDetailsMap(QObject *parent) : QQmlPropertyMap(this, parent) {
-    qDebug() << "check constructor";
     insert("id",                QVariant());
     insert("name",              QVariant());
     insert("crewCapacity",      QVariant());

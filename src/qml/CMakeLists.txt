@@ -17,4 +17,5 @@ qt_add_qml_module(SpaceshipCrewV2_Module
         CreateRoomForm.qml
         CreateCrewMemberForm.qml
         RoomDetails.qml
+        CrewMemberDetails.qml
 )

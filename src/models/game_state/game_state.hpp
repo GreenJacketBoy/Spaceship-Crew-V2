@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include "selected_entities_map.hpp"
 #include "adjacent_room_list_room_details.hpp"
 #include "add_adjacent_room_model.hpp"
 #include "add_skill_model.hpp"
@@ -37,6 +38,7 @@ public:
     inline auto &getCurrentRoomModel() { return this->currentRoomModel; }
     inline auto &getCrewMemberInRoomDetailsModel() { return this->crewMemberInRoomDetailsModel; }
     inline auto &getInfoRoomDetailsMap() { return this->infoRoomDetailsMap; }
+    inline auto &getSelectedEntitiesMap() { return this->selectedEntitiesMap; }
 
     void triggerSubscriptions();
 
@@ -57,6 +59,7 @@ private:
     std::unique_ptr<CurrentRoomModel> currentRoomModel = std::make_unique<CurrentRoomModel>();
     std::unique_ptr<CrewMemberInRoomDetailsModel> crewMemberInRoomDetailsModel = std::make_unique<CrewMemberInRoomDetailsModel>();
     std::unique_ptr<InfoRoomDetailsMap> infoRoomDetailsMap = std::make_unique<InfoRoomDetailsMap>();
+    std::unique_ptr<SelectedEntitiesMap> selectedEntitiesMap = std::make_unique<SelectedEntitiesMap>();
 };
 
 #endif // !GAME_STATE_HPP
