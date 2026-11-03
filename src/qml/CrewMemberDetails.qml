@@ -62,6 +62,45 @@ Column {
             }
         }
         Column {
+            width: parent.width / 2
+            height: parent.height
+            Text {
+                id: skillsText
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: qsTr("Skills")
+            }
+            ScrollView {
+                id: skills
+                width: parent.width
+                height: parent.height - skillsText.implicitHeight
+                ListView {
+                    id: skillsList
+                    width: parent.width
+                    model: skillsCrewMemberDetailsModel
+                    delegate: 
+                        Rectangle {
+                            border.color: "black"
+                            height: skillsColumn.implicitHeight
+                            width: skillsList.width
+                            Column {
+                                id: skillsColumn
+                                width: parent.width
+                                Text {
+                                    width: parent.width
+                                    wrapMode: Text.Wrap
+                                    text: "name: " + model.name
+                                }
+
+                                Text {
+                                    width: parent.width
+                                    wrapMode: Text.Wrap
+                                    text: "level: " + model.level
+                                }
+                            }
+                        }
+                }
+            }
         }
     }
     Column {

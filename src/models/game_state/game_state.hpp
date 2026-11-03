@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include "skills_crew_member_details.hpp"
 #include "next_immediate_rooms_crew_member_details.hpp"
 #include "selected_entities_map.hpp"
 #include "adjacent_room_list_room_details.hpp"
@@ -41,6 +42,7 @@ public:
     inline auto &getInfoRoomDetailsMap() { return this->infoRoomDetailsMap; }
     inline auto &getSelectedEntitiesMap() { return this->selectedEntitiesMap; }
     inline auto &getNextImmediateRoomsCrewMemberDetailsModel() { return this->nextImmediateRoomsCrewMemberDetailsModel; }
+    inline auto &getSkillsCrewMemberDetailsModel() { return this->skillsCrewMemberDetailsModel; }
 
     void triggerSubscriptions();
 
@@ -63,6 +65,7 @@ private:
     std::unique_ptr<InfoRoomDetailsMap> infoRoomDetailsMap = std::make_unique<InfoRoomDetailsMap>();
     std::unique_ptr<SelectedEntitiesMap> selectedEntitiesMap = std::make_unique<SelectedEntitiesMap>();
     std::unique_ptr<NextImmediateRoomsCrewMemberDetailsModel> nextImmediateRoomsCrewMemberDetailsModel = std::make_unique<NextImmediateRoomsCrewMemberDetailsModel>();
+    std::unique_ptr<SkillsCrewMemberDetailsModel> skillsCrewMemberDetailsModel = std::make_unique<SkillsCrewMemberDetailsModel>();
 };
 
 #endif // !GAME_STATE_HPP

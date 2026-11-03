@@ -30,6 +30,16 @@ namespace util {
         }
         return std::nullopt;
     }
+
+    template<typename Key, typename Value, Numeric Size> 
+    inline const std::optional<const Key*> atIndexKey(const std::map<Key, Value> &map, Size index) {
+        Size i = 0;
+        for (const auto &[key, _]: map) {
+            if (index == i) return std::addressof(key);
+            i++;
+        }
+        return std::nullopt;
+    }
 }
 
 #endif // !AT_INDEX_HPPGET_ROOM_HPP
