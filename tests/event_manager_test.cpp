@@ -334,3 +334,113 @@ TEST(EventManager, SelectedEntities) {
     roomSelected.selectRoom(-1);
     EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::ROOM));
 }
+
+TEST(EventManager, InfoCrewMembersDetailsMap) {
+
+    GameState &gameState = GameState::getInstance();
+    gameState.triggerSubscriptions();
+    auto &spaceShip = gameState.getSpaceShip().get()->value();
+
+    auto infoMap = gameState.getInfoCrewMemberDetailsMap().get();
+ 
+    auto movedCrewMember1 = std::unique_ptr<CrewMember>(new CrewMember("James", "Pilot", {}));
+    size_t crewMemberId1 = movedCrewMember1->getId();
+    auto movedCrewMember2 = std::unique_ptr<CrewMember>(new CrewMember("Karl", "Engineer", {}));
+    size_t crewMemberId2 = movedCrewMember2->getId();
+    auto movedRoom1 = std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room1Id = movedRoom1->getId();
+    auto movedRoom2 = std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room2Id = movedRoom2->getId();
+
+    spaceShip.getRoomMap().insert({movedRoom1->getId(), std::move(movedRoom1)});
+    spaceShip.getRoomMap().insert({movedRoom2->getId(), std::move(movedRoom2)});
+    spaceShip.getCrewMap().insert({movedCrewMember1->getId(), std::move(movedCrewMember1)});
+    spaceShip.getCrewMap().insert({movedCrewMember2->getId(), std::move(movedCrewMember2)});
+
+    auto crewMember1 = util::getCrewMember(crewMemberId1).value();
+    auto crewMember2 = util::getCrewMember(crewMemberId2).value();
+    auto room1 = util::getRoom(room1Id).value();
+    auto room2 = util::getRoom(room2Id).value();
+
+    EXPECT_DOUBLE_EQ(infoMap->size(), 4);
+    EXPECT_TRUE(infoMap->contains("id"));
+    EXPECT_TRUE(infoMap->contains("name"));
+    EXPECT_TRUE(infoMap->contains("title"));
+    EXPECT_TRUE(infoMap->contains("currentRoom"));
+
+    EXPECT_EQ(infoMap->value("id"), QVariant());
+    EXPECT_EQ(infoMap->value("name"), QVariant());
+    EXPECT_EQ(infoMap->value("title"), QVariant());
+    EXPECT_EQ(infoMap->value("currentRoom"), QVariant());
+
+    // select crew member 1
+    gameState.getEventManager()->getCrewMemberSelectedEvent().emitEvent(crewMemberId1);
+
+    EXPECT_DOUBLE_EQ(infoMap->size(), 4);
+    EXPECT_TRUE(infoMap->contains("id"));
+    EXPECT_TRUE(infoMap->contains("name"));
+    EXPECT_TRUE(infoMap->contains("title"));
+    EXPECT_TRUE(infoMap->contains("currentRoom"));
+
+    EXPECT_DOUBLE_EQ(*static_cast<const size_t *>(infoMap->value("id").constData()), crewMemberId1);
+    EXPECT_STREQ(infoMap->value("name").toString().toStdString().c_str(), "James");
+    EXPECT_STREQ(infoMap->value("title").toString().toStdString().c_str(), "Pilot");
+    EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), "Not in a room");
+
+    CrewMemberMovedPayload payload = {
+        crewMemberId1,
+        std::nullopt,
+        room1Id,
+    };
+    // move crew member 1 to room 1
+    gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), std::format("#{} Room 1 (Corridor)", room1Id).c_str());
+
+    payload = {
+        crewMemberId1,
+        room1Id,
+        room2Id,
+    };
+    // move crew member 1 to room 2
+    gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), std::format("#{} Room 2 (Corridor)", room2Id).c_str());
+
+    payload = {
+        crewMemberId1,
+        room2Id,
+        std::nullopt,
+    };
+    // move crew member 1 to no room
+    gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), "Not in a room");
+
+    payload = {
+        crewMemberId2,
+        std::nullopt,
+        room1Id,
+    };
+    // move crew member 2 to room 1
+    gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
+    // select crew member 2
+    gameState.getEventManager()->getCrewMemberSelectedEvent().emitEvent(crewMemberId2);
+    
+    EXPECT_DOUBLE_EQ(infoMap->size(), 4);
+    EXPECT_TRUE(infoMap->contains("id"));
+    EXPECT_TRUE(infoMap->contains("name"));
+    EXPECT_TRUE(infoMap->contains("title"));
+    EXPECT_TRUE(infoMap->contains("currentRoom"));
+
+    EXPECT_DOUBLE_EQ(*static_cast<const size_t *>(infoMap->value("id").constData()), crewMemberId2);
+    EXPECT_STREQ(infoMap->value("name").toString().toStdString().c_str(), "Karl");
+    EXPECT_STREQ(infoMap->value("title").toString().toStdString().c_str(), "Engineer");
+    EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), std::format("#{} Room 1 (Corridor)", room1Id).c_str());
+
+    payload = {
+        crewMemberId1,
+        room2Id,
+        room2Id,
+    };
+    // move crew member 1 to room 2 (yes crew member **1**)
+    gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
+    EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), std::format("#{} Room 1 (Corridor)", room1Id).c_str());
+}

@@ -104,5 +104,30 @@ Column {
         }
     }
     Column {
+        id: crewMemberInfos
+        width: parent.width
+        height: parent.height / 2
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "id: " + infoCrewMemberDetailsMap.id
+        }
+
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "name: " + infoCrewMemberDetailsMap.name
+        }
+
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "title: " + infoCrewMemberDetailsMap.title
+        }
+        Text {
+            width: parent.width
+            wrapMode: Text.Wrap
+            text: "current room: " + infoCrewMemberDetailsMap.currentRoom
+        }
     }
 }

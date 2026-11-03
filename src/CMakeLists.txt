@@ -25,6 +25,7 @@ add_library(SpaceshipCrewV2_Lib
         qml/q_models/selected_entities_map.cpp
         qml/q_models/next_immediate_rooms_crew_member_details.cpp
         qml/q_models/skills_crew_member_details.cpp
+        qml/q_models/info_crew_member_details_map.cpp
         util/get_room.cpp
         util/get_room_list.cpp
         util/get_crew_list.cpp
