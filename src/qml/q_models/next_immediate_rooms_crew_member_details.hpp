@@ -3,6 +3,7 @@
 
 #include "create_room_event.hpp"
 #include "crew_member_moved_event.hpp"
+#include "crew_member_selected_event.hpp"
 #include <cstddef>
 #include <QAbstractListModel>
 #include <optional>
@@ -10,7 +11,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class NextImmediateRoomsCrewMemberDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public CrewMemberMovedSubscriber {
+class NextImmediateRoomsCrewMemberDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public CrewMemberMovedSubscriber, public CrewMemberSelectedSubscriber {
 public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -21,6 +22,8 @@ public:
     void handleRoomCreated(size_t &roomId) override;
 
     void handleCrewMemberMoved(CrewMemberMovedPayload &payload) override;
+
+    void handleCrewMemberSelected(size_t &crewMemberId) override;
 
     void triggerSubscriptions();
 

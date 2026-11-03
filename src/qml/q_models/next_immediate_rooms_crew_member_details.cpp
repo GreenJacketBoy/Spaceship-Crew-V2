@@ -84,7 +84,15 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberMoved(CrewMemberM
     this->layoutChanged();
 }
 
+void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberSelected(size_t &crewMemberId) {
+    this->layoutAboutToBeChanged();
+    this->crewMemberId = crewMemberId;
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount(), 0));
+    this->layoutChanged();
+}
+
 void NextImmediateRoomsCrewMemberDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
 }
