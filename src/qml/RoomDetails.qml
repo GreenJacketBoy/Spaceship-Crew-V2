@@ -103,6 +103,13 @@ Column {
                                     wrapMode: Text.Wrap
                                     text: "title: " + model.title
                                 }
+
+                                Button {
+                                    text: qsTr("Select")
+                                    onClicked: {
+                                        crewMemberSelectedEvent.selectCrewMember(model.id);
+                                    }
+                                }
                             }
                         }
                 }
