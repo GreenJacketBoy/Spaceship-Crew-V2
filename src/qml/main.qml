@@ -45,16 +45,15 @@ Window {
 
 
         StackLayout {
-            z: bar.z - 1
             height: parent.height
-            width: parent.width
+            width: parent.width - 300
             currentIndex: selectedEntitiesMap.lastSelected
             RoomDetails {
-                width: parent.width - 300
+                width: parent.width
                 height: parent.height
             }
             CrewMemberDetails {
-                width: parent.width - 300
+                width: parent.width
                 height: parent.height
             }
         }
