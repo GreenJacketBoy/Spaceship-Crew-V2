@@ -87,7 +87,7 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberMoved(CrewMemberM
 void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberSelected(size_t &crewMemberId) {
     this->layoutAboutToBeChanged();
     this->crewMemberId = crewMemberId;
-    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount(), 0));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 
