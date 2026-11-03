@@ -46,15 +46,14 @@ QHash<int, QByteArray> CrewMemberInRoomDetailsModel::roleNames() const {
     };
 }
 
-void CrewMemberInRoomDetailsModel::handleCrewMemberCreated(size_t &crewMemberId) {
+void CrewMemberInRoomDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
     if (!this->roomId) return;
-    auto selectedRoomId = this->roomId.value();
-    auto optionalSelectedRoom = util::getRoom(selectedRoomId);
-    if (!optionalSelectedRoom) return;
-    if (!optionalSelectedRoom.value()->getCrewMembersInRoom().contains(crewMemberId)) return;
+
+    if (!payload.toRoomId && !payload.fromRoomId) return;
+    if (payload.fromRoomId.value() != this->roomId.value() &&  payload.fromRoomId.value() != this->roomId.value()) return;
 
     this->layoutAboutToBeChanged();
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 
@@ -69,6 +68,6 @@ void CrewMemberInRoomDetailsModel::handleRoomSelected(size_t &roomId) {
 }
 
 void CrewMemberInRoomDetailsModel::triggerSubscriptions() {
-    GameState::getInstance().getEventManager()->getCreateCrewMemberEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
 }

@@ -2,7 +2,7 @@
 #define CREW_MEMBER_IN_ROOM_DETAILS_HPP
 
 #include <cstddef>
-#include "create_crew_member_event.hpp"
+#include "crew_member_moved_event.hpp"
 #include "room_selected_event.hpp"
 #include <QAbstractTableModel>
 #include <optional>
@@ -10,7 +10,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class CrewMemberInRoomDetailsModel : public QAbstractTableModel, public CreateCrewMemberSubscriber, public RoomSelectedSubscriber {
+class CrewMemberInRoomDetailsModel : public QAbstractTableModel, public CrewMemberMovedSubscriber, public RoomSelectedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -20,7 +20,7 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void handleCrewMemberCreated(size_t &crewMemberId) override;
+    void handleCrewMemberMoved(CrewMemberMovedPayload &crewMemberId) override;
 
     void handleRoomSelected(size_t &roomId) override;
 
