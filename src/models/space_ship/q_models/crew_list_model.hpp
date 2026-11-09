@@ -1,6 +1,8 @@
 #ifndef CREW_LIST_MODEL_HPP
 #define CREW_LIST_MODEL_HPP
 
+#include "crew_member_name_updated_event.hpp"
+#include "crew_member_title_updated_event.hpp"
 #include "create_crew_member_event.hpp"
 #include "crew_member_selected_event.hpp"
 #include <QAbstractTableModel>
@@ -8,7 +10,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class CrewListModel : public QAbstractTableModel, public CreateCrewMemberSubscriber, public CrewMemberSelectedSubscriber {
+class CrewListModel : public QAbstractTableModel, public CreateCrewMemberSubscriber, public CrewMemberSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -21,6 +23,10 @@ public:
     void handleCrewMemberCreated(size_t &payload) override;
 
     void handleCrewMemberSelected(size_t &crewMemberId) override;
+
+    void handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) override;
+
+    void handleCrewMemberNameUpdated(CrewMemberNameUpdatedPayload &payload) override;
 
     void triggerSubscriptions();
 

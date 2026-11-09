@@ -1,3 +1,5 @@
+#include "index_of.hpp"
+#include "get_crew_list.hpp"
 #include "crew_member_in_room_details.hpp"
 #include "get_crew_member.hpp"
 #include "q_variant_special_type.hpp"
@@ -67,7 +69,31 @@ void CrewMemberInRoomDetailsModel::handleRoomSelected(size_t &roomId) {
     this->layoutChanged();
 }
 
+void CrewMemberInRoomDetailsModel::handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) {
+    auto optionalCrewList = util::getCrewList();
+    if (!optionalCrewList) return;
+    auto crewList = optionalCrewList.value();
+
+    auto optionalIndex = util::indexOf<size_t>(*crewList, payload.crewMemberId);
+    if (!optionalIndex) return;
+    size_t index = optionalIndex.value();
+    this->dataChanged(this->index(index, 0), this->index(index, 0));
+}
+
+void CrewMemberInRoomDetailsModel::handleCrewMemberNameUpdated(CrewMemberNameUpdatedPayload &payload) {
+    auto optionalCrewList = util::getCrewList();
+    if (!optionalCrewList) return;
+    auto crewList = optionalCrewList.value();
+
+    auto optionalIndex = util::indexOf<size_t>(*crewList, payload.crewMemberId);
+    if (!optionalIndex) return;
+    size_t index = optionalIndex.value();
+    this->dataChanged(this->index(index, 0), this->index(index, 0));
+}
+
 void CrewMemberInRoomDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberTitleUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberNameUpdatedEvent().subscribe(*this);
 }

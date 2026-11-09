@@ -15,4 +15,6 @@ void GameState::triggerSubscriptions() {
     if (this->nextImmediateRoomsCrewMemberDetailsModel) this->nextImmediateRoomsCrewMemberDetailsModel->triggerSubscriptions();
     if (this->skillsCrewMemberDetailsModel) this->skillsCrewMemberDetailsModel->triggerSubscriptions();
     if (this->infoCrewMemberDetailsMap) this->infoCrewMemberDetailsMap->triggerSubscriptions();
+    if (this->editInfoCrewMemberDetailsMap) this->editInfoCrewMemberDetailsMap->triggerSubscriptions();
+    if (this->editCurrentRoomModel) this->editCurrentRoomModel->triggerSubscriptions();
 }

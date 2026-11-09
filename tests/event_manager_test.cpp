@@ -5,6 +5,7 @@
 #include <qhashfunctions.h>
 #include <qlist.h>
 #include <qvariant.h>
+#include <string>
 #include <utility>
 #include "create_crew_member_event.hpp"
 #include "create_room_event.hpp"
@@ -443,4 +444,22 @@ TEST(EventManager, InfoCrewMembersDetailsMap) {
     // move crew member 1 to room 2 (yes crew member **1**)
     gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
     EXPECT_STREQ(infoMap->value("currentRoom").toString().toStdString().c_str(), std::format("#{} Room 1 (Corridor)", room1Id).c_str());
+
+    const char titleString[] = "Not Engineer";
+    CrewMemberTitleUpdatedPayload titlePayload = {
+        crewMemberId2,
+        titleString,
+    };
+    gameState.getEventManager()->getCrewMemberTitleUpdatedEvent().emitEvent(titlePayload);
+    EXPECT_STREQ(infoMap->value("name").toString().toStdString().c_str(), "Karl");
+    EXPECT_STREQ(infoMap->value("title").toString().toStdString().c_str(), "Not Engineer");
+
+    const char nameString[] = "Not Karl";
+    CrewMemberNameUpdatedPayload namePayload = {
+        crewMemberId2,
+        nameString,
+    };
+    gameState.getEventManager()->getCrewMemberNameUpdatedEvent().emitEvent(namePayload);
+    EXPECT_STREQ(infoMap->value("name").toString().toStdString().c_str(), "Not Karl");
+    EXPECT_STREQ(infoMap->value("title").toString().toStdString().c_str(), "Not Engineer");
 }

@@ -1,4 +1,5 @@
 #include "info_crew_member_details_map.hpp"
+#include "get_crew_list.hpp"
 #include "get_crew_member.hpp"
 #include "get_room.hpp"
 #include "q_variant_special_type.hpp"
@@ -45,7 +46,21 @@ void InfoCrewMemberDetailsMap::updateCurrentRoom(const std::optional<size_t> &op
     insert("currentRoom", QVariant(std::format("#{} {} ({})", room->getId(), room->getName(), room->getTypeName()).c_str()));
 }
 
+void InfoCrewMemberDetailsMap::handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) {
+    if (this->crewMemberId && this->crewMemberId.value() == payload.crewMemberId) {
+        insert("title", QVariant(QString(payload.title)));
+    }
+}
+
+void InfoCrewMemberDetailsMap::handleCrewMemberNameUpdated(CrewMemberNameUpdatedPayload &payload) {
+    if (this->crewMemberId && this->crewMemberId.value() == payload.crewMemberId) {
+        insert("name", QVariant(QString(payload.name)));
+    }
+}
+
 void InfoCrewMemberDetailsMap::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberTitleUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberNameUpdatedEvent().subscribe(*this);
 }

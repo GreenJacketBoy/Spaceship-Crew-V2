@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 Column {
     Row {
@@ -103,31 +104,109 @@ Column {
             }
         }
     }
-    Column {
-        id: crewMemberInfos
+    StackLayout {
         width: parent.width
         height: parent.height / 2
-        Text {
+        currentIndex: editInfoCrewMemberDetailsMap.isEditing ? 0 : 1
+        Column {
+            id: editCrewMemberInfos
             width: parent.width
-            wrapMode: Text.Wrap
-            text: "id: " + infoCrewMemberDetailsMap.id
-        }
+            height: parent.height
+            Text {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: "id: " + editInfoCrewMemberDetailsMap.id
+            }
 
-        Text {
-            width: parent.width
-            wrapMode: Text.Wrap
-            text: "name: " + infoCrewMemberDetailsMap.name
-        }
+            Row {
+                Text { text: qsTr("Name: ") }
+                
+                Rectangle {
+                    width: nameInput.width; height: nameInput.implicitHeight
+                    border.color: "black"
+                    TextInput {
+                        id: nameInput
+                        text: editInfoCrewMemberDetailsMap.name
+                        width: 30
+                    }
+                }
+            }
 
-        Text {
-            width: parent.width
-            wrapMode: Text.Wrap
-            text: "title: " + infoCrewMemberDetailsMap.title
+            Row {
+                Text { text: qsTr("Title: ") }
+                
+                Rectangle {
+                    width: titleInput.width; height: titleInput.implicitHeight
+                    border.color: "black"
+                    TextInput {
+                        id: titleInput
+                        text: editInfoCrewMemberDetailsMap.title
+                        width: 30
+                    }
+                }
+            }
+
+            Row {
+                Text { text: qsTr("Current Room: ") }
+                ComboBox {
+                    id: currentRoom
+                    currentValue: editInfoCrewMemberDetailsMap.currentRoom
+                    model: editCurrentRoomModel
+                    textRole: "text"
+                    valueRole: "value"
+                }
+            }
+            Button {
+                text: qsTr("Save")
+                onClicked: {
+                    editInfoCrewMemberDetailsMap.save(
+                        nameInput.text,
+                        titleInput.text,
+                        currentRoom.currentValue,
+                    );
+                }
+            }
+            Button {
+                text: qsTr("Cancel")
+                onClicked: {
+                    editInfoCrewMemberDetailsMap.cancel();
+                }
+            }
         }
-        Text {
+        Column {
+            id: crewMemberInfos
             width: parent.width
-            wrapMode: Text.Wrap
-            text: "current room: " + infoCrewMemberDetailsMap.currentRoom
+            height: parent.height
+            Text {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: "id: " + infoCrewMemberDetailsMap.id
+            }
+
+            Text {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: "name: " + infoCrewMemberDetailsMap.name
+            }
+
+            Text {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: "title: " + infoCrewMemberDetailsMap.title
+            }
+
+            Text {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: "current room: " + infoCrewMemberDetailsMap.currentRoom
+            }
+
+            Button {
+                text: qsTr("Edit")
+                onClicked: {
+                    editInfoCrewMemberDetailsMap.openEditMenu();
+                }
+            }
         }
     }
 }

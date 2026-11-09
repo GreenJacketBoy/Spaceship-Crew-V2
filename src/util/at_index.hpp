@@ -1,17 +1,14 @@
 #ifndef AT_INDEX_HPP
 #define AT_INDEX_HPP
 
+#include "numeric_concept.hpp"
 #include <map>
 #include <memory>
 #include <optional>
 #include <set>
-#include <type_traits>
-
-template<typename T> 
-concept Numeric = std::is_arithmetic_v<T>;
 
 namespace util {
-    template<typename T, Numeric Size> 
+    template<typename T, util::Numeric Size> 
     inline const std::optional<const T*> atIndex(const std::set<T> &set, Size index) {
         Size i = 0;
         for (const auto &item: set) {
@@ -21,7 +18,7 @@ namespace util {
         return std::nullopt; // OOOOH MAGAWD
     }
 
-    template<typename Key, typename Value, Numeric Size> 
+    template<typename Key, typename Value, util::Numeric Size> 
     inline const std::optional<const Value*> atIndex(const std::map<Key, Value> &map, Size index) {
         Size i = 0;
         for (const auto &[_, item]: map) {
@@ -31,7 +28,7 @@ namespace util {
         return std::nullopt;
     }
 
-    template<typename Key, typename Value, Numeric Size> 
+    template<typename Key, typename Value, util::Numeric Size> 
     inline const std::optional<const Key*> atIndexKey(const std::map<Key, Value> &map, Size index) {
         Size i = 0;
         for (const auto &[key, _]: map) {

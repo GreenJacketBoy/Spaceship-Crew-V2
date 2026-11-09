@@ -50,9 +50,11 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("crewMemberInRoomDetailsModel", gameState->getCrewMemberInRoomDetailsModel().get());
     engine.rootContext()->setContextProperty("nextImmediateRoomsCrewMemberDetailsModel", gameState->getNextImmediateRoomsCrewMemberDetailsModel().get());
     engine.rootContext()->setContextProperty("skillsCrewMemberDetailsModel", gameState->getSkillsCrewMemberDetailsModel().get());
+    engine.rootContext()->setContextProperty("editCurrentRoomModel", gameState->getEditCurrentRoomModel().get());
     engine.rootContext()->setContextProperty("infoRoomDetailsMap", gameState->getInfoRoomDetailsMap().get());
     engine.rootContext()->setContextProperty("infoCrewMemberDetailsMap", gameState->getInfoCrewMemberDetailsMap().get());
     engine.rootContext()->setContextProperty("selectedEntitiesMap", gameState->getSelectedEntitiesMap().get());
+    engine.rootContext()->setContextProperty("editInfoCrewMemberDetailsMap", gameState->getEditInfoCrewMemberDetailsMap().get());
     engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
     engine.rootContext()->setContextProperty("createCrewMemberEvent", &gameState->getEventManager().get()->getCreateCrewMemberEvent());
     engine.rootContext()->setContextProperty("roomSelectedEvent", &gameState->getEventManager().get()->getRoomSelectedEvent());

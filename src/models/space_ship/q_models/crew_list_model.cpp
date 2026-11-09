@@ -1,9 +1,11 @@
+#include "index_of.hpp"
 #include "at_index.hpp"
 #include "crew_member.hpp"
 #include "crew_list_model.hpp"
 #include "game_state.hpp"
 #include "get_crew_list.hpp"
 #include "q_variant_special_type.hpp"
+#include <cstddef>
 
 int CrewListModel::columnCount(const QModelIndex &parent) const {
     return 1;
@@ -70,7 +72,31 @@ void CrewListModel::handleCrewMemberSelected(size_t &crewMemberId) {
         this->dataChanged(this->index(toBeSelectedIndex.value(), 0), this->index(toBeSelectedIndex.value(), 0));
 }
 
+void CrewListModel::handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) {
+    auto optionalCrewList = util::getCrewList();
+    if (!optionalCrewList) return;
+    auto crewList = optionalCrewList.value();
+
+    auto optionalIndex = util::indexOf<size_t>(*crewList, payload.crewMemberId);
+    if (!optionalIndex) return;
+    size_t index = optionalIndex.value();
+    this->dataChanged(this->index(index, 0), this->index(index, 0));
+}
+
+void CrewListModel::handleCrewMemberNameUpdated(CrewMemberNameUpdatedPayload &payload) {
+    auto optionalCrewList = util::getCrewList();
+    if (!optionalCrewList) return;
+    auto crewList = optionalCrewList.value();
+
+    auto optionalIndex = util::indexOf<size_t>(*crewList, payload.crewMemberId);
+    if (!optionalIndex) return;
+    size_t index = optionalIndex.value();
+    this->dataChanged(this->index(index, 0), this->index(index, 0));
+}
+
 void CrewListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateCrewMemberEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberNameUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberTitleUpdatedEvent().subscribe(*this);
 }
