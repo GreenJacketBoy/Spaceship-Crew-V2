@@ -2,6 +2,7 @@
 #include "q_variant_special_type.hpp"
 #include "get_room.hpp"
 #include "game_state.hpp"
+#include <qlogging.h>
 #include <qobject.h>
 #include <qvariant.h>
 
@@ -43,7 +44,64 @@ void InfoRoomDetailsMap::handleCrewMemberMoved(CrewMemberMovedPayload &payload) 
     insert("currentCrewAmount", util::qVariantSizeT(room->getCrewMembersInRoom().size()));
 }
 
+void InfoRoomDetailsMap::handleRoomNameUpdated(RoomNameUpdatedPayload &payload) {
+    if (!this->roomId || this->roomId.value() != payload.roomId)
+        return;
+    auto optionalRoom = util::getRoom(this->roomId.value());
+    if (!optionalRoom) return;
+    auto room = optionalRoom.value();
+
+    insert("name", QVariant(QString::fromStdString(room->getName())));
+}
+
+void InfoRoomDetailsMap::handleRoomCrewCapacityUpdated(RoomCrewCapacityUpdatedPayload &payload) {
+    qDebug() << "check";
+    if (!this->roomId || this->roomId.value() != payload.roomId)
+        return;
+    auto optionalRoom = util::getRoom(this->roomId.value());
+    if (!optionalRoom) return;
+    auto room = optionalRoom.value();
+
+    insert("crewCapacity", util::qVariantSizeT(room->getCrewCapacity()));
+}
+
+void InfoRoomDetailsMap::handleRoomStorageCapacityUpdated(RoomStorageCapacityUpdatedPayload &payload) {
+    if (!this->roomId || this->roomId.value() != payload.roomId)
+        return;
+    auto optionalRoom = util::getRoom(this->roomId.value());
+    if (!optionalRoom) return;
+    auto room = optionalRoom.value();
+
+    insert("storageCapacity", util::qVariantSizeT(room->getStorageCapacity()));
+}
+
+void InfoRoomDetailsMap::handleRoomSizeUpdated(RoomSizeUpdatedPayload &payload) {
+    if (!this->roomId || this->roomId.value() != payload.roomId)
+        return;
+    auto optionalRoom = util::getRoom(this->roomId.value());
+    if (!optionalRoom) return;
+    auto room = optionalRoom.value();
+
+    insert("size", util::qVariantSizeT(room->getSize()));
+}
+
+void InfoRoomDetailsMap::handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) {
+    if (!this->roomId || this->roomId.value() != payload.roomId)
+        return;
+    auto optionalRoom = util::getRoom(this->roomId.value());
+    if (!optionalRoom) return;
+    auto room = optionalRoom.value();
+
+    insert("type", QVariant(room->getTypeName()));
+}
+
+
 void InfoRoomDetailsMap::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomNameUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomCrewCapacityUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomStorageCapacityUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomTypeUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomSizeUpdatedEvent().subscribe(*this);
 }

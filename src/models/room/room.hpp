@@ -4,6 +4,7 @@
 #include <set>
 #include <cstddef>
 #include <string>
+#include <utility>
 #include <vector>
 #include "crew_member_moved_event.hpp"
 #include "room_type.hpp"
@@ -28,6 +29,16 @@ class Room : public CrewMemberMovedSubscriber {
     inline size_t       getCrewCapacity()    { return this->crewCapacity;     }
     inline auto        &getAdjacentRooms()   { return this->adjacentRoomsIds; }
     inline const auto  &getCrewMembersInRoom() { return this->crewMembersInRoom; }
+
+    inline void setName(const std::string &name) { this->name = name; }
+    inline void setName(std::string &&name)      { this->name = name; }
+
+    inline void setRoomType(const RoomType &type) { this->type = type; }
+    inline void setRoomType(RoomType &&type)      { this->type = type; }
+
+    inline void setSize(size_t size) { this->size = size; }
+    inline void setCrewCapacity(size_t crewCapacity) { this->crewCapacity = crewCapacity; }
+    inline void setStorageCapacity(size_t storageCapacity) { this->storageCapacity = storageCapacity; }
 
     inline bool addAdjacentRoom(const size_t &roomId) {
         return this->adjacentRoomsIds.insert(roomId).second;

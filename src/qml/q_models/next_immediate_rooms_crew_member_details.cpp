@@ -1,11 +1,13 @@
 #include "next_immediate_rooms_crew_member_details.hpp"
 #include "crew_member_moved_event.hpp"
 #include "get_crew_member.hpp"
+#include "index_of.hpp"
 #include "q_variant_special_type.hpp"
 #include "room.hpp"
 #include "get_room.hpp"
 #include "at_index.hpp"
 #include "game_state.hpp"
+#include <cstddef>
 #include <optional>
 #include <qdebug.h>
 #include <qvariant.h>
@@ -91,8 +93,30 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberSelected(size_t &
     this->layoutChanged();
 }
 
+void NextImmediateRoomsCrewMemberDetailsModel::handleRoomNameUpdated(RoomNameUpdatedPayload &payload) {
+    this->updateDataForRoom(payload.roomId);
+}
+
+void NextImmediateRoomsCrewMemberDetailsModel::handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) {
+    this->updateDataForRoom(payload.roomId);
+}
+
+constexpr void NextImmediateRoomsCrewMemberDetailsModel::updateDataForRoom(const size_t roomId) {
+    auto optionalCurrentRoom = this->getCurrentRoom();
+    if (!optionalCurrentRoom) return;
+    auto &adjacentRooms = optionalCurrentRoom.value()->getAdjacentRooms();
+
+    auto optionalIndex = util::indexOf<size_t>(adjacentRooms, roomId);
+    if (!optionalIndex) return;
+    size_t index = optionalIndex.value();
+
+    this->dataChanged(this->index(index, 0), this->index(index, 0));
+}
+
 void NextImmediateRoomsCrewMemberDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomNameUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomTypeUpdatedEvent().subscribe(*this);
 }

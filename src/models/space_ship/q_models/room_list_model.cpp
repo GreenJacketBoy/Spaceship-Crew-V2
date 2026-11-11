@@ -1,3 +1,4 @@
+#include "index_of.hpp"
 #include "room_list_model.hpp"
 #include "at_index.hpp"
 #include "game_state.hpp"
@@ -78,7 +79,28 @@ void RoomListModel::handleRoomSelected(size_t &roomId) {
         this->dataChanged(this->index(toBeSelectedIndex.value(), 0), this->index(toBeSelectedIndex.value(), 0));
 }
 
+void RoomListModel::handleRoomNameUpdated(RoomNameUpdatedPayload &payload) {
+    this->updateDataForRoom(payload.roomId);
+}
+
+void RoomListModel::handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) {
+    this->updateDataForRoom(payload.roomId);
+}
+
+constexpr void RoomListModel::updateDataForRoom(const size_t roomId) {
+    auto optionalRoomList = util::getRoomList();
+    if (!optionalRoomList) return;
+
+    auto optionalIndex = util::indexOf<size_t>(*optionalRoomList.value(), roomId);
+    if (!optionalIndex) return;
+    size_t index = optionalIndex.value();
+
+    this->dataChanged(this->index(index, 0), this->index(index, 0));
+}
+
 void RoomListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomNameUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomTypeUpdatedEvent().subscribe(*this);
 }

@@ -4,6 +4,8 @@
 #include "create_room_event.hpp"
 #include "crew_member_moved_event.hpp"
 #include "crew_member_selected_event.hpp"
+#include "room_name_updated_event.hpp"
+#include "room_type_updated_event.hpp"
 #include <cstddef>
 #include <QAbstractListModel>
 #include <optional>
@@ -11,7 +13,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class NextImmediateRoomsCrewMemberDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public CrewMemberMovedSubscriber, public CrewMemberSelectedSubscriber {
+class NextImmediateRoomsCrewMemberDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public CrewMemberMovedSubscriber, public CrewMemberSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber {
 public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -24,6 +26,10 @@ public:
     void handleCrewMemberMoved(CrewMemberMovedPayload &payload) override;
 
     void handleCrewMemberSelected(size_t &crewMemberId) override;
+
+    void handleRoomNameUpdated(RoomNameUpdatedPayload &payload) override;
+
+    void handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) override;
 
     void triggerSubscriptions();
 
@@ -38,6 +44,7 @@ private:
     };
 
     constexpr std::optional<Room *> getCurrentRoom() const;
+    constexpr void updateDataForRoom(const size_t roomId);
 
     std::optional<size_t> crewMemberId;
 };

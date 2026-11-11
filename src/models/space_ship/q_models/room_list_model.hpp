@@ -3,14 +3,16 @@
 
 #include <cstddef>
 #include "create_room_event.hpp"
+#include "room_name_updated_event.hpp"
 #include "room_selected_event.hpp"
+#include "room_type_updated_event.hpp"
 #include <QAbstractTableModel>
 #include <optional>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber {
+class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -24,6 +26,10 @@ public:
 
     void handleRoomSelected(size_t &roomId) override;
 
+    void handleRoomNameUpdated(RoomNameUpdatedPayload &payload) override;
+
+    void handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) override;
+
     void triggerSubscriptions();
 
 private:
@@ -36,6 +42,8 @@ private:
         TypeRole,
         IsSelectedRole,
     };
+
+    constexpr void updateDataForRoom(const size_t roomId);
 
     std::optional<size_t> selectedRoomId;
 };

@@ -3,6 +3,8 @@
 
 #include "edit_info_crew_member_details_map.hpp"
 #include "edit_current_room_model.hpp"
+#include "edit_info_room_details_map.hpp"
+#include "edit_room_type_model.hpp"
 #include "info_crew_member_details_map.hpp"
 #include "skills_crew_member_details.hpp"
 #include "next_immediate_rooms_crew_member_details.hpp"
@@ -49,6 +51,8 @@ public:
     inline auto &getInfoCrewMemberDetailsMap() { return this->infoCrewMemberDetailsMap; }
     inline auto &getEditInfoCrewMemberDetailsMap() { return this->editInfoCrewMemberDetailsMap; }
     inline auto &getEditCurrentRoomModel() { return this->editCurrentRoomModel; }
+    inline auto &getEditInfoRoomDetailsMap() { return this->editInfoRoomDetailsMap; }
+    inline auto &getEditRoomTypeModel() { return this->editRoomTypeModel; }
 
     void triggerSubscriptions();
 
@@ -75,6 +79,8 @@ private:
     std::unique_ptr<InfoCrewMemberDetailsMap> infoCrewMemberDetailsMap = std::make_unique<InfoCrewMemberDetailsMap>();
     std::unique_ptr<EditInfoCrewMemberDetailsMap> editInfoCrewMemberDetailsMap = std::make_unique<EditInfoCrewMemberDetailsMap>();
     std::unique_ptr<EditCurrentRoomModel> editCurrentRoomModel = std::make_unique<EditCurrentRoomModel>();
+    std::unique_ptr<EditInfoRoomDetailsMap> editInfoRoomDetailsMap = std::make_unique<EditInfoRoomDetailsMap>();
+    std::unique_ptr<EditRoomTypeModel> editRoomTypeModel = std::make_unique<EditRoomTypeModel>();
 };
 
 #endif // !GAME_STATE_HPP

@@ -16,6 +16,11 @@ add_library(SpaceshipCrewV2_Lib
         models/event_manager/events/crew_member_selected_event.cpp
         models/event_manager/events/crew_member_name_updated_event.cpp
         models/event_manager/events/crew_member_title_updated_event.cpp
+        models/event_manager/events/room_info/room_crew_capacity_updated_event.cpp
+        models/event_manager/events/room_info/room_name_updated_event.cpp
+        models/event_manager/events/room_info/room_size_updated_event.cpp
+        models/event_manager/events/room_info/room_storage_capacity_updated_event.cpp
+        models/event_manager/events/room_info/room_type_updated_event.cpp
         qml/q_models/add_adjacent_room_model.cpp
         qml/q_models/adjacent_rooms_list_create_room.cpp
         qml/q_models/add_skill_model.cpp
@@ -30,6 +35,8 @@ add_library(SpaceshipCrewV2_Lib
         qml/q_models/info_crew_member_details_map.cpp
         qml/q_models/edit_current_room_model.cpp
         qml/q_models/edit_info_crew_member_details_map.cpp
+        qml/q_models/edit_info_room_details_map.cpp
+        qml/q_models/edit_room_type_model.cpp
         util/get_room.cpp
         util/get_room_list.cpp
         util/get_crew_list.cpp
@@ -50,6 +57,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/space_ship/q_models
         models/event_manager
         models/event_manager/events
+        models/event_manager/events/room_info
         models/game_state
         qml/q_models
 )
