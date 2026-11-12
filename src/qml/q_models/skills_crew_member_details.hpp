@@ -4,7 +4,6 @@
 #include "crew_member_selected_event.hpp"
 #include <cstddef>
 #include <QAbstractListModel>
-#include <optional>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
@@ -26,8 +25,6 @@ private:
         NameRole = Qt::UserRole + 1,
         LevelRole,
     };
-
-    std::optional<size_t> crewMemberId;
 };
 
 #endif // !SKILLS_CREW_MEMBER_DETAILS_HPP

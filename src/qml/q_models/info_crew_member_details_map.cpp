@@ -1,3 +1,4 @@
+#include "selected_crew_member_id.hpp"
 #include "info_crew_member_details_map.hpp"
 #include "get_crew_list.hpp"
 #include "get_crew_member.hpp"
@@ -17,8 +18,7 @@ InfoCrewMemberDetailsMap::InfoCrewMemberDetailsMap(QObject *parent) : QQmlProper
 }
 
 void InfoCrewMemberDetailsMap::handleCrewMemberSelected(size_t &crewMemberId) {
-    this->crewMemberId = crewMemberId;
-    auto optionalCrewMember = util::getCrewMember(this->crewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(crewMemberId);
     if (!optionalCrewMember) return;
     auto crewMember = optionalCrewMember.value();
 
@@ -30,7 +30,8 @@ void InfoCrewMemberDetailsMap::handleCrewMemberSelected(size_t &crewMemberId) {
 }
 
 void InfoCrewMemberDetailsMap::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
-    if (!this->crewMemberId || this->crewMemberId.value() != payload.crewMemberId) return;
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (!selectedCrewMemberId || selectedCrewMemberId.value() != payload.crewMemberId) return;
     this->updateCurrentRoom(payload.toRoomId);
 }
 
@@ -47,13 +48,15 @@ void InfoCrewMemberDetailsMap::updateCurrentRoom(const std::optional<size_t> &op
 }
 
 void InfoCrewMemberDetailsMap::handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) {
-    if (this->crewMemberId && this->crewMemberId.value() == payload.crewMemberId) {
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (selectedCrewMemberId && selectedCrewMemberId.value() == payload.crewMemberId) {
         insert("title", QVariant(QString(payload.title)));
     }
 }
 
 void InfoCrewMemberDetailsMap::handleCrewMemberNameUpdated(CrewMemberNameUpdatedPayload &payload) {
-    if (this->crewMemberId && this->crewMemberId.value() == payload.crewMemberId) {
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (selectedCrewMemberId && selectedCrewMemberId.value() == payload.crewMemberId) {
         insert("name", QVariant(QString(payload.name)));
     }
 }

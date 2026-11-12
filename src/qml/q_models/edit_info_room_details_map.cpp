@@ -1,3 +1,4 @@
+#include "selected_room_id.hpp"
 #include "edit_info_room_details_map.hpp"
 #include "get_room.hpp"
 #include "q_variant_special_type.hpp"
@@ -20,13 +21,13 @@ EditInfoRoomDetailsMap::EditInfoRoomDetailsMap(QObject *parent) : QQmlPropertyMa
 }
 
 void EditInfoRoomDetailsMap::handleRoomSelected(size_t &crewMemberId) {
-    this->roomId = crewMemberId;
     this->resetToCurrentValues();
 }
 
 void EditInfoRoomDetailsMap::resetToCurrentValues() {
+    const auto selectedRoomId = util::selectedRoomId();
     std::optional<Room *> optionalRoom;
-    if (!this->roomId || !(optionalRoom = util::getRoom(this->roomId.value()))) {
+    if (!selectedRoomId || !(optionalRoom = util::getRoom(selectedRoomId.value()))) {
         insert("id",          QString());
         insert("name",        QString());
         insert("type", util::QVariantSpecialType(RoomTypeEnum::BRIDGE));
@@ -58,8 +59,9 @@ void EditInfoRoomDetailsMap::resetToCurrentValues() {
 }
 
 void EditInfoRoomDetailsMap::save(QString name, QString crewCapacityAsString, QString storageCapacityAsString, QString sizeAsString, RoomTypeEnum roomType) {
-    if (!this->roomId) return;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return;
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 

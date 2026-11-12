@@ -2,6 +2,7 @@
 #define EVENT_MANAGER_HPP
 
 #include "crew_member_deleted_event.hpp"
+#include "crew_member_unselected_event.hpp"
 #include "room_crew_capacity_updated_event.hpp"
 #include "room_name_updated_event.hpp"
 #include "room_size_updated_event.hpp"
@@ -14,6 +15,7 @@
 #include "room_selected_event.hpp"
 #include "crew_member_name_updated_event.hpp"
 #include "crew_member_title_updated_event.hpp"
+#include "room_unselected_event.hpp"
 
 class EventManager {
 public: 
@@ -30,7 +32,9 @@ public:
     inline RoomCrewCapacityUpdatedEvent &getRoomCrewCapacityUpdatedEvent() { return this->roomCrewCapacityUpdatedEvent; }
     inline RoomStorageCapacityUpdatedEvent &getRoomStorageCapacityUpdatedEvent() { return this->roomStorageCapacityUpdatedEvent; }
     inline CrewMemberDeletedEvent &getCrewMemberDeletedEvent() { return this->crewMemberDeletedEvent; }
- 
+    inline RoomUnselectedEvent &getRoomUnselectedEvent() { return this->roomUnselectedEvent; }
+    inline CrewMemberUnselectedEvent &getCrewMemberUnselectedEvent() { return this->crewMemberUnselectedEvent; }
+
 private:
     CreateRoomEvent createRoomEvent;
     CreateCrewMemberEvent createCrewMemberEvent;
@@ -45,6 +49,8 @@ private:
     RoomCrewCapacityUpdatedEvent roomCrewCapacityUpdatedEvent;
     RoomStorageCapacityUpdatedEvent roomStorageCapacityUpdatedEvent;
     CrewMemberDeletedEvent crewMemberDeletedEvent;
+    RoomUnselectedEvent roomUnselectedEvent;
+    CrewMemberUnselectedEvent crewMemberUnselectedEvent;
 };
 
 #endif // !EVENT_MANAGER_HPP

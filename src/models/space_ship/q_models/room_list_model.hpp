@@ -6,13 +6,13 @@
 #include "room_name_updated_event.hpp"
 #include "room_selected_event.hpp"
 #include "room_type_updated_event.hpp"
+#include "room_unselected_event.hpp"
 #include <QAbstractTableModel>
-#include <optional>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber {
+class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber, public RoomUnselectedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -25,6 +25,8 @@ public:
     void handleRoomCreated(size_t &payload) override;
 
     void handleRoomSelected(size_t &roomId) override;
+
+    void handleRoomUnselected(size_t &roomId) override;
 
     void handleRoomNameUpdated(RoomNameUpdatedPayload &payload) override;
 
@@ -45,7 +47,7 @@ private:
 
     constexpr void updateDataForRoom(const size_t roomId);
 
-    std::optional<size_t> selectedRoomId;
+    std::optional<size_t> lastSelectedRoomId;
 };
 
 #endif // !ROOM_LIST_MODEL_HPP

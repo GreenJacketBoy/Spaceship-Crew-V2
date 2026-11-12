@@ -17,7 +17,7 @@ public:
     void emitEvent(size_t &crewMemberId) override;
 
 public slots:
-    inline void selectCrewMember(size_t crewMemberId) { this->emitEvent(crewMemberId); };
+    void selectCrewMember(size_t crewMemberId);
 };
 
 #endif // !CREW_MEMBER_SELECTED_EVENT_HPP

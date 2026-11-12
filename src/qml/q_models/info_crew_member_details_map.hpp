@@ -25,8 +25,6 @@ public:
     void triggerSubscriptions();
 
 private:
-    std::optional<size_t> crewMemberId;
-
     void updateCurrentRoom(const std::optional<size_t> &crewMemberId);
 };
 

@@ -3,15 +3,16 @@
 #include "q_variant_special_type.hpp"
 #include "at_index.hpp"
 #include "game_state.hpp"
+#include "selected_crew_member_id.hpp"
 #include "skill.hpp"
 #include <cstddef>
 #include <optional>
-#include <qdebug.h>
 #include <qvariant.h>
 
 int SkillsCrewMemberDetailsModel::rowCount(const QModelIndex &parent) const {
-    if (!this->crewMemberId) return 0;
-    auto optionalCrewMember = util::getCrewMember(this->crewMemberId.value());
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (!selectedCrewMemberId) return 0;
+    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
     if (!optionalCrewMember) return 0;
     auto crewMember = optionalCrewMember.value();
 
@@ -19,8 +20,9 @@ int SkillsCrewMemberDetailsModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant SkillsCrewMemberDetailsModel::data(const QModelIndex &index, int role) const {
-    if (!this->crewMemberId) return QVariant();
-    auto optionalCrewMember = util::getCrewMember(this->crewMemberId.value());
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (!selectedCrewMemberId) return QVariant();
+    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
     if (!optionalCrewMember) return QVariant();
     auto crewMember = optionalCrewMember.value();
     auto optionalSkillType = util::atIndexKey(crewMember->getSkills(), index.row());
@@ -39,7 +41,6 @@ QVariant SkillsCrewMemberDetailsModel::data(const QModelIndex &index, int role) 
 
 void SkillsCrewMemberDetailsModel::handleCrewMemberSelected(size_t &crewMemberId) {
     this->layoutAboutToBeChanged();
-    this->crewMemberId = crewMemberId;
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }

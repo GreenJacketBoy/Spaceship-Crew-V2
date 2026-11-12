@@ -4,6 +4,7 @@
 #include "get_room.hpp"
 #include "at_index.hpp"
 #include "game_state.hpp"
+#include "selected_room_id.hpp"
 #include <qvariant.h>
 
 int AdjacentRoomListRoomDetailsModel::columnCount(const QModelIndex &parent) const {
@@ -11,15 +12,17 @@ int AdjacentRoomListRoomDetailsModel::columnCount(const QModelIndex &parent) con
 }
 
 int AdjacentRoomListRoomDetailsModel::rowCount(const QModelIndex &parent) const {
-    if (!this->roomId) return 0;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return 0;
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return 0;
     return optionalRoom.value()->getAdjacentRooms().size();
 }
 
 QVariant AdjacentRoomListRoomDetailsModel::data(const QModelIndex &index, int role) const {
-    if (!this->roomId) return QVariant();
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return QVariant();
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return QVariant();
     auto &adjacentRooms = optionalRoom.value()->getAdjacentRooms();
 
@@ -53,11 +56,12 @@ QHash<int, QByteArray> AdjacentRoomListRoomDetailsModel::roleNames() const {
 }
 
 void AdjacentRoomListRoomDetailsModel::handleRoomCreated(size_t &roomId) {
-    if (!this->roomId) return;
-    auto selectedRoomId = this->roomId.value();
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return;
+
     auto optionalCreatedRoom = util::getRoom(roomId);
     if (!optionalCreatedRoom) return;
-    if (!optionalCreatedRoom.value()->isRoomAdjacent(selectedRoomId)) return;
+    if (!optionalCreatedRoom.value()->isRoomAdjacent(selectedRoomId.value())) return;
 
     this->layoutAboutToBeChanged();
     this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
@@ -65,11 +69,7 @@ void AdjacentRoomListRoomDetailsModel::handleRoomCreated(size_t &roomId) {
 }
 
 void AdjacentRoomListRoomDetailsModel::handleRoomSelected(size_t &roomId) {
-    auto optionalRoom = util::getRoom(roomId);
-    if (!optionalRoom) return;
-
     this->layoutAboutToBeChanged();
-    this->roomId = roomId;
     this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
     this->layoutChanged();
 }

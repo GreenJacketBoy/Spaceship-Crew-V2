@@ -1,3 +1,4 @@
+#include "selected_crew_member_id.hpp"
 #include "next_immediate_rooms_crew_member_details.hpp"
 #include "crew_member_moved_event.hpp"
 #include "get_crew_member.hpp"
@@ -9,7 +10,6 @@
 #include "game_state.hpp"
 #include <cstddef>
 #include <optional>
-#include <qdebug.h>
 #include <qvariant.h>
 
 int NextImmediateRoomsCrewMemberDetailsModel::rowCount(const QModelIndex &parent) const {
@@ -65,8 +65,9 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleRoomCreated(size_t &roomId)
 }
 
 constexpr std::optional<Room *> NextImmediateRoomsCrewMemberDetailsModel::getCurrentRoom() const {
-    if (!this->crewMemberId) return std::nullopt;
-    auto optionalCrewMember = util::getCrewMember(this->crewMemberId.value());
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (!selectedCrewMemberId) return std::nullopt;
+    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
     if (!optionalCrewMember) return std::nullopt;
     auto optionalCurrentRoomId = optionalCrewMember.value()->getCurrentRoomId();
     if (!optionalCurrentRoomId) return std::nullopt;
@@ -81,14 +82,12 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberMoved(CrewMemberM
     }
 
     this->layoutAboutToBeChanged();
-    this->crewMemberId = payload.crewMemberId;
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 
 void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberSelected(size_t &crewMemberId) {
     this->layoutAboutToBeChanged();
-    this->crewMemberId = crewMemberId;
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }

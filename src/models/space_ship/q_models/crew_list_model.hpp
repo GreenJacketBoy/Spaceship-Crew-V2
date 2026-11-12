@@ -6,12 +6,13 @@
 #include "crew_member_title_updated_event.hpp"
 #include "create_crew_member_event.hpp"
 #include "crew_member_selected_event.hpp"
+#include "crew_member_unselected_event.hpp"
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class CrewListModel : public QAbstractTableModel, public CreateCrewMemberSubscriber, public CrewMemberSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber {
+class CrewListModel : public QAbstractTableModel, public CreateCrewMemberSubscriber, public CrewMemberSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber, public CrewMemberUnselectedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -24,6 +25,8 @@ public:
     void handleCrewMemberCreated(size_t &payload) override;
 
     void handleCrewMemberSelected(size_t &crewMemberId) override;
+
+    void handleCrewMemberUnselected(size_t &crewMemberId) override;
 
     void handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) override;
 
@@ -41,7 +44,7 @@ private:
         IsSelectedRole,
     };
 
-    std::optional<size_t> selectedCrewMemberId;
+    std::optional<size_t> lastSelectedCrewMemberId;
 };
 
 #endif // !CREW_LIST_MODEL_HPP

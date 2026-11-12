@@ -21,8 +21,6 @@ public slots:
     void openEditMenu();
 
 private:
-    std::optional<size_t> crewMemberId;
-
     void resetToCurrentValues();
 };
 

@@ -23,8 +23,6 @@ public slots:
     void openEditMenu();
 
 private:
-    std::optional<size_t> roomId;
-
     void resetToCurrentValues();
 };
 

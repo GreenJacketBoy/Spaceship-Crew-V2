@@ -1,3 +1,4 @@
+#include "selected_crew_member_id.hpp"
 #include "edit_info_crew_member_details_map.hpp"
 #include "crew_member.hpp"
 #include "crew_member_moved_event.hpp"
@@ -21,13 +22,13 @@ EditInfoCrewMemberDetailsMap::EditInfoCrewMemberDetailsMap(QObject *parent) : QQ
 }
 
 void EditInfoCrewMemberDetailsMap::handleCrewMemberSelected(size_t &crewMemberId) {
-    this->crewMemberId = crewMemberId;
     this->resetToCurrentValues();
 }
 
 void EditInfoCrewMemberDetailsMap::resetToCurrentValues() {
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
     std::optional<CrewMember *> optionalCrewMember;
-    if (!this->crewMemberId || !(optionalCrewMember = util::getCrewMember(this->crewMemberId.value()))) {
+    if (!selectedCrewMemberId || !(optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value()))) {
         insert("id",          QString());
         insert("name",        QString());
         insert("title",       QString());
@@ -53,8 +54,9 @@ void EditInfoCrewMemberDetailsMap::resetToCurrentValues() {
 }
 
 void EditInfoCrewMemberDetailsMap::save(QString name, QString title, std::optional<size_t> currentRoom) {
-    if (!this->crewMemberId) return;
-    auto optionalCrewMember = util::getCrewMember(this->crewMemberId.value());
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (!selectedCrewMemberId) return;
+    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
     if (!optionalCrewMember) return;
     auto crewMember = optionalCrewMember.value();
 

@@ -35,8 +35,6 @@ private:
         SizeRole,
         TypeRole,
     };
-
-    std::optional<size_t> roomId;
 };
 
 #endif // !ADJACENT_ROOM_LIST_ROOM_DETAILS_HPP

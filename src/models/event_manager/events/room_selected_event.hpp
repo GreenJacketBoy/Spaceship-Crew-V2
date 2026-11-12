@@ -19,7 +19,7 @@ public:
     void emitEvent(size_t &roomId) override;
 
 public slots:
-    inline void selectRoom(size_t roomId) { this->emitEvent(roomId); };
+    void selectRoom(size_t roomId);
 };
 
 #endif // !ROOM_SELECTED_EVENT_HPP

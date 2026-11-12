@@ -1,3 +1,4 @@
+#include "selected_crew_member_id.hpp"
 #include "index_of.hpp"
 #include "at_index.hpp"
 #include "crew_member.hpp"
@@ -6,6 +7,7 @@
 #include "get_crew_list.hpp"
 #include "q_variant_special_type.hpp"
 #include <cstddef>
+#include <qlogging.h>
 
 int CrewListModel::columnCount(const QModelIndex &parent) const {
     return 1;
@@ -23,12 +25,13 @@ QVariant CrewListModel::data(const QModelIndex &index, int role) const {
     auto optionalCrewMember = util::atIndex(*optionalCrewList.value(), index.row());
     if (!optionalCrewMember || !optionalCrewMember.value()) return QVariant();
     auto crewMember = optionalCrewMember.value()->get();
+    const auto selectedCrewMemberId = util::selectedCrewMemberId();
 
     switch (role) {
         case IdRole: return util::qVariantSizeT(crewMember->getId());
         case NameRole: return QVariant(crewMember->getName().c_str());
         case TitleRole: return QVariant(crewMember->getTitle().c_str());
-        case IsSelectedRole: return QVariant(this->selectedCrewMemberId && this->selectedCrewMemberId.value() == crewMember->getId());
+        case IsSelectedRole: return QVariant(selectedCrewMemberId && selectedCrewMemberId.value() == crewMember->getId());
         default: return QVariant();
     }
     return QVariant();
@@ -66,16 +69,27 @@ void CrewListModel::handleCrewMemberSelected(size_t &crewMemberId) {
     size_t index = 0;
     for (const auto &[_, crewMember] : *roomList) {
         if (crewMember->getId() == crewMemberId) toBeSelectedIndex = index;
-        if (this->selectedCrewMemberId && crewMember->getId() == this->selectedCrewMemberId.value()) currentSelectedIndex = index;
-        if ((currentSelectedIndex || !this->selectedCrewMemberId) && toBeSelectedIndex) break;
+        if (this->lastSelectedCrewMemberId && crewMember->getId() == this->lastSelectedCrewMemberId.value()) currentSelectedIndex = index;
+        if ((currentSelectedIndex || !this->lastSelectedCrewMemberId) && toBeSelectedIndex) break;
         index++;
     }
 
-    this->selectedCrewMemberId = crewMemberId;
+    this->lastSelectedCrewMemberId = crewMemberId;
     if (currentSelectedIndex)
         this->dataChanged(this->index(currentSelectedIndex.value(), 0), this->index(currentSelectedIndex.value(), 0));
     if (toBeSelectedIndex)
         this->dataChanged(this->index(toBeSelectedIndex.value(), 0), this->index(toBeSelectedIndex.value(), 0));
+}
+
+void CrewListModel::handleCrewMemberUnselected(size_t &crewMemberId) {
+    auto optionalCrewList = util::getCrewList();
+    if (!optionalCrewList) return;
+    auto crewList = optionalCrewList.value();
+
+    std::optional<size_t> selectedIndex = util::indexOf<size_t>(*crewList, crewMemberId);
+    
+    if (selectedIndex)
+        this->dataChanged(this->index(selectedIndex.value(), 0), this->index(selectedIndex.value(), 0));
 }
 
 void CrewListModel::handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) {
@@ -106,4 +120,5 @@ void CrewListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCrewMemberNameUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberTitleUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberDeletedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberUnselectedEvent().subscribe(*this);
 }

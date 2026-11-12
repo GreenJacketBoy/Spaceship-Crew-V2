@@ -1,3 +1,4 @@
+#include "selected_room_id.hpp"
 #include "index_of.hpp"
 #include "get_crew_list.hpp"
 #include "crew_member_in_room_details.hpp"
@@ -13,15 +14,17 @@ int CrewMemberInRoomDetailsModel::columnCount(const QModelIndex &parent) const {
 }
 
 int CrewMemberInRoomDetailsModel::rowCount(const QModelIndex &parent) const {
-    if (!this->roomId) return 0;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return 0;
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return 0;
     return optionalRoom.value()->getCrewMembersInRoom().size();
 }
 
 QVariant CrewMemberInRoomDetailsModel::data(const QModelIndex &index, int role) const {
-    if (!this->roomId) return QVariant();
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return QVariant();
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return QVariant();
     auto &crewMembersInRoom = optionalRoom.value()->getCrewMembersInRoom();
 
@@ -49,10 +52,11 @@ QHash<int, QByteArray> CrewMemberInRoomDetailsModel::roleNames() const {
 }
 
 void CrewMemberInRoomDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
-    if (!this->roomId) return;
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return;
 
     if (!payload.toRoomId && !payload.fromRoomId) return;
-    if (payload.fromRoomId.value() != this->roomId.value() &&  payload.fromRoomId.value() != this->roomId.value()) return;
+    if (payload.fromRoomId.value() != selectedRoomId.value() &&  payload.fromRoomId.value() != selectedRoomId.value()) return;
 
     this->layoutAboutToBeChanged();
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
@@ -60,11 +64,7 @@ void CrewMemberInRoomDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload 
 }
 
 void CrewMemberInRoomDetailsModel::handleRoomSelected(size_t &roomId) {
-    auto optionalRoom = util::getRoom(roomId);
-    if (!optionalRoom) return;
-
     this->layoutAboutToBeChanged();
-    this->roomId = roomId;
     this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
     this->layoutChanged();
 }
@@ -92,9 +92,10 @@ void CrewMemberInRoomDetailsModel::handleCrewMemberNameUpdated(CrewMemberNameUpd
 }
 
 void CrewMemberInRoomDetailsModel::handleCrewMemberDeleted(CrewMemberDeletedPayload &payload) {
-    if (!this->roomId) return;
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId) return;
     if (!payload.deletedCrewMemberCurrentRoomId) return;
-    if (this->roomId.value() != payload.deletedCrewMemberCurrentRoomId.value()) return;
+    if (selectedRoomId.value() != payload.deletedCrewMemberCurrentRoomId.value()) return;
 
     this->layoutAboutToBeChanged();
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));

@@ -1,8 +1,9 @@
+#include "selected_room_id.hpp"
 #include "info_room_details_map.hpp"
 #include "q_variant_special_type.hpp"
 #include "get_room.hpp"
 #include "game_state.hpp"
-#include <qlogging.h>
+#include <cstddef>
 #include <qobject.h>
 #include <qvariant.h>
 
@@ -17,8 +18,7 @@ InfoRoomDetailsMap::InfoRoomDetailsMap(QObject *parent) : QQmlPropertyMap(this, 
 }
 
 void InfoRoomDetailsMap::handleRoomSelected(size_t &roomId) {
-    this->roomId = roomId;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(roomId);
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
@@ -32,12 +32,14 @@ void InfoRoomDetailsMap::handleRoomSelected(size_t &roomId) {
 }
 
 void InfoRoomDetailsMap::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
-    if (!this->roomId) return;
+    const auto optionalSelectedRoomId = util::selectedRoomId();
+    if (!optionalSelectedRoomId) return;
+    const size_t selectedRoomId = optionalSelectedRoomId.value();
 
     if (!payload.toRoomId && !payload.fromRoomId) return;
-    if (payload.fromRoomId.value() != this->roomId.value() &&  payload.fromRoomId.value() != this->roomId.value()) return;
+    if (payload.fromRoomId.value() != selectedRoomId &&  payload.fromRoomId.value() != selectedRoomId) return;
 
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(selectedRoomId);
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
@@ -45,9 +47,10 @@ void InfoRoomDetailsMap::handleCrewMemberMoved(CrewMemberMovedPayload &payload) 
 }
 
 void InfoRoomDetailsMap::handleRoomNameUpdated(RoomNameUpdatedPayload &payload) {
-    if (!this->roomId || this->roomId.value() != payload.roomId)
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId || selectedRoomId.value() != payload.roomId)
         return;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
@@ -55,10 +58,10 @@ void InfoRoomDetailsMap::handleRoomNameUpdated(RoomNameUpdatedPayload &payload) 
 }
 
 void InfoRoomDetailsMap::handleRoomCrewCapacityUpdated(RoomCrewCapacityUpdatedPayload &payload) {
-    qDebug() << "check";
-    if (!this->roomId || this->roomId.value() != payload.roomId)
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId || selectedRoomId.value() != payload.roomId)
         return;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
@@ -66,9 +69,10 @@ void InfoRoomDetailsMap::handleRoomCrewCapacityUpdated(RoomCrewCapacityUpdatedPa
 }
 
 void InfoRoomDetailsMap::handleRoomStorageCapacityUpdated(RoomStorageCapacityUpdatedPayload &payload) {
-    if (!this->roomId || this->roomId.value() != payload.roomId)
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId || selectedRoomId.value() != payload.roomId)
         return;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
@@ -76,9 +80,10 @@ void InfoRoomDetailsMap::handleRoomStorageCapacityUpdated(RoomStorageCapacityUpd
 }
 
 void InfoRoomDetailsMap::handleRoomSizeUpdated(RoomSizeUpdatedPayload &payload) {
-    if (!this->roomId || this->roomId.value() != payload.roomId)
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId || selectedRoomId.value() != payload.roomId)
         return;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
@@ -86,9 +91,10 @@ void InfoRoomDetailsMap::handleRoomSizeUpdated(RoomSizeUpdatedPayload &payload) 
 }
 
 void InfoRoomDetailsMap::handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) {
-    if (!this->roomId || this->roomId.value() != payload.roomId)
+    const auto selectedRoomId = util::selectedRoomId();
+    if (!selectedRoomId || selectedRoomId.value() != payload.roomId)
         return;
-    auto optionalRoom = util::getRoom(this->roomId.value());
+    auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 

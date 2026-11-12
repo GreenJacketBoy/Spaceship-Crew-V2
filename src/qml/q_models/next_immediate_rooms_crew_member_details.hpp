@@ -45,8 +45,6 @@ private:
 
     constexpr std::optional<Room *> getCurrentRoom() const;
     constexpr void updateDataForRoom(const size_t roomId);
-
-    std::optional<size_t> crewMemberId;
 };
 
 #endif // !NEXT_IMMEDIATE_ROOMS_CREW_MEMBER_DETAILS_HPP

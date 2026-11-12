@@ -42,8 +42,6 @@ private:
         NameRole,
         TitleRole,
     };
-
-    std::optional<size_t> roomId;
 };
 
 #endif // !CREW_MEMBER_IN_ROOM_DETAILS_HPP

@@ -35,9 +35,6 @@ public:
     void handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) override;
 
     void triggerSubscriptions();
-
-private:
-    std::optional<size_t> roomId;
 };
 
 #endif // !INFO_ROOM_DETAILS_MAP_HPP
