@@ -16,6 +16,7 @@ add_library(SpaceshipCrewV2_Lib
         models/event_manager/events/crew_member_selected_event.cpp
         models/event_manager/events/crew_member_name_updated_event.cpp
         models/event_manager/events/crew_member_title_updated_event.cpp
+        models/event_manager/events/crew_member_deleted_event.cpp
         models/event_manager/events/room_info/room_crew_capacity_updated_event.cpp
         models/event_manager/events/room_info/room_name_updated_event.cpp
         models/event_manager/events/room_info/room_size_updated_event.cpp

@@ -40,3 +40,7 @@ void Room::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
         this->crewMembersInRoom.erase(payload.crewMemberId);
     }
 }
+
+void Room::handleCrewMemberDeleted(CrewMemberDeletedPayload &payload) {
+    this->crewMembersInRoom.erase(payload.deletedCrewMemberId);
+}

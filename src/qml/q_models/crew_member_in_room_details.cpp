@@ -91,9 +91,20 @@ void CrewMemberInRoomDetailsModel::handleCrewMemberNameUpdated(CrewMemberNameUpd
     this->dataChanged(this->index(index, 0), this->index(index, 0));
 }
 
+void CrewMemberInRoomDetailsModel::handleCrewMemberDeleted(CrewMemberDeletedPayload &payload) {
+    if (!this->roomId) return;
+    if (!payload.deletedCrewMemberCurrentRoomId) return;
+    if (this->roomId.value() != payload.deletedCrewMemberCurrentRoomId.value()) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void CrewMemberInRoomDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberTitleUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberNameUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberDeletedEvent().subscribe(*this);
 }

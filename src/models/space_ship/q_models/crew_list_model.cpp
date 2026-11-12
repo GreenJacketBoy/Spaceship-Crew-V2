@@ -49,6 +49,12 @@ void CrewListModel::handleCrewMemberCreated(size_t &payload) {
     this->layoutChanged();
 }
 
+void CrewListModel::handleCrewMemberDeleted(CrewMemberDeletedPayload &payload) {
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void CrewListModel::handleCrewMemberSelected(size_t &crewMemberId) {
     auto optionalCrewList = util::getCrewList();
     if (!optionalCrewList) return;
@@ -99,4 +105,5 @@ void CrewListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberNameUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberTitleUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getCrewMemberDeletedEvent().subscribe(*this);
 }

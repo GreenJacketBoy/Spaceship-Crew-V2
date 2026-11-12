@@ -207,6 +207,13 @@ Column {
                     editInfoCrewMemberDetailsMap.openEditMenu();
                 }
             }
+
+            Button {
+                text: qsTr("Delete")
+                onClicked: {
+                    crewMemberDeletedEvent.deleteCrewMember(infoCrewMemberDetailsMap.id);
+                }
+            }
         }
     }
 }

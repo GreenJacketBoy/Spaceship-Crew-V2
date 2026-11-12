@@ -6,10 +6,11 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "crew_member_deleted_event.hpp"
 #include "crew_member_moved_event.hpp"
 #include "room_type.hpp"
 
-class Room : public CrewMemberMovedSubscriber {
+class Room : public CrewMemberMovedSubscriber, public CrewMemberDeletedSubscriber {
     public: 
     Room(
         std::string &&name,
@@ -53,6 +54,7 @@ class Room : public CrewMemberMovedSubscriber {
     }
 
     void handleCrewMemberMoved(CrewMemberMovedPayload &payload) override;
+    void handleCrewMemberDeleted(CrewMemberDeletedPayload &payload) override;
 
 private:
     size_t        id;

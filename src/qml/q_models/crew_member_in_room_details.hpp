@@ -2,6 +2,7 @@
 #define CREW_MEMBER_IN_ROOM_DETAILS_HPP
 
 #include <cstddef>
+#include "crew_member_deleted_event.hpp"
 #include "crew_member_name_updated_event.hpp"
 #include "crew_member_title_updated_event.hpp"
 #include "crew_member_moved_event.hpp"
@@ -12,7 +13,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class CrewMemberInRoomDetailsModel : public QAbstractTableModel, public CrewMemberMovedSubscriber, public RoomSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber  {
+class CrewMemberInRoomDetailsModel : public QAbstractTableModel, public CrewMemberMovedSubscriber, public RoomSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -29,6 +30,9 @@ public:
     void handleCrewMemberTitleUpdated(CrewMemberTitleUpdatedPayload &payload) override;
 
     void handleCrewMemberNameUpdated(CrewMemberNameUpdatedPayload &payload) override;
+
+    void handleCrewMemberDeleted(CrewMemberDeletedPayload &payload) override;
+
 
     void triggerSubscriptions();
 

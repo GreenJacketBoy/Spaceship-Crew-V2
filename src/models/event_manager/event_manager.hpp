@@ -1,6 +1,7 @@
 #ifndef EVENT_MANAGER_HPP
 #define EVENT_MANAGER_HPP
 
+#include "crew_member_deleted_event.hpp"
 #include "room_crew_capacity_updated_event.hpp"
 #include "room_name_updated_event.hpp"
 #include "room_size_updated_event.hpp"
@@ -28,6 +29,7 @@ public:
     inline RoomSizeUpdatedEvent &getRoomSizeUpdatedEvent() { return this->roomSizeUpdatedEvent; }
     inline RoomCrewCapacityUpdatedEvent &getRoomCrewCapacityUpdatedEvent() { return this->roomCrewCapacityUpdatedEvent; }
     inline RoomStorageCapacityUpdatedEvent &getRoomStorageCapacityUpdatedEvent() { return this->roomStorageCapacityUpdatedEvent; }
+    inline CrewMemberDeletedEvent &getCrewMemberDeletedEvent() { return this->crewMemberDeletedEvent; }
  
 private:
     CreateRoomEvent createRoomEvent;
@@ -42,6 +44,7 @@ private:
     RoomSizeUpdatedEvent roomSizeUpdatedEvent;
     RoomCrewCapacityUpdatedEvent roomCrewCapacityUpdatedEvent;
     RoomStorageCapacityUpdatedEvent roomStorageCapacityUpdatedEvent;
+    CrewMemberDeletedEvent crewMemberDeletedEvent;
 };
 
 #endif // !EVENT_MANAGER_HPP
