@@ -1,15 +1,12 @@
 #include "at_index.hpp"
 #include "current_room_model.hpp"
 #include "game_state.hpp"
+#include "get_room.hpp"
 #include "get_room_list.hpp"
 #include "q_variant_special_type.hpp"
 #include <cstddef>
 #include <optional>
 #include <qvariant.h>
-
-int CurrentRoomModel::columnCount(const QModelIndex &parent) const {
-    return 2;
-}
 
 int CurrentRoomModel::rowCount(const QModelIndex &parent) const {
     auto roomMap = util::getRoomList();
@@ -52,12 +49,19 @@ QHash<int, QByteArray> CurrentRoomModel::roleNames() const {
     };
 }
 
+void CurrentRoomModel::handleRoomDeleted(size_t &roomId) {
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(1, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void CurrentRoomModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
 }
 
 void CurrentRoomModel::handleRoomCreated(size_t &payload) {
     this->layoutAboutToBeChanged();
-    this->changePersistentIndex(this->index(1, 2), this->index(this->rowCount()-1, 2));
+    this->changePersistentIndex(this->index(1, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }

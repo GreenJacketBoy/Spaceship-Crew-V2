@@ -4,6 +4,7 @@
 #include "crew_member_deleted_event.hpp"
 #include "crew_member_unselected_event.hpp"
 #include "room_crew_capacity_updated_event.hpp"
+#include "room_deleted_event.hpp"
 #include "room_name_updated_event.hpp"
 #include "room_size_updated_event.hpp"
 #include "room_storage_capacity_updated_event.hpp"
@@ -34,6 +35,7 @@ public:
     inline CrewMemberDeletedEvent &getCrewMemberDeletedEvent() { return this->crewMemberDeletedEvent; }
     inline RoomUnselectedEvent &getRoomUnselectedEvent() { return this->roomUnselectedEvent; }
     inline CrewMemberUnselectedEvent &getCrewMemberUnselectedEvent() { return this->crewMemberUnselectedEvent; }
+    inline RoomDeletedEvent &getRoomDeletedEvent() { return this->roomDeletedEvent; }
 
 private:
     CreateRoomEvent createRoomEvent;
@@ -51,6 +53,7 @@ private:
     CrewMemberDeletedEvent crewMemberDeletedEvent;
     RoomUnselectedEvent roomUnselectedEvent;
     CrewMemberUnselectedEvent crewMemberUnselectedEvent;
+    RoomDeletedEvent roomDeletedEvent;
 };
 
 #endif // !EVENT_MANAGER_HPP

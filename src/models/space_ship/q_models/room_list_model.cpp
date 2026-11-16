@@ -58,6 +58,12 @@ void RoomListModel::handleRoomCreated(size_t &payload) {
     this->layoutChanged();
 }
 
+void RoomListModel::handleRoomDeleted(size_t &roomId) {
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void RoomListModel::handleRoomSelected(size_t &roomId) {
     auto optionalRoomList = util::getRoomList();
     if (!optionalRoomList) return;
@@ -117,4 +123,5 @@ void RoomListModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getRoomNameUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomTypeUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomUnselectedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
 }

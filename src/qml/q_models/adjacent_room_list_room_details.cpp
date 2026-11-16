@@ -5,6 +5,7 @@
 #include "at_index.hpp"
 #include "game_state.hpp"
 #include "selected_room_id.hpp"
+#include <cstddef>
 #include <qvariant.h>
 
 int AdjacentRoomListRoomDetailsModel::columnCount(const QModelIndex &parent) const {
@@ -74,7 +75,23 @@ void AdjacentRoomListRoomDetailsModel::handleRoomSelected(size_t &roomId) {
     this->layoutChanged();
 }
 
+
+void AdjacentRoomListRoomDetailsModel::handleRoomDeleted(size_t &roomId) {
+    const auto optionalSelectedRoomId = util::selectedRoomId();
+    if (!optionalSelectedRoomId) return;
+    size_t selectedRoomId = optionalSelectedRoomId.value();
+
+    auto optionalCreatedRoom = util::getRoom(selectedRoomId);
+    if (!optionalCreatedRoom) return;
+    if (!optionalCreatedRoom.value()->isRoomAdjacent(roomId)) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void AdjacentRoomListRoomDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
 }

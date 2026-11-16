@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("roomSelectedEvent", &gameState->getEventManager().get()->getRoomSelectedEvent());
     engine.rootContext()->setContextProperty("crewMemberSelectedEvent", &gameState->getEventManager().get()->getCrewMemberSelectedEvent());
     engine.rootContext()->setContextProperty("crewMemberDeletedEvent", &gameState->getEventManager().get()->getCrewMemberDeletedEvent());
+    engine.rootContext()->setContextProperty("roomDeletedEvent", &gameState->getEventManager().get()->getRoomDeletedEvent());
     engine.load(QUrl(QStringLiteral("qrc:/qml/main/main.qml")));
 
     if (engine.rootObjects().isEmpty()) {

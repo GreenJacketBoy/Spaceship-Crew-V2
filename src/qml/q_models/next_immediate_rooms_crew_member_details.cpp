@@ -112,10 +112,23 @@ constexpr void NextImmediateRoomsCrewMemberDetailsModel::updateDataForRoom(const
     this->dataChanged(this->index(index, 0), this->index(index, 0));
 }
 
+void NextImmediateRoomsCrewMemberDetailsModel::handleRoomDeleted(size_t &roomId) {
+    const auto optionalCurrentRoom = this->getCurrentRoom();
+    if (!optionalCurrentRoom) return;
+    Room *currentRoom = optionalCurrentRoom.value();
+
+    if (!currentRoom->isRoomAdjacent(roomId)) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void NextImmediateRoomsCrewMemberDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberSelectedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomNameUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomTypeUpdatedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
 }

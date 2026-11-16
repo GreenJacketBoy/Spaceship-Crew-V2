@@ -7,9 +7,12 @@
 #include <qvariant.h>
 #include <string>
 #include <utility>
+#include <vector>
 #include "create_crew_member_event.hpp"
 #include "create_room_event.hpp"
 #include "crew_member.hpp"
+#include "crew_member_deleted_event.hpp"
+#include "crew_member_moved_event.hpp"
 #include "game_state.hpp"
 #include "get_crew_member.hpp"
 #include "get_room.hpp"
@@ -332,8 +335,8 @@ TEST(EventManager, SelectedEntities) {
     EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::ROOM));
     crewMemberSelected.selectCrewMember(-1);
     EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::CREW_MEMBER));
-    roomSelected.selectRoom(-1);
-    EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::ROOM));
+    roomSelected.selectRoom(-1); // unselects the room because it's already selected
+    EXPECT_EQ(selectedEntitiesMap->value(LAST_SELECTED), QVariant(SelectedEntity::CREW_MEMBER));
 }
 
 TEST(EventManager, InfoCrewMembersDetailsMap) {
@@ -462,4 +465,76 @@ TEST(EventManager, InfoCrewMembersDetailsMap) {
     gameState.getEventManager()->getCrewMemberNameUpdatedEvent().emitEvent(namePayload);
     EXPECT_STREQ(infoMap->value("name").toString().toStdString().c_str(), "Not Karl");
     EXPECT_STREQ(infoMap->value("title").toString().toStdString().c_str(), "Not Engineer");
+}
+
+TEST(EventManager, DeleteCrewMember) {
+
+    GameState &gameState = GameState::getInstance();
+    gameState.triggerSubscriptions();
+    auto &spaceShip = gameState.getSpaceShip().get()->value();
+
+    auto movedCrewMember1 = std::unique_ptr<CrewMember>(new CrewMember("James", "Pilot", {}));
+    size_t crewMemberId1 = movedCrewMember1->getId();
+    auto movedCrewMember2 = std::unique_ptr<CrewMember>(new CrewMember("Karl", "Engineer", {}));
+    size_t crewMemberId2 = movedCrewMember2->getId();
+
+    spaceShip.getCrewMap().insert({movedCrewMember1->getId(), std::move(movedCrewMember1)});
+    spaceShip.getCrewMap().insert({movedCrewMember2->getId(), std::move(movedCrewMember2)});
+
+    ASSERT_TRUE(util::getCrewMember(crewMemberId1));
+    ASSERT_DOUBLE_EQ(crewMemberId1, util::getCrewMember(crewMemberId1).value()->getId());
+    ASSERT_TRUE(util::getCrewMember(crewMemberId2));
+    ASSERT_DOUBLE_EQ(crewMemberId2, util::getCrewMember(crewMemberId2).value()->getId());
+
+    auto pointerToCrewMember1 = util::getCrewMember(crewMemberId1).value();
+    CrewMemberDeletedPayload payload = { crewMemberId1, pointerToCrewMember1->getCurrentRoomId() };
+    gameState.getEventManager()->getCrewMemberDeletedEvent().emitEvent(payload);
+
+    ASSERT_FALSE(util::getCrewMember(crewMemberId1));
+
+    ASSERT_TRUE(util::getCrewMember(crewMemberId2));
+    ASSERT_DOUBLE_EQ(crewMemberId2, util::getCrewMember(crewMemberId2).value()->getId());
+}
+
+TEST(EventManager, DeleteRoom) {
+
+    GameState &gameState = GameState::getInstance();
+    gameState.triggerSubscriptions();
+    auto &spaceShip = gameState.getSpaceShip().get()->value();
+
+    auto movedCrewMember1 = std::unique_ptr<CrewMember>(new CrewMember("James", "Pilot", {}));
+    size_t crewMemberId1 = movedCrewMember1->getId();
+    auto movedCrewMember2 = std::unique_ptr<CrewMember>(new CrewMember("Karl", "Engineer", {}));
+    size_t crewMemberId2 = movedCrewMember2->getId();
+    auto movedRoom1 = std::unique_ptr<Room>(new Room("Room 1", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room1Id = movedRoom1->getId();
+    auto movedRoom2 = std::unique_ptr<Room>(new Room("Room 2", 1, 1, 1, RoomTypeEnum::CORRIDOR, {}));
+    size_t room2Id = movedRoom2->getId();
+
+    spaceShip.getRoomMap().insert({movedRoom1->getId(), std::move(movedRoom1)});
+    spaceShip.getRoomMap().insert({movedRoom2->getId(), std::move(movedRoom2)});
+    spaceShip.getCrewMap().insert({movedCrewMember1->getId(), std::move(movedCrewMember1)});
+    spaceShip.getCrewMap().insert({movedCrewMember2->getId(), std::move(movedCrewMember2)});
+
+    auto crewMember1 = util::getCrewMember(crewMemberId1).value();
+    auto crewMember2 = util::getCrewMember(crewMemberId2).value();
+    auto room1 = util::getRoom(room1Id).value();
+    auto room2 = util::getRoom(room2Id).value();
+
+    // move crew member 1 to room 2
+    CrewMemberMovedPayload movedPayload = {crewMemberId1, std::nullopt, room2Id};
+    gameState.getEventManager()->getCrewMemberMovedEvent().emitEvent(movedPayload);
+
+    ASSERT_DOUBLE_EQ(crewMember1->getCurrentRoomId().value(), room2Id);
+    ASSERT_FALSE(crewMember2->getCurrentRoomId());
+    ASSERT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    ASSERT_DOUBLE_EQ(room2->getCrewMembersInRoom().size(), 1);
+
+    // delete room 2
+    gameState.getEventManager()->getRoomDeletedEvent().emitEvent(room2Id);
+
+    ASSERT_FALSE(crewMember1->getCurrentRoomId());
+    ASSERT_FALSE(crewMember2->getCurrentRoomId());
+    ASSERT_DOUBLE_EQ(room1->getCrewMembersInRoom().size(), 0);
+    ASSERT_FALSE(util::getRoom(room2Id));
 }

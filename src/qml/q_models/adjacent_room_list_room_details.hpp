@@ -3,14 +3,14 @@
 
 #include <cstddef>
 #include "create_room_event.hpp"
+#include "room_deleted_event.hpp"
 #include "room_selected_event.hpp"
 #include <QAbstractTableModel>
-#include <optional>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class AdjacentRoomListRoomDetailsModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber {
+class AdjacentRoomListRoomDetailsModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomDeletedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -23,6 +23,8 @@ public:
     void handleRoomCreated(size_t &roomId) override;
 
     void handleRoomSelected(size_t &roomId) override;
+
+    void handleRoomDeleted(size_t &roomId) override;
 
     void triggerSubscriptions();
 

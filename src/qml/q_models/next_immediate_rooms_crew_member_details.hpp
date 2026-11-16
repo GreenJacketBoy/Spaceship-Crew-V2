@@ -4,6 +4,7 @@
 #include "create_room_event.hpp"
 #include "crew_member_moved_event.hpp"
 #include "crew_member_selected_event.hpp"
+#include "room_deleted_event.hpp"
 #include "room_name_updated_event.hpp"
 #include "room_type_updated_event.hpp"
 #include <cstddef>
@@ -13,7 +14,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class NextImmediateRoomsCrewMemberDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public CrewMemberMovedSubscriber, public CrewMemberSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber {
+class NextImmediateRoomsCrewMemberDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public CrewMemberMovedSubscriber, public CrewMemberSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber, public RoomDeletedSubscriber {
 public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -30,6 +31,8 @@ public:
     void handleRoomNameUpdated(RoomNameUpdatedPayload &payload) override;
 
     void handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) override;
+
+    void handleRoomDeleted(size_t &roomId) override;
 
     void triggerSubscriptions();
 

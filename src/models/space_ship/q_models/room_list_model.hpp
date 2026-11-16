@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include "create_room_event.hpp"
+#include "room_deleted_event.hpp"
 #include "room_name_updated_event.hpp"
 #include "room_selected_event.hpp"
 #include "room_type_updated_event.hpp"
@@ -12,7 +13,7 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber, public RoomUnselectedSubscriber {
+class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber, public RoomUnselectedSubscriber, public RoomDeletedSubscriber {
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -31,6 +32,8 @@ public:
     void handleRoomNameUpdated(RoomNameUpdatedPayload &payload) override;
 
     void handleRoomTypeUpdated(RoomTypeUpdatedPayload &payload) override;
+
+    void handleRoomDeleted(size_t &roomId) override;
 
     void triggerSubscriptions();
 

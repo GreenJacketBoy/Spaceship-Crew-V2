@@ -1,6 +1,7 @@
 #ifndef ADJACENT_ROOMS_LIST_CREATE_ROOM_HPP
 #define ADJACENT_ROOMS_LIST_CREATE_ROOM_HPP
 
+#include "room_deleted_event.hpp"
 #include <cstddef>
 #include <QAbstractTableModel>
 #include <qhashfunctions.h>
@@ -9,18 +10,22 @@
 #include <qtmetamacros.h>
 #include <qvariant.h>
 
-class AdjacentRoomsListCreateRoomModel : public QAbstractTableModel {
+class AdjacentRoomsListCreateRoomModel : public QAbstractTableModel, public RoomDeletedSubscriber {
 Q_OBJECT
 public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
+    void handleRoomDeleted(size_t &roomId) override;
+
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE QList<size_t> *getAdjacentRooms() { return &this->adjacentRooms; };
+
+    void triggerSubscriptions();
 
 public slots: 
     void adjacentRoomAddedCreateForm(size_t roomId);

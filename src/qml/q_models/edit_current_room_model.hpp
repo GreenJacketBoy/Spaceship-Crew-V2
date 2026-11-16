@@ -2,12 +2,13 @@
 #define EDIT_CURRENT_ROOM_MODEL_HPP
 
 #include "create_room_event.hpp"
+#include "room_deleted_event.hpp"
 #include <QAbstractTableModel>
 #include <qabstractitemmodel.h>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 
-class EditCurrentRoomModel : public QAbstractListModel, public CreateRoomSubscriber {
+class EditCurrentRoomModel : public QAbstractListModel, public CreateRoomSubscriber, public RoomDeletedSubscriber {
 public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -16,6 +17,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     void handleRoomCreated(size_t &roomId) override;
+
+    void handleRoomDeleted(size_t &roomId) override;
 
     void triggerSubscriptions();
 

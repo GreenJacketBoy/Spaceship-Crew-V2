@@ -1,6 +1,9 @@
 #include "room.hpp"
+#include "game_state.hpp"
 #include "get_room.hpp"
+#include <cstddef>
 #include <iostream>
+#include <optional>
 
 Room::Room(
     std::string &&name,
@@ -38,6 +41,13 @@ void Room::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
     }
     else if (payload.fromRoomId && payload.fromRoomId.value() == this->id) {
         this->crewMembersInRoom.erase(payload.crewMemberId);
+    }
+}
+
+void Room::handleRoomDeleted(size_t &roomId) {
+    for (size_t crewMemberId : this->crewMembersInRoom) {
+        CrewMemberMovedPayload payload = {crewMemberId, roomId, std::nullopt};
+        GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().emitEvent(payload);
     }
 }
 

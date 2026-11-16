@@ -1,3 +1,4 @@
+#include "game_state.hpp"
 #include "room.hpp"
 #include "adjacent_rooms_list_create_room.hpp"
 #include "get_room.hpp"
@@ -68,4 +69,17 @@ void AdjacentRoomsListCreateRoomModel::adjacentRoomRemovedCreateForm(size_t room
     this->adjacentRooms.removeOne(roomId);
     this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
     this->layoutChanged();
+}
+
+void AdjacentRoomsListCreateRoomModel::handleRoomDeleted(size_t &roomId) {
+    if (!this->adjacentRooms.contains(roomId)) return;
+
+    this->layoutAboutToBeChanged();
+    this->adjacentRooms.removeOne(roomId);
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
+void AdjacentRoomsListCreateRoomModel::triggerSubscriptions() {
+    GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
 }

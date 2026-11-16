@@ -54,6 +54,13 @@ void EditCurrentRoomModel::handleRoomCreated(size_t &roomId) {
     this->layoutChanged();
 }
 
+void EditCurrentRoomModel::handleRoomDeleted(size_t &roomId) {
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(1, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void EditCurrentRoomModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
 }

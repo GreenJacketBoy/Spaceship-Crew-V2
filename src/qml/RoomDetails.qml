@@ -259,6 +259,13 @@ Column {
                     editInfoRoomDetailsMap.openEditMenu();
                 }
             }
+
+            Button {
+                text: qsTr("Delete")
+                onClicked: {
+                    roomDeletedEvent.deleteRoom(infoRoomDetailsMap.id);
+                }
+            }
         }
     }
 }
