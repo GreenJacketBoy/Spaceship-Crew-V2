@@ -2,6 +2,7 @@
 #define EVENT_MANAGER_HPP
 
 #include "crew_member_deleted_event.hpp"
+#include "crew_member_skill_updated_event.hpp"
 #include "crew_member_unselected_event.hpp"
 #include "room_crew_capacity_updated_event.hpp"
 #include "room_deleted_event.hpp"
@@ -36,6 +37,7 @@ public:
     inline RoomUnselectedEvent &getRoomUnselectedEvent() { return this->roomUnselectedEvent; }
     inline CrewMemberUnselectedEvent &getCrewMemberUnselectedEvent() { return this->crewMemberUnselectedEvent; }
     inline RoomDeletedEvent &getRoomDeletedEvent() { return this->roomDeletedEvent; }
+    inline CrewMemberSkillUpdatedEvent &getCrewMemberSkillUpdatedEvent() { return this->crewMemberSkillUpdatedEvent; }
 
 private:
     CreateRoomEvent createRoomEvent;
@@ -54,6 +56,7 @@ private:
     RoomUnselectedEvent roomUnselectedEvent;
     CrewMemberUnselectedEvent crewMemberUnselectedEvent;
     RoomDeletedEvent roomDeletedEvent;
+    CrewMemberSkillUpdatedEvent crewMemberSkillUpdatedEvent;
 };
 
 #endif // !EVENT_MANAGER_HPP

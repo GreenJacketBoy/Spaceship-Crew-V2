@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include "crew_member_details_add_skill_map.hpp"
 #include "edit_info_crew_member_details_map.hpp"
 #include "edit_current_room_model.hpp"
 #include "edit_info_room_details_map.hpp"
@@ -53,6 +54,7 @@ public:
     inline auto &getEditCurrentRoomModel() { return this->editCurrentRoomModel; }
     inline auto &getEditInfoRoomDetailsMap() { return this->editInfoRoomDetailsMap; }
     inline auto &getEditRoomTypeModel() { return this->editRoomTypeModel; }
+    inline auto &getCrewMemberDetailsAddSkillMap() { return this->crewMemberDetailsAddSkillMap; }
 
     void triggerSubscriptions();
 
@@ -81,6 +83,7 @@ private:
     std::unique_ptr<EditCurrentRoomModel> editCurrentRoomModel = std::make_unique<EditCurrentRoomModel>();
     std::unique_ptr<EditInfoRoomDetailsMap> editInfoRoomDetailsMap = std::make_unique<EditInfoRoomDetailsMap>();
     std::unique_ptr<EditRoomTypeModel> editRoomTypeModel = std::make_unique<EditRoomTypeModel>();
+    std::unique_ptr<CrewMemberDetailsAddSkillMap> crewMemberDetailsAddSkillMap = std::make_unique<CrewMemberDetailsAddSkillMap>();
 };
 
 #endif // !GAME_STATE_HPP

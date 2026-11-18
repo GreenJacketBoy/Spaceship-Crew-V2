@@ -65,11 +65,71 @@ Column {
         Column {
             width: parent.width / 2
             height: parent.height
-            Text {
-                id: skillsText
-                width: parent.width
-                wrapMode: Text.Wrap
-                text: qsTr("Skills")
+            Column {
+                id: skillsTextAndAddMenu
+                height: skillsText.implicitHeight + (crewMemberDetailsAddSkillMap.isEditing ? (addLevelInputRow.height + addSkillComboBoxRow.height + saveNewSkillButton.height + cancelNewSkillButton.height) : addNewSkillButton.height)
+                Text {
+                    id: skillsText
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    text: qsTr("Skills")
+                }
+                StackLayout {
+                    width: skillsList.width
+                    currentIndex: crewMemberDetailsAddSkillMap.isEditing ? 0 : 1
+                    Column {
+
+                        Row {
+                            id: addSkillComboBoxRow
+                            Text { text: qsTr("Add skill: ") }
+                            ComboBox {
+                                id: addSkillComboBox
+                                model: addSkillModel
+                                textRole: "text"
+                                valueRole: "value"
+                            }
+                        }
+
+                        Row {
+                            id: addLevelInputRow
+                            Text { text: qsTr("Level (number): ") }
+                            Rectangle {
+                                width: addLevelInput.width; height: addLevelInput.implicitHeight
+                                border.color: "black"
+                                TextInput {
+                                    id: addLevelInput
+                                    width: 30
+                                    validator: IntValidator { bottom: 0 }
+                                }
+                            }
+                        }
+
+                        Button {
+                            id: saveNewSkillButton
+                            text: qsTr("Add Skill")
+                            onClicked: {
+                                crewMemberDetailsAddSkillMap.save(addSkillComboBox.currentValue, addLevelInput.text);
+                            }
+                        }
+                        Button {
+                            id: cancelNewSkillButton
+                            text: qsTr("Cancel")
+                            onClicked: {
+                                crewMemberDetailsAddSkillMap.cancel();
+                            }
+                        }
+                    }
+
+                    Column {
+                        Button {
+                            id: addNewSkillButton
+                            text: qsTr("Add new")
+                            onClicked: {
+                                    crewMemberDetailsAddSkillMap.edit();
+                            }
+                        }
+                    }
+                }
             }
             ScrollView {
                 id: skills
@@ -80,23 +140,79 @@ Column {
                     width: parent.width
                     model: skillsCrewMemberDetailsModel
                     delegate: 
-                        Rectangle {
-                            border.color: "black"
-                            height: skillsColumn.implicitHeight
+                        StackLayout {
                             width: skillsList.width
-                            Column {
-                                id: skillsColumn
-                                width: parent.width
-                                Text {
+                            height: (model.isEditing ? skillEditRectangle : skillRectangle).height
+                            currentIndex: model.isEditing ? 0 : 1
+                            Rectangle {
+                                id: skillEditRectangle
+                                border.color: "black"
+                                height: skillsColumnEdit.implicitHeight
+                                width: skillsList.width
+                                Column {
+                                    id: skillsColumnEdit
                                     width: parent.width
-                                    wrapMode: Text.Wrap
-                                    text: "name: " + model.name
-                                }
+                                    Text {
+                                        width: parent.width
+                                        wrapMode: Text.Wrap
+                                        text: "name: " + model.name
+                                    }
 
-                                Text {
+                                    Row {
+                                        Text { text: qsTr("Level: ") }
+                                        
+                                        Rectangle {
+                                            width: levelInput.width; height: levelInput.implicitHeight
+                                            border.color: "black"
+                                            TextInput {
+                                                id: levelInput
+                                                validator: IntValidator { bottom: 0 }
+                                                text: model.level
+                                                width: 30
+                                            }
+                                        }
+                                    }
+
+                                    Button {
+                                        text: qsTr("Save")
+                                        onClicked: {
+                                            skillsCrewMemberDetailsModel.save(model.type, levelInput.text);
+                                        }
+                                    }
+                                    Button {
+                                        text: qsTr("Cancel")
+                                        onClicked: {
+                                            skillsCrewMemberDetailsModel.cancel(model.type);
+                                        }
+                                    }
+                                }
+                            }
+                            Rectangle {
+                                id: skillRectangle
+                                border.color: "black"
+                                height: skillsColumn.implicitHeight
+                                width: skillsList.width
+                                Column {
+                                    id: skillsColumn
                                     width: parent.width
-                                    wrapMode: Text.Wrap
-                                    text: "level: " + model.level
+                                    Text {
+                                        width: parent.width
+                                        wrapMode: Text.Wrap
+                                        text: "name: " + model.name
+                                    }
+
+                                    Text {
+                                        width: parent.width
+                                        wrapMode: Text.Wrap
+                                        text: "level: " + model.level
+                                    }
+
+                                    Button {
+                                        text: qsTr("Edit")
+                                        onClicked: {
+                                            skillsCrewMemberDetailsModel.edit(model.type);
+                                        }
+                                    }
                                 }
                             }
                         }
