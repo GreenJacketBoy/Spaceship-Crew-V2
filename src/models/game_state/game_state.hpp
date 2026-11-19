@@ -63,30 +63,30 @@ public:
 private:
     GameState() {};
     // TEMPORARY
-    std::unique_ptr<std::optional<SpaceShip>> spaceShip = std::unique_ptr<std::optional<SpaceShip>>(new std::optional<SpaceShip>(SpaceShip("Antarctica", "Fr", {}, {})));
+    const std::unique_ptr<std::optional<SpaceShip>> spaceShip = std::unique_ptr<std::optional<SpaceShip>>(new std::optional<SpaceShip>(SpaceShip("Antarctica", "Fr", {}, {})));
 
-    std::unique_ptr<EventManager>  eventManager = std::make_unique<EventManager>();
-    std::unique_ptr<RoomTypeModel> roomTypeModel = std::make_unique<RoomTypeModel>();
-    std::unique_ptr<RoomListModel> roomListModel = std::make_unique<RoomListModel>();
-    std::unique_ptr<CrewListModel> crewListModel = std::make_unique<CrewListModel>();
-    std::unique_ptr<AddAdjacentRoomModel> addAdjacentRoomModel = std::make_unique<AddAdjacentRoomModel>();
-    std::unique_ptr<AdjacentRoomsListCreateRoomModel> adjacentRoomsListCreateRoomModel = std::make_unique<AdjacentRoomsListCreateRoomModel>();
-    std::unique_ptr<AddSkillModel> addSkillModel = std::make_unique<AddSkillModel>();
-    std::unique_ptr<SkillsListCreateCrewMemberModel> skillsListCreateCrewMemberModel = std::make_unique<SkillsListCreateCrewMemberModel>();
-    std::unique_ptr<AdjacentRoomListRoomDetailsModel> adjacentRoomListRoomDetailsModel = std::make_unique<AdjacentRoomListRoomDetailsModel>();
-    std::unique_ptr<CurrentRoomModel> currentRoomModel = std::make_unique<CurrentRoomModel>();
-    std::unique_ptr<CrewMemberInRoomDetailsModel> crewMemberInRoomDetailsModel = std::make_unique<CrewMemberInRoomDetailsModel>();
-    std::unique_ptr<InfoRoomDetailsMap> infoRoomDetailsMap = std::make_unique<InfoRoomDetailsMap>();
-    std::unique_ptr<SelectedEntitiesMap> selectedEntitiesMap = std::make_unique<SelectedEntitiesMap>();
-    std::unique_ptr<NextImmediateRoomsCrewMemberDetailsModel> nextImmediateRoomsCrewMemberDetailsModel = std::make_unique<NextImmediateRoomsCrewMemberDetailsModel>();
-    std::unique_ptr<SkillsCrewMemberDetailsModel> skillsCrewMemberDetailsModel = std::make_unique<SkillsCrewMemberDetailsModel>();
-    std::unique_ptr<InfoCrewMemberDetailsMap> infoCrewMemberDetailsMap = std::make_unique<InfoCrewMemberDetailsMap>();
-    std::unique_ptr<EditInfoCrewMemberDetailsMap> editInfoCrewMemberDetailsMap = std::make_unique<EditInfoCrewMemberDetailsMap>();
-    std::unique_ptr<EditCurrentRoomModel> editCurrentRoomModel = std::make_unique<EditCurrentRoomModel>();
-    std::unique_ptr<EditInfoRoomDetailsMap> editInfoRoomDetailsMap = std::make_unique<EditInfoRoomDetailsMap>();
-    std::unique_ptr<EditRoomTypeModel> editRoomTypeModel = std::make_unique<EditRoomTypeModel>();
-    std::unique_ptr<CrewMemberDetailsAddSkillMap> crewMemberDetailsAddSkillMap = std::make_unique<CrewMemberDetailsAddSkillMap>();
-    std::unique_ptr<RoomDetailsEditAdjacentRoomsMap> roomDetailsEditAdjacentRoomsMap = std::make_unique<RoomDetailsEditAdjacentRoomsMap>();
+    const std::unique_ptr<EventManager>  eventManager = std::make_unique<EventManager>();
+    const std::unique_ptr<RoomTypeModel> roomTypeModel = std::make_unique<RoomTypeModel>();
+    const std::unique_ptr<RoomListModel> roomListModel = std::make_unique<RoomListModel>();
+    const std::unique_ptr<CrewListModel> crewListModel = std::make_unique<CrewListModel>();
+    const std::unique_ptr<AddAdjacentRoomModel> addAdjacentRoomModel = std::make_unique<AddAdjacentRoomModel>();
+    const std::unique_ptr<AdjacentRoomsListCreateRoomModel> adjacentRoomsListCreateRoomModel = std::make_unique<AdjacentRoomsListCreateRoomModel>();
+    const std::unique_ptr<AddSkillModel> addSkillModel = std::make_unique<AddSkillModel>();
+    const std::unique_ptr<SkillsListCreateCrewMemberModel> skillsListCreateCrewMemberModel = std::make_unique<SkillsListCreateCrewMemberModel>();
+    const std::unique_ptr<AdjacentRoomListRoomDetailsModel> adjacentRoomListRoomDetailsModel = std::make_unique<AdjacentRoomListRoomDetailsModel>();
+    const std::unique_ptr<CurrentRoomModel> currentRoomModel = std::make_unique<CurrentRoomModel>();
+    const std::unique_ptr<CrewMemberInRoomDetailsModel> crewMemberInRoomDetailsModel = std::make_unique<CrewMemberInRoomDetailsModel>();
+    const std::unique_ptr<InfoRoomDetailsMap> infoRoomDetailsMap = std::make_unique<InfoRoomDetailsMap>();
+    const std::unique_ptr<SelectedEntitiesMap> selectedEntitiesMap = std::make_unique<SelectedEntitiesMap>();
+    const std::unique_ptr<NextImmediateRoomsCrewMemberDetailsModel> nextImmediateRoomsCrewMemberDetailsModel = std::make_unique<NextImmediateRoomsCrewMemberDetailsModel>();
+    const std::unique_ptr<SkillsCrewMemberDetailsModel> skillsCrewMemberDetailsModel = std::make_unique<SkillsCrewMemberDetailsModel>();
+    const std::unique_ptr<InfoCrewMemberDetailsMap> infoCrewMemberDetailsMap = std::make_unique<InfoCrewMemberDetailsMap>();
+    const std::unique_ptr<EditInfoCrewMemberDetailsMap> editInfoCrewMemberDetailsMap = std::make_unique<EditInfoCrewMemberDetailsMap>();
+    const std::unique_ptr<EditCurrentRoomModel> editCurrentRoomModel = std::make_unique<EditCurrentRoomModel>();
+    const std::unique_ptr<EditInfoRoomDetailsMap> editInfoRoomDetailsMap = std::make_unique<EditInfoRoomDetailsMap>();
+    const std::unique_ptr<EditRoomTypeModel> editRoomTypeModel = std::make_unique<EditRoomTypeModel>();
+    const std::unique_ptr<CrewMemberDetailsAddSkillMap> crewMemberDetailsAddSkillMap = std::make_unique<CrewMemberDetailsAddSkillMap>();
+    const std::unique_ptr<RoomDetailsEditAdjacentRoomsMap> roomDetailsEditAdjacentRoomsMap = std::make_unique<RoomDetailsEditAdjacentRoomsMap>();
 };
 
 #endif // !GAME_STATE_HPP
