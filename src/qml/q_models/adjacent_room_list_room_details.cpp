@@ -25,7 +25,7 @@ QVariant AdjacentRoomListRoomDetailsModel::data(const QModelIndex &index, int ro
     if (!selectedRoomId) return QVariant();
     auto optionalRoom = util::getRoom(selectedRoomId.value());
     if (!optionalRoom) return QVariant();
-    auto &adjacentRooms = optionalRoom.value()->getAdjacentRooms();
+    const auto &adjacentRooms = optionalRoom.value()->getAdjacentRooms();
 
     auto optionalRoomIdAtIndex = util::atIndex(adjacentRooms, index.row());
     if (!optionalRoomIdAtIndex) return QVariant();
@@ -90,8 +90,34 @@ void AdjacentRoomListRoomDetailsModel::handleRoomDeleted(size_t &roomId) {
     this->layoutChanged();
 }
 
+void AdjacentRoomListRoomDetailsModel::handleRoomAddAdjacentRoom(RoomAddAdjacentRoomPayload &payload) {
+    const auto optionalSelectedRoomId = util::selectedRoomId();
+    if (!optionalSelectedRoomId) return;
+    size_t selectedRoomId = optionalSelectedRoomId.value();
+
+    if (payload.roomId != selectedRoomId && payload.adjacentRoomId != selectedRoomId) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
+void AdjacentRoomListRoomDetailsModel::handleRoomRemoveAdjacentRoom(RoomRemoveAdjacentRoomPayload &payload) {
+    const auto optionalSelectedRoomId = util::selectedRoomId();
+    if (!optionalSelectedRoomId) return;
+    size_t selectedRoomId = optionalSelectedRoomId.value();
+
+    if (payload.roomId != selectedRoomId && payload.adjacentRoomId != selectedRoomId) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void AdjacentRoomListRoomDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomSelectedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomAddAdjacentRoomEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomRemoveAdjacentRoomEvent().subscribe(*this);
 }

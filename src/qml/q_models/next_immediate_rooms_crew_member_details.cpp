@@ -64,7 +64,7 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleRoomCreated(size_t &roomId)
     this->layoutChanged();
 }
 
-constexpr std::optional<Room *> NextImmediateRoomsCrewMemberDetailsModel::getCurrentRoom() const {
+constexpr std::optional<size_t> NextImmediateRoomsCrewMemberDetailsModel::getCurrentRoomId() const {
     const auto selectedCrewMemberId = util::selectedCrewMemberId();
     if (!selectedCrewMemberId) return std::nullopt;
     auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
@@ -72,7 +72,14 @@ constexpr std::optional<Room *> NextImmediateRoomsCrewMemberDetailsModel::getCur
     auto optionalCurrentRoomId = optionalCrewMember.value()->getCurrentRoomId();
     if (!optionalCurrentRoomId) return std::nullopt;
 
-    return util::getRoom(optionalCurrentRoomId.value());
+    return optionalCurrentRoomId.value();
+}
+
+constexpr std::optional<Room *> NextImmediateRoomsCrewMemberDetailsModel::getCurrentRoom() const {
+    auto currentRoomId = this->getCurrentRoomId();
+    if (!currentRoomId) return std::nullopt;
+
+    return util::getRoom(currentRoomId.value());
 }
 
 void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
@@ -124,6 +131,30 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleRoomDeleted(size_t &roomId)
     this->layoutChanged();
 }
 
+void NextImmediateRoomsCrewMemberDetailsModel::handleRoomAddAdjacentRoom(RoomAddAdjacentRoomPayload &payload) {
+    const auto optionalCurrentRoomId = this->getCurrentRoomId();
+    if (!optionalCurrentRoomId) return;
+    size_t currentRoomId = optionalCurrentRoomId.value();
+
+    if (payload.roomId != currentRoomId && payload.adjacentRoomId != currentRoomId) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
+void NextImmediateRoomsCrewMemberDetailsModel::handleRoomRemoveAdjacentRoom(RoomRemoveAdjacentRoomPayload &payload) {
+    const auto optionalCurrentRoomId = this->getCurrentRoomId();
+    if (!optionalCurrentRoomId) return;
+    size_t currentRoomId = optionalCurrentRoomId.value();
+
+    if (payload.roomId != currentRoomId && payload.adjacentRoomId != currentRoomId) return;
+
+    this->layoutAboutToBeChanged();
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
+    this->layoutChanged();
+}
+
 void NextImmediateRoomsCrewMemberDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getCreateRoomEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getCrewMemberMovedEvent().subscribe(*this);
@@ -131,4 +162,6 @@ void NextImmediateRoomsCrewMemberDetailsModel::triggerSubscriptions() {
     GameState::getInstance().getEventManager()->getRoomNameUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomTypeUpdatedEvent().subscribe(*this);
     GameState::getInstance().getEventManager()->getRoomDeletedEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomAddAdjacentRoomEvent().subscribe(*this);
+    GameState::getInstance().getEventManager()->getRoomRemoveAdjacentRoomEvent().subscribe(*this);
 }

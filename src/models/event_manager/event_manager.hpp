@@ -4,9 +4,11 @@
 #include "crew_member_deleted_event.hpp"
 #include "crew_member_skill_updated_event.hpp"
 #include "crew_member_unselected_event.hpp"
+#include "room_add_adjacent_room_event.hpp"
 #include "room_crew_capacity_updated_event.hpp"
 #include "room_deleted_event.hpp"
 #include "room_name_updated_event.hpp"
+#include "room_remove_adjacent_room_event.hpp"
 #include "room_size_updated_event.hpp"
 #include "room_storage_capacity_updated_event.hpp"
 #include "room_type_updated_event.hpp"
@@ -38,6 +40,8 @@ public:
     inline CrewMemberUnselectedEvent &getCrewMemberUnselectedEvent() { return this->crewMemberUnselectedEvent; }
     inline RoomDeletedEvent &getRoomDeletedEvent() { return this->roomDeletedEvent; }
     inline CrewMemberSkillUpdatedEvent &getCrewMemberSkillUpdatedEvent() { return this->crewMemberSkillUpdatedEvent; }
+    inline RoomAddAdjacentRoomEvent &getRoomAddAdjacentRoomEvent() { return this->roomAddAdjacentRoomEvent; }
+    inline RoomRemoveAdjacentRoomEvent &getRoomRemoveAdjacentRoomEvent() { return this->roomRemoveAdjacentRoomEvent; }
 
 private:
     CreateRoomEvent createRoomEvent;
@@ -57,6 +61,8 @@ private:
     CrewMemberUnselectedEvent crewMemberUnselectedEvent;
     RoomDeletedEvent roomDeletedEvent;
     CrewMemberSkillUpdatedEvent crewMemberSkillUpdatedEvent;
+    RoomAddAdjacentRoomEvent roomAddAdjacentRoomEvent;
+    RoomRemoveAdjacentRoomEvent roomRemoveAdjacentRoomEvent;
 };
 
 #endif // !EVENT_MANAGER_HPP

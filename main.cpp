@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("editInfoCrewMemberDetailsMap", gameState->getEditInfoCrewMemberDetailsMap().get());
     engine.rootContext()->setContextProperty("editInfoRoomDetailsMap", gameState->getEditInfoRoomDetailsMap().get());
     engine.rootContext()->setContextProperty("crewMemberDetailsAddSkillMap", gameState->getCrewMemberDetailsAddSkillMap().get());
+    engine.rootContext()->setContextProperty("roomDetailsEditAdjacentRoomsMap", gameState->getRoomDetailsEditAdjacentRoomsMap().get());
     engine.rootContext()->setContextProperty("createRoomEvent", &gameState->getEventManager().get()->getCreateRoomEvent());
     engine.rootContext()->setContextProperty("createCrewMemberEvent", &gameState->getEventManager().get()->getCreateCrewMemberEvent());
     engine.rootContext()->setContextProperty("roomSelectedEvent", &gameState->getEventManager().get()->getRoomSelectedEvent());

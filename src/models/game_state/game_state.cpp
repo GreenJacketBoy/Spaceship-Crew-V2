@@ -1,4 +1,5 @@
 #include "game_state.hpp"
+#include <qlogging.h>
 
 void GameState::triggerSubscriptions() {
     auto &events = this->eventManager;
@@ -19,4 +20,5 @@ void GameState::triggerSubscriptions() {
     if (this->editCurrentRoomModel) this->editCurrentRoomModel->triggerSubscriptions();
     if (this->editInfoRoomDetailsMap) this->editInfoRoomDetailsMap->triggerSubscriptions();
     if (this->crewMemberDetailsAddSkillMap) this->crewMemberDetailsAddSkillMap->triggerSubscriptions();
+    if (this->roomDetailsEditAdjacentRoomsMap) this->roomDetailsEditAdjacentRoomsMap->triggerSubscriptions();
 }

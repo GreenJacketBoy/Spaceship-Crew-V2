@@ -11,16 +11,62 @@ Column {
         Column {
             width: parent.width / 2
             height: parent.height
-            Text {
-                id: adjacentRoomsText
-                width: parent.width
-                wrapMode: Text.Wrap
-                text: qsTr("Adjacent Rooms")
+            Column {
+                id: adjacentRoomsTextAndAddMenu
+                height: adjacentRoomsText.implicitHeight + (roomDetailsEditAdjacentRoomsMap.isEditing ? (addAdjacentRoomComboBoxRow.height + addAdjacentRoomButton.height + cancelAdjacentRoomButton.height) : addNewAdjacentRoomButton.height)
+                Text {
+                    id: adjacentRoomsText
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    text: qsTr("Adjacent Rooms")
+                }
+                StackLayout {
+                    width: adjacentRoomsAndCreMembersInRoom.width
+                    currentIndex: roomDetailsEditAdjacentRoomsMap.isEditing ? 0 : 1
+                    Column {
+
+                        Row {
+                            id: addAdjacentRoomComboBoxRow
+                            Text { text: qsTr("Add adjacent room: ") }
+                            ComboBox {
+                                id: addAdjacentRoomComboBox
+                                model: addAdjacentRoomModel
+                                textRole: "text"
+                                valueRole: "value"
+                            }
+                        }
+
+                        Button {
+                            id: addAdjacentRoomButton
+                            text: qsTr("Add Adjacent")
+                            onClicked: {
+                                roomDetailsEditAdjacentRoomsMap.add(addAdjacentRoomComboBox.currentValue);
+                            }
+                        }
+                        Button {
+                            id: cancelAdjacentRoomButton
+                            text: qsTr("Cancel")
+                            onClicked: {
+                                roomDetailsEditAdjacentRoomsMap.cancel();
+                            }
+                        }
+                    }
+
+                    Column {
+                        Button {
+                            id: addNewAdjacentRoomButton
+                            text: qsTr("Add new")
+                            onClicked: {
+                                roomDetailsEditAdjacentRoomsMap.edit();
+                            }
+                        }
+                    }
+                }
             }
             ScrollView {
                 id: adjacentRooms
                 width: parent.width
-                height: parent.height - adjacentRoomsText.implicitHeight
+                height: parent.height - adjacentRoomsTextAndAddMenu.height
                 ListView {
                     id: adjacentRoomList
                     width: parent.width
@@ -51,10 +97,18 @@ Column {
                                     text: "type: " + model.type
                                 }
 
-                                Button {
-                                    text: qsTr("Select")
-                                    onClicked: {
-                                        roomSelectedEvent.selectRoom(model.id);
+                                Row {
+                                    Button {
+                                        text: qsTr("Select")
+                                        onClicked: {
+                                            roomSelectedEvent.selectRoom(model.id);
+                                        }
+                                    }
+                                    Button {
+                                        text: qsTr("Remove")
+                                        onClicked: {
+                                            roomDetailsEditAdjacentRoomsMap.remove(model.id);
+                                        }
                                     }
                                 }
                             }

@@ -7,6 +7,7 @@
 #include "edit_info_room_details_map.hpp"
 #include "edit_room_type_model.hpp"
 #include "info_crew_member_details_map.hpp"
+#include "room_details_edit_adjacent_rooms_map.hpp"
 #include "skills_crew_member_details.hpp"
 #include "next_immediate_rooms_crew_member_details.hpp"
 #include "selected_entities_map.hpp"
@@ -55,6 +56,7 @@ public:
     inline auto &getEditInfoRoomDetailsMap() { return this->editInfoRoomDetailsMap; }
     inline auto &getEditRoomTypeModel() { return this->editRoomTypeModel; }
     inline auto &getCrewMemberDetailsAddSkillMap() { return this->crewMemberDetailsAddSkillMap; }
+    inline auto &getRoomDetailsEditAdjacentRoomsMap() { return this->roomDetailsEditAdjacentRoomsMap; }
 
     void triggerSubscriptions();
 
@@ -84,6 +86,7 @@ private:
     std::unique_ptr<EditInfoRoomDetailsMap> editInfoRoomDetailsMap = std::make_unique<EditInfoRoomDetailsMap>();
     std::unique_ptr<EditRoomTypeModel> editRoomTypeModel = std::make_unique<EditRoomTypeModel>();
     std::unique_ptr<CrewMemberDetailsAddSkillMap> crewMemberDetailsAddSkillMap = std::make_unique<CrewMemberDetailsAddSkillMap>();
+    std::unique_ptr<RoomDetailsEditAdjacentRoomsMap> roomDetailsEditAdjacentRoomsMap = std::make_unique<RoomDetailsEditAdjacentRoomsMap>();
 };
 
 #endif // !GAME_STATE_HPP

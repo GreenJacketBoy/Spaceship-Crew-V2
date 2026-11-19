@@ -43,11 +43,12 @@ class Room : public CrewMemberMovedSubscriber, public CrewMemberDeletedSubscribe
     inline void setStorageCapacity(size_t storageCapacity) { this->storageCapacity = storageCapacity; }
 
     inline bool addAdjacentRoom(const size_t &roomId) {
+        if (this->id == roomId) return false;
         return this->adjacentRoomsIds.insert(roomId).second;
     }
 
     inline bool removeAdjacentRoom(const size_t &roomId) {
-        return this->adjacentRoomsIds.extract(roomId).empty();
+        return !this->adjacentRoomsIds.extract(roomId).empty();
     }
 
     inline bool isRoomAdjacent(const size_t &roomId) {
