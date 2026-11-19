@@ -37,7 +37,8 @@ void InfoRoomDetailsMap::handleCrewMemberMoved(CrewMemberMovedPayload &payload) 
     const size_t selectedRoomId = optionalSelectedRoomId.value();
 
     if (!payload.toRoomId && !payload.fromRoomId) return;
-    if (payload.fromRoomId.value() != selectedRoomId &&  payload.fromRoomId.value() != selectedRoomId) return;
+    if (payload.toRoomId && payload.toRoomId.value() != selectedRoomId) return;
+    if (payload.fromRoomId && payload.fromRoomId.value() != selectedRoomId) return;
 
     auto optionalRoom = util::getRoom(selectedRoomId);
     if (!optionalRoom) return;

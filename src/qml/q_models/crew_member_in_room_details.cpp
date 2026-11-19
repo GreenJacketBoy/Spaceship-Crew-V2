@@ -7,6 +7,7 @@
 #include "get_room.hpp"
 #include "at_index.hpp"
 #include "game_state.hpp"
+#include <cstddef>
 #include <qvariant.h>
 
 int CrewMemberInRoomDetailsModel::columnCount(const QModelIndex &parent) const {
@@ -52,11 +53,13 @@ QHash<int, QByteArray> CrewMemberInRoomDetailsModel::roleNames() const {
 }
 
 void CrewMemberInRoomDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
-    const auto selectedRoomId = util::selectedRoomId();
-    if (!selectedRoomId) return;
+    const auto optionalSelectedRoomId = util::selectedRoomId();
+    if (!optionalSelectedRoomId) return;
+    const size_t selectedRoomId = optionalSelectedRoomId.value();
 
     if (!payload.toRoomId && !payload.fromRoomId) return;
-    if (payload.fromRoomId.value() != selectedRoomId.value() &&  payload.fromRoomId.value() != selectedRoomId.value()) return;
+    if (payload.toRoomId && payload.toRoomId.value() != selectedRoomId) return;
+    if (payload.fromRoomId && payload.fromRoomId.value() != selectedRoomId) return;
 
     this->layoutAboutToBeChanged();
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));

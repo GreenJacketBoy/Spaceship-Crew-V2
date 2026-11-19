@@ -9,7 +9,6 @@
 #include "room_storage_capacity_updated_event.hpp"
 #include "room_type_updated_event.hpp"
 #include <QQmlPropertyMap>
-#include <optional>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
