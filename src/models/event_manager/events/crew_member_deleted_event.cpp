@@ -16,7 +16,7 @@ void CrewMemberDeletedEvent::emitEvent(CrewMemberDeletedPayload &payload) {
     if (!crewMember) return;
 
     auto optionalCurrentRoom = util::getRoom(payload.deletedCrewMemberCurrentRoomId);
-    if (!optionalCurrentRoom) optionalCurrentRoom.value()->handleCrewMemberDeleted(payload);
+    if (optionalCurrentRoom) optionalCurrentRoom.value()->handleCrewMemberDeleted(payload);
 
     for (auto subscriber : this->subscribers) {
         subscriber->handleCrewMemberDeleted(payload);
