@@ -4,17 +4,16 @@
 #include "room_deleted_event.hpp"
 #include <cstddef>
 #include <QAbstractTableModel>
+#include <qabstractitemmodel.h>
 #include <qhashfunctions.h>
 #include <qlist.h>
 #include <qnamespace.h>
 #include <qtmetamacros.h>
 #include <qvariant.h>
 
-class AdjacentRoomsListCreateRoomModel : public QAbstractTableModel, public RoomDeletedSubscriber {
+class AdjacentRoomsListCreateRoomModel : public QAbstractListModel, public RoomDeletedSubscriber {
 Q_OBJECT
 public:
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     void handleRoomDeleted(size_t &roomId) override;

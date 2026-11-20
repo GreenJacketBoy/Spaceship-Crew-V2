@@ -9,14 +9,13 @@
 #include "room_selected_event.hpp"
 #include <QAbstractTableModel>
 #include <optional>
+#include <qabstractitemmodel.h>
 #include <qhashfunctions.h>
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class CrewMemberInRoomDetailsModel : public QAbstractTableModel, public CrewMemberMovedSubscriber, public RoomSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber {
+class CrewMemberInRoomDetailsModel : public QAbstractListModel, public CrewMemberMovedSubscriber, public RoomSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber {
 public:
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

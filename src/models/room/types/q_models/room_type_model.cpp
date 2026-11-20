@@ -4,10 +4,6 @@
 #include <qvariant.h>
 #include "room_type.hpp"
 
-int RoomTypeModel::columnCount(const QModelIndex &parent) const {
-    return 2;
-}
-
 int RoomTypeModel::rowCount(const QModelIndex &parent) const {
     return AMOUNT_OF_ROOM_TYPES;
 }

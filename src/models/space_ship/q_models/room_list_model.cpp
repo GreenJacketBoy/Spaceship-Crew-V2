@@ -9,10 +9,6 @@
 #include <cstddef>
 #include <optional>
 
-int RoomListModel::columnCount(const QModelIndex &parent) const {
-    return 1;
-}
-
 int RoomListModel::rowCount(const QModelIndex &parent) const {
     auto roomList = util::getRoomList();
     if (!roomList) return 0;
@@ -54,7 +50,7 @@ QHash<int, QByteArray> RoomListModel::roleNames() const {
 
 void RoomListModel::handleRoomCreated(size_t &payload) {
     this->layoutAboutToBeChanged();
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 

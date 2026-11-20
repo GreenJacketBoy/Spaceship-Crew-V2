@@ -7,10 +7,6 @@
 #include <format>
 #include <qvariant.h>
 
-int AddAdjacentRoomModel::columnCount(const QModelIndex &parent) const {
-    return 2;
-}
-
 int AddAdjacentRoomModel::rowCount(const QModelIndex &parent) const {
     auto roomMap = util::getRoomList();
     if (!roomMap) return 0;
@@ -48,6 +44,6 @@ void AddAdjacentRoomModel::triggerSubscriptions() {
 
 void AddAdjacentRoomModel::handleRoomCreated(size_t &payload) {
     this->layoutAboutToBeChanged();
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }

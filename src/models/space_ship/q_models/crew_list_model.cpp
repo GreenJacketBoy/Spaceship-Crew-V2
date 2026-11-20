@@ -9,10 +9,6 @@
 #include <cstddef>
 #include <qlogging.h>
 
-int CrewListModel::columnCount(const QModelIndex &parent) const {
-    return 1;
-}
-
 int CrewListModel::rowCount(const QModelIndex &parent) const {
     auto crewList = util::getCrewList();
     if (!crewList) return 0;
@@ -48,7 +44,7 @@ QHash<int, QByteArray> CrewListModel::roleNames() const {
 
 void CrewListModel::handleCrewMemberCreated(size_t &payload) {
     this->layoutAboutToBeChanged();
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 

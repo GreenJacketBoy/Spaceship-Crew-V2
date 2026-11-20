@@ -12,10 +12,8 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class AdjacentRoomListRoomDetailsModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomDeletedSubscriber, public RoomAddAdjacentRoomSubscriber, public RoomRemoveAdjacentRoomSubscriber {
+class AdjacentRoomListRoomDetailsModel : public QAbstractListModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomDeletedSubscriber, public RoomAddAdjacentRoomSubscriber, public RoomRemoveAdjacentRoomSubscriber {
 public:
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

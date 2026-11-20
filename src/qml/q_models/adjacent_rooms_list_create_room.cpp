@@ -9,10 +9,6 @@
 #include <qabstractitemmodel.h>
 #include <qvariant.h>
 
-int AdjacentRoomsListCreateRoomModel::columnCount(const QModelIndex &parent) const {
-    return 1;
-}
-
 int AdjacentRoomsListCreateRoomModel::rowCount(const QModelIndex &parent) const {
     return this->adjacentRooms.size();
 }
@@ -60,14 +56,14 @@ void AdjacentRoomsListCreateRoomModel::adjacentRoomAddedCreateForm(size_t roomId
 
     this->layoutAboutToBeChanged();
     this->adjacentRooms.push_back(roomId);
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 
 void AdjacentRoomsListCreateRoomModel::adjacentRoomRemovedCreateForm(size_t roomId) {
     this->layoutAboutToBeChanged();
     this->adjacentRooms.removeOne(roomId);
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 

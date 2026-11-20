@@ -10,10 +10,6 @@
 #include <sstream>
 #include <stdexcept>
 
-int SkillsListCreateCrewMemberModel::columnCount(const QModelIndex &parent) const {
-    return 3;
-}
-
 int SkillsListCreateCrewMemberModel::rowCount(const QModelIndex &parent) const {
     return this->skills.size();
 }
@@ -54,21 +50,15 @@ void SkillsListCreateCrewMemberModel::skillAddedCreateForm(SkillType skillType, 
     Skill skill = {skillType, levelNumber};
     if (this->skills.contains(skill)) return;
 
-    const int lastRowIndex = this->rowCount() - 1;
-    const int lastColumnIndex = this->columnCount() - 1;
-
     this->layoutAboutToBeChanged();
     this->skills.push_back(skill);
-    this->changePersistentIndex(this->index(0, 0), this->index(lastRowIndex, lastColumnIndex));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 
 void SkillsListCreateCrewMemberModel::skillRemovedCreateForm(SkillType skillType) {
-    const int lastRowIndex = this->rowCount() - 1;
-    const int lastColumnIndex = this->columnCount() - 1;
-
     this->layoutAboutToBeChanged();
     this->skills.removeIf([&skillType](const Skill &skill) -> bool { return skill.type == skillType; });
-    this->changePersistentIndex(this->index(0, 0), this->index(lastRowIndex, lastColumnIndex));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }

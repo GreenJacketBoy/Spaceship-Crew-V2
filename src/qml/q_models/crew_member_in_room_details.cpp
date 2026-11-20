@@ -10,10 +10,6 @@
 #include <cstddef>
 #include <qvariant.h>
 
-int CrewMemberInRoomDetailsModel::columnCount(const QModelIndex &parent) const {
-    return 3;
-}
-
 int CrewMemberInRoomDetailsModel::rowCount(const QModelIndex &parent) const {
     auto optionalRoom = util::getRoom(util::selectedRoomId());
     if (!optionalRoom) return 0;
@@ -64,7 +60,7 @@ void CrewMemberInRoomDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload 
 
 void CrewMemberInRoomDetailsModel::handleRoomSelected(size_t &roomId) {
     this->layoutAboutToBeChanged();
-    this->changePersistentIndex(this->index(0, this->columnCount()-1), this->index(this->rowCount()-1, this->columnCount()-1));
+    this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));
     this->layoutChanged();
 }
 

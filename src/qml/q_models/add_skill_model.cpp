@@ -4,10 +4,6 @@
 #include <iostream>
 #include <qvariant.h>
 
-int AddSkillModel::columnCount(const QModelIndex &parent) const {
-    return 2;
-}
-
 int AddSkillModel::rowCount(const QModelIndex &parent) const {
     return AMOUNT_OF_SKILLS;
 }

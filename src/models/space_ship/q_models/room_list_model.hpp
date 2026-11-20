@@ -13,10 +13,8 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class RoomListModel : public QAbstractTableModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber, public RoomUnselectedSubscriber, public RoomDeletedSubscriber {
+class RoomListModel : public QAbstractListModel, public CreateRoomSubscriber, public RoomSelectedSubscriber, public RoomNameUpdatedSubscriber, public RoomTypeUpdatedSubscriber, public RoomUnselectedSubscriber, public RoomDeletedSubscriber {
 public:
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

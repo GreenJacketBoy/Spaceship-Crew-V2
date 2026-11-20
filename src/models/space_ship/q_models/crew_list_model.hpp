@@ -12,10 +12,8 @@
 #include <qnamespace.h>
 #include <qvariant.h>
 
-class CrewListModel : public QAbstractTableModel, public CreateCrewMemberSubscriber, public CrewMemberSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber, public CrewMemberUnselectedSubscriber {
+class CrewListModel : public QAbstractListModel, public CreateCrewMemberSubscriber, public CrewMemberSelectedSubscriber, public CrewMemberNameUpdatedSubscriber, public CrewMemberTitleUpdatedSubscriber, public CrewMemberDeletedSubscriber, public CrewMemberUnselectedSubscriber {
 public:
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
