@@ -16,3 +16,17 @@ std::optional<Room *> util::getRoom(size_t roomId) noexcept {
         return std::nullopt;
     }
 }
+
+std::optional<Room *> util::getRoom(std::optional<size_t> optionalRoomId) noexcept {
+    if (!optionalRoomId) return std::nullopt;
+    auto &spaceship = GameState::getInstance().getSpaceShip();
+    if (spaceship.get() == nullptr || !spaceship.get()->has_value()) return std::nullopt;
+
+    try {
+        auto &room = spaceship.get()->value().getRoomMap().at(optionalRoomId.value());
+        if (!room) return std::nullopt;
+        return room.get();
+    } catch (std::out_of_range) {
+        return std::nullopt;
+    }
+}

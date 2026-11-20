@@ -26,9 +26,8 @@ void EditInfoCrewMemberDetailsMap::handleCrewMemberSelected(size_t &crewMemberId
 }
 
 void EditInfoCrewMemberDetailsMap::resetToCurrentValues() {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    std::optional<CrewMember *> optionalCrewMember;
-    if (!selectedCrewMemberId || !(optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value()))) {
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
+    if (!optionalCrewMember) {
         insert("id",          QString());
         insert("name",        QString());
         insert("title",       QString());
@@ -54,9 +53,7 @@ void EditInfoCrewMemberDetailsMap::resetToCurrentValues() {
 }
 
 void EditInfoCrewMemberDetailsMap::save(QString name, QString title, std::optional<size_t> currentRoom) {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return;
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return;
     auto crewMember = optionalCrewMember.value();
 

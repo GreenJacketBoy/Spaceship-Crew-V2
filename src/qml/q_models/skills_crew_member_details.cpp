@@ -1,4 +1,5 @@
 #include "skills_crew_member_details.hpp"
+#include "crew_member.hpp"
 #include "crew_member_skill_updated_event.hpp"
 #include "get_crew_member.hpp"
 #include "index_of.hpp"
@@ -12,9 +13,7 @@
 #include <qvariant.h>
 
 int SkillsCrewMemberDetailsModel::rowCount(const QModelIndex &parent) const {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return 0;
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return 0;
     auto crewMember = optionalCrewMember.value();
 
@@ -22,9 +21,7 @@ int SkillsCrewMemberDetailsModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant SkillsCrewMemberDetailsModel::data(const QModelIndex &index, int role) const {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return QVariant();
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return QVariant();
     auto crewMember = optionalCrewMember.value();
     auto optionalSkillType = util::atIndexKey(crewMember->getSkills(), index.row());
@@ -88,10 +85,7 @@ QHash<int, QByteArray> SkillsCrewMemberDetailsModel::roleNames() const {
 constexpr void SkillsCrewMemberDetailsModel::setIsEditing(SkillType skillType, bool isEditing) {
     this->skillsEditStatus.at(static_cast<size_t>(skillType)) = isEditing;
 
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return;
-
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return;
 
     auto optionalIndex = util::indexOf<size_t>(optionalCrewMember.value()->getSkills(), skillType);
@@ -110,10 +104,9 @@ void SkillsCrewMemberDetailsModel::cancel(SkillType skillType) {
 }
 
 void SkillsCrewMemberDetailsModel::save(SkillType skillType, QString levelString) {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return;
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return;
+    CrewMember *crewMember = optionalCrewMember.value();
 
     size_t level = -1;
     auto stream = std::stringstream(levelString.toStdString());
@@ -121,10 +114,10 @@ void SkillsCrewMemberDetailsModel::save(SkillType skillType, QString levelString
 
     this->skillsEditStatus.at(static_cast<size_t>(skillType)) = false;
     CrewMemberSkillUpdatedPayload payload = {
-        selectedCrewMemberId.value(),
+        crewMember->getId(),
         skillType, 
         level,
-        optionalCrewMember.value()->getSkillLevel(skillType),
+        crewMember->getSkillLevel(skillType),
     };
     GameState::getInstance().getEventManager()->getCrewMemberSkillUpdatedEvent().emitEvent(payload);
 }

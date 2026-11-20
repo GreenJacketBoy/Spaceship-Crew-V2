@@ -65,9 +65,7 @@ void NextImmediateRoomsCrewMemberDetailsModel::handleRoomCreated(size_t &roomId)
 }
 
 constexpr std::optional<size_t> NextImmediateRoomsCrewMemberDetailsModel::getCurrentRoomId() const {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return std::nullopt;
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return std::nullopt;
     auto optionalCurrentRoomId = optionalCrewMember.value()->getCurrentRoomId();
     if (!optionalCurrentRoomId) return std::nullopt;
@@ -76,17 +74,12 @@ constexpr std::optional<size_t> NextImmediateRoomsCrewMemberDetailsModel::getCur
 }
 
 constexpr std::optional<Room *> NextImmediateRoomsCrewMemberDetailsModel::getCurrentRoom() const {
-    auto currentRoomId = this->getCurrentRoomId();
-    if (!currentRoomId) return std::nullopt;
-
-    return util::getRoom(currentRoomId.value());
+    return util::getRoom(this->getCurrentRoomId());
 }
 
 void NextImmediateRoomsCrewMemberDetailsModel::handleCrewMemberMoved(CrewMemberMovedPayload &payload) {
-    if (payload.toRoomId) {
-        auto optionalRoom = util::getRoom(payload.toRoomId.value());
-        if (!optionalRoom) return;
-    }
+    auto selectedCrewMemberId = util::selectedCrewMemberId();
+    if (selectedCrewMemberId && selectedCrewMemberId.value() != payload.crewMemberId) return;
 
     this->layoutAboutToBeChanged();
     this->changePersistentIndex(this->index(0, 0), this->index(this->rowCount()-1, 0));

@@ -13,17 +13,13 @@ int AdjacentRoomListRoomDetailsModel::columnCount(const QModelIndex &parent) con
 }
 
 int AdjacentRoomListRoomDetailsModel::rowCount(const QModelIndex &parent) const {
-    const auto selectedRoomId = util::selectedRoomId();
-    if (!selectedRoomId) return 0;
-    auto optionalRoom = util::getRoom(selectedRoomId.value());
+    auto optionalRoom = util::getRoom(util::selectedRoomId());
     if (!optionalRoom) return 0;
     return optionalRoom.value()->getAdjacentRooms().size();
 }
 
 QVariant AdjacentRoomListRoomDetailsModel::data(const QModelIndex &index, int role) const {
-    const auto selectedRoomId = util::selectedRoomId();
-    if (!selectedRoomId) return QVariant();
-    auto optionalRoom = util::getRoom(selectedRoomId.value());
+    auto optionalRoom = util::getRoom(util::selectedRoomId());
     if (!optionalRoom) return QVariant();
     const auto &adjacentRooms = optionalRoom.value()->getAdjacentRooms();
 
@@ -77,11 +73,7 @@ void AdjacentRoomListRoomDetailsModel::handleRoomSelected(size_t &roomId) {
 
 
 void AdjacentRoomListRoomDetailsModel::handleRoomDeleted(size_t &roomId) {
-    const auto optionalSelectedRoomId = util::selectedRoomId();
-    if (!optionalSelectedRoomId) return;
-    size_t selectedRoomId = optionalSelectedRoomId.value();
-
-    auto optionalCreatedRoom = util::getRoom(selectedRoomId);
+    auto optionalCreatedRoom = util::getRoom(util::selectedRoomId());
     if (!optionalCreatedRoom) return;
     if (!optionalCreatedRoom.value()->isRoomAdjacent(roomId)) return;
 

@@ -15,10 +15,8 @@ void CrewMemberDeletedEvent::emitEvent(CrewMemberDeletedPayload &payload) {
     auto &crewMember = node.mapped();
     if (!crewMember) return;
 
-    if (payload.deletedCrewMemberCurrentRoomId) {
-        auto optionalCurrentRoom = util::getRoom(payload.deletedCrewMemberCurrentRoomId.value());
-        if (!optionalCurrentRoom) optionalCurrentRoom.value()->handleCrewMemberDeleted(payload);
-    }
+    auto optionalCurrentRoom = util::getRoom(payload.deletedCrewMemberCurrentRoomId);
+    if (!optionalCurrentRoom) optionalCurrentRoom.value()->handleCrewMemberDeleted(payload);
 
     for (auto subscriber : this->subscribers) {
         subscriber->handleCrewMemberDeleted(payload);

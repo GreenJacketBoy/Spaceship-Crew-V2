@@ -1,4 +1,5 @@
 #include "crew_member_details_add_skill_map.hpp"
+#include "crew_member.hpp"
 #include "game_state.hpp"
 #include "get_crew_member.hpp"
 #include "selected_crew_member_id.hpp"
@@ -28,20 +29,19 @@ void CrewMemberDetailsAddSkillMap::cancel() {
 }
 
 void CrewMemberDetailsAddSkillMap::save(SkillType skillType, QString levelString) {
-    const auto selectedCrewMemberId = util::selectedCrewMemberId();
-    if (!selectedCrewMemberId) return;
-    auto optionalCrewMember = util::getCrewMember(selectedCrewMemberId.value());
+    auto optionalCrewMember = util::getCrewMember(util::selectedCrewMemberId());
     if (!optionalCrewMember) return;
+    CrewMember *crewMember = optionalCrewMember.value();
 
     size_t level = -1;
     auto stream = std::stringstream(levelString.toStdString());
     stream >> level;
 
     CrewMemberSkillUpdatedPayload payload = {
-        selectedCrewMemberId.value(),
+        crewMember->getId(),
         skillType, 
         level,
-        optionalCrewMember.value()->getSkillLevel(skillType),
+        crewMember->getSkillLevel(skillType),
     };
     GameState::getInstance().getEventManager()->getCrewMemberSkillUpdatedEvent().emitEvent(payload);
     insert("isEditing", QVariant(false));

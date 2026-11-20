@@ -15,17 +15,13 @@ int CrewMemberInRoomDetailsModel::columnCount(const QModelIndex &parent) const {
 }
 
 int CrewMemberInRoomDetailsModel::rowCount(const QModelIndex &parent) const {
-    const auto selectedRoomId = util::selectedRoomId();
-    if (!selectedRoomId) return 0;
-    auto optionalRoom = util::getRoom(selectedRoomId.value());
+    auto optionalRoom = util::getRoom(util::selectedRoomId());
     if (!optionalRoom) return 0;
     return optionalRoom.value()->getCrewMembersInRoom().size();
 }
 
 QVariant CrewMemberInRoomDetailsModel::data(const QModelIndex &index, int role) const {
-    const auto selectedRoomId = util::selectedRoomId();
-    if (!selectedRoomId) return QVariant();
-    auto optionalRoom = util::getRoom(selectedRoomId.value());
+    auto optionalRoom = util::getRoom(util::selectedRoomId());
     if (!optionalRoom) return QVariant();
     auto &crewMembersInRoom = optionalRoom.value()->getCrewMembersInRoom();
 

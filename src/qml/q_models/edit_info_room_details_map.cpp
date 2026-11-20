@@ -25,9 +25,8 @@ void EditInfoRoomDetailsMap::handleRoomSelected(size_t &crewMemberId) {
 }
 
 void EditInfoRoomDetailsMap::resetToCurrentValues() {
-    const auto selectedRoomId = util::selectedRoomId();
-    std::optional<Room *> optionalRoom;
-    if (!selectedRoomId || !(optionalRoom = util::getRoom(selectedRoomId.value()))) {
+    auto optionalRoom = util::getRoom(util::selectedRoomId());
+    if (!optionalRoom) {
         insert("id",          QString());
         insert("name",        QString());
         insert("type", util::QVariantSpecialType(RoomTypeEnum::BRIDGE));
@@ -59,9 +58,7 @@ void EditInfoRoomDetailsMap::resetToCurrentValues() {
 }
 
 void EditInfoRoomDetailsMap::save(QString name, QString crewCapacityAsString, QString storageCapacityAsString, QString sizeAsString, RoomTypeEnum roomType) {
-    const auto selectedRoomId = util::selectedRoomId();
-    if (!selectedRoomId) return;
-    auto optionalRoom = util::getRoom(selectedRoomId.value());
+    auto optionalRoom = util::getRoom(util::selectedRoomId());
     if (!optionalRoom) return;
     auto room = optionalRoom.value();
 
