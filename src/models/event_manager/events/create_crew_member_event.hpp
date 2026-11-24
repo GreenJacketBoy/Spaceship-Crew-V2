@@ -3,6 +3,7 @@
 
 #include "event_template.hpp"
 #include <cstddef>
+#include <optional>
 #include <qlist.h>
 #include <qobject.h>
 #include <qtmetamacros.h>
@@ -21,7 +22,7 @@ public:
     void emitEvent(size_t &crewMemberId) override;
 
 public slots:
-    void createCrewMember(
+    std::optional<size_t> createCrewMember(
         QString name,
         QString title,
         std::optional<size_t> optionalCurrentRoomId,

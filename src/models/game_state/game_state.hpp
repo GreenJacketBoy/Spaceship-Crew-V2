@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_HPP
 #define GAME_STATE_HPP
 
+#include "skills_lookup.hpp"
 #include "crew_member_details_add_skill_map.hpp"
 #include "edit_info_crew_member_details_map.hpp"
 #include "edit_current_room_model.hpp"
@@ -57,6 +58,7 @@ public:
     inline auto &getEditRoomTypeModel() { return this->editRoomTypeModel; }
     inline auto &getCrewMemberDetailsAddSkillMap() { return this->crewMemberDetailsAddSkillMap; }
     inline auto &getRoomDetailsEditAdjacentRoomsMap() { return this->roomDetailsEditAdjacentRoomsMap; }
+    inline auto &getSkillsLookup() { return this->skillsLookup; }
 
     void triggerSubscriptions();
 
@@ -87,6 +89,7 @@ private:
     const std::unique_ptr<EditRoomTypeModel> editRoomTypeModel = std::make_unique<EditRoomTypeModel>();
     const std::unique_ptr<CrewMemberDetailsAddSkillMap> crewMemberDetailsAddSkillMap = std::make_unique<CrewMemberDetailsAddSkillMap>();
     const std::unique_ptr<RoomDetailsEditAdjacentRoomsMap> roomDetailsEditAdjacentRoomsMap = std::make_unique<RoomDetailsEditAdjacentRoomsMap>();
+    const std::unique_ptr<SkillsLookup> skillsLookup = std::make_unique<SkillsLookup>();
 };
 
 #endif // !GAME_STATE_HPP

@@ -21,4 +21,5 @@ void GameState::triggerSubscriptions() {
     if (this->editInfoRoomDetailsMap) this->editInfoRoomDetailsMap->triggerSubscriptions();
     if (this->crewMemberDetailsAddSkillMap) this->crewMemberDetailsAddSkillMap->triggerSubscriptions();
     if (this->roomDetailsEditAdjacentRoomsMap) this->roomDetailsEditAdjacentRoomsMap->triggerSubscriptions();
+    // if (this->skillsLookup) this->skillsLookup->triggerSubscriptions();
 }

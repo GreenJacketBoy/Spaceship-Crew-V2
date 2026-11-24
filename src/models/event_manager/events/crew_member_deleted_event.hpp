@@ -2,6 +2,7 @@
 #define CREW_MEMBER_DELETED_EVENT_HPP
 
 #include "event_template.hpp"
+#include "skill.hpp"
 #include <cstddef>
 #include <optional>
 #include <qobject.h>
@@ -10,6 +11,7 @@
 struct CrewMemberDeletedPayload {
     const size_t deletedCrewMemberId;
     const std::optional<size_t> deletedCrewMemberCurrentRoomId;
+    const std::map<SkillType, size_t> &skills;
 };
 
 class CrewMemberDeletedSubscriber {

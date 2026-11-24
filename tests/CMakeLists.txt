@@ -7,6 +7,7 @@ add_executable(spaceship_test
     event/medical_event_test.cpp
     space_ship_test.cpp
     event_manager_test.cpp
+    skills_lookup_test.cpp
 )
 
 find_package(GTest REQUIRED) # Find GTest

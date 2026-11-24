@@ -50,6 +50,7 @@ add_library(SpaceshipCrewV2_Lib
         util/get_room_list.cpp
         util/get_crew_list.cpp
         util/get_crew_member.cpp
+        models/skills_lookup/skills_lookup.cpp
 )
 
 target_include_directories(SpaceshipCrewV2_Lib
@@ -61,6 +62,7 @@ target_include_directories(SpaceshipCrewV2_Lib
         models/crew_member
         models/crew_member/associated_rooms
         models/skill
+        models/skills_lookup
         models/event
         models/space_ship
         models/space_ship/q_models

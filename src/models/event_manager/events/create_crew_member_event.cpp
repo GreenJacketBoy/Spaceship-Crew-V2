@@ -13,25 +13,29 @@
 #include "get_crew_list.hpp"
 
 void CreateCrewMemberEvent::emitEvent(size_t &crewMemberId) {
+    GameState::getInstance().getSkillsLookup()->handleCrewMemberCreated(crewMemberId);
+
     for (auto subscriber : this->subscribers) {
         subscriber->handleCrewMemberCreated(crewMemberId);
     }
 }
 
-void CreateCrewMemberEvent::createCrewMember(
+std::optional<size_t> CreateCrewMemberEvent::createCrewMember(
     QString name,
     QString title,
     std::optional<size_t> optionalCurrentRoomId,
     QList<Skill> *skills // simple pointer because Qt doesn't know references nor const
 ) {
     auto &spaceShip = GameState::getInstance().getSpaceShip();
-    if (!spaceShip) return;
+    if (!spaceShip) return std::nullopt;
 
     std::vector<Skill> skillsVector;
-    skillsVector.reserve(skills->size());
-
-    for (const auto &skill : *skills) {
-        skillsVector.push_back(skill);
+    if (skills != nullptr) {
+        skillsVector.reserve(skills->size());
+    
+        for (const auto &skill : *skills) {
+            if (skill.level != 0) skillsVector.push_back(skill);
+        }
     }
     
     auto crewMember = std::unique_ptr<CrewMember>(new CrewMember(
@@ -44,7 +48,7 @@ void CreateCrewMemberEvent::createCrewMember(
     auto crewMap = util::getCrewList();
     if (!crewMap) {
         std::cout << "Warning : crewMap undefined in CreateCrewMemberEvent\n";
-        return;
+        return std::nullopt;
     }
     crewMap.value()->insert({crewMemberId, std::move(crewMember)});
     CrewMemberMovedPayload payload = {
@@ -56,4 +60,5 @@ void CreateCrewMemberEvent::createCrewMember(
     // moved event must be sent before this one, otherwise the models getting updated will not have up to date information
 
     this->emitEvent(crewMemberId);
+    return crewMemberId;
 }

@@ -487,7 +487,7 @@ TEST(EventManager, DeleteCrewMember) {
     ASSERT_DOUBLE_EQ(crewMemberId2, util::getCrewMember(crewMemberId2).value()->getId());
 
     auto pointerToCrewMember1 = util::getCrewMember(crewMemberId1).value();
-    CrewMemberDeletedPayload payload = { crewMemberId1, pointerToCrewMember1->getCurrentRoomId() };
+    CrewMemberDeletedPayload payload = { crewMemberId1, pointerToCrewMember1->getCurrentRoomId(), pointerToCrewMember1->getSkills() };
     gameState.getEventManager()->getCrewMemberDeletedEvent().emitEvent(payload);
 
     ASSERT_FALSE(util::getCrewMember(crewMemberId1));
